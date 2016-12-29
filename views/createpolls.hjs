@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>create polls</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1>Create a poll</h1>
+    <form action="/api/polls" method="post">
+        <input type="text" name="pollquestion" placeholder="Poll question" />
+        <br/>
+        <input type="text" name="responses" placeholder="responses" /> (separated with ; )
+        <br/>
+        
+        <input type="submit" value="Create poll" />
+    </form>
+  </body>
+</html>
