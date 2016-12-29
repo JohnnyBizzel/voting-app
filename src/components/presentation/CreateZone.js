@@ -8,7 +8,10 @@ class CreateZone extends Component {
             this.state = {
                 zone:{
 				    name:'',
-				    zipCodes:''
+				    zipCodes:'',
+				    latitude:0,
+				    longditude:0,
+				    country:''
 			    }
         };
     }
@@ -19,7 +22,7 @@ class CreateZone extends Component {
         updatedZone[event.target.id] = event.target.value;
 
         this.setState({
-            comment: updatedZone
+            zone: updatedZone
         });
     }
     
@@ -27,6 +30,12 @@ class CreateZone extends Component {
     submitZone(event){
         console.log("Submitting zone (CreateZone): " + JSON.stringify(this.state.zone));
         // call the function from the container (not here as this is presentation layer)
+        let newZone = Object.assign({}, this.state.zone);
+        newZone[event.target.id] = event.target.value;
+
+        this.setState({
+            zone: newZone
+        });
         this.props.onCreate(this.state.zone);
     }
     
@@ -34,11 +43,21 @@ class CreateZone extends Component {
         return (
 			<div>
              Add a Zone:<br/>
-                    <input id="name" onChange={this.updateZone.bind(this)} className="form-control" type="text" placeholder="Name"/>
+                    <input id="name" onChange={this.updateZone.bind(this)} 
+                        className="form-control" type="text" placeholder="Name"/>
                     <br/>
-                    <input id="zip" onChange={this.updateZone.bind(this)} className="form-control" type="text" placeholder="Zip Code"/>
+                    <input id="zipCodes" onChange={this.updateZone.bind(this)} 
+                        className="form-control" type="text" placeholder="Zip Code(s)"/>
                     <br/>
-                    
+                    <input id="latitude" onChange={this.updateZone.bind(this)} 
+                        className="form-control" type="text" placeholder="Latitude" />
+                    <br/>
+                    <input id="longditude" onChange={this.updateZone.bind(this)} 
+                        className="form-control" type="text"  placeholder="Longditude" />
+                    <br/>
+                    <input id="country" onChange={this.updateZone.bind(this)} 
+                        className="form-control" type="text"  placeholder="Country code" />
+                    <br/>
                     <br/>
                     <button onClick={this.submitZone.bind(this)} className="btn btn-info" >Add Zone</button>
             </div>
