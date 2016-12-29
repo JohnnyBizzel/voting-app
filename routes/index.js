@@ -22,5 +22,9 @@ res.render("createcomment",null);
 
 });
 
+router.get("/editpoll",function(req,res,next){
+res.render("editpoll",null);
+
+});
 
 module.exports = router;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 //import Zones from '../containers/Zones'
-import Comments from '../containers/Comments'
+import EditPoll from '../presentation/EditPoll'
 import Polls from '../containers/Polls'
 
 class Home extends Component {
@@ -13,7 +13,7 @@ class Home extends Component {
                         <Polls />
                     </div>
                     <div className="col-md-6 col-sm-6">
-                        
+                        <EditPoll />
                     </div>
                 </div>
             </div>
