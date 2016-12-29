@@ -87,7 +87,7 @@
 	                _react2.default.createElement(
 	                    'h2',
 	                    null,
-	                    'Yik Yak!'
+	                    'Voting App!'
 	                ),
 	                _react2.default.createElement(_Home2.default, null)
 	            );
@@ -21818,13 +21818,13 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Zones = __webpack_require__(184);
-	
-	var _Zones2 = _interopRequireDefault(_Zones);
-	
-	var _Comments = __webpack_require__(195);
+	var _Comments = __webpack_require__(196);
 	
 	var _Comments2 = _interopRequireDefault(_Comments);
+	
+	var _Polls = __webpack_require__(200);
+	
+	var _Polls2 = _interopRequireDefault(_Polls);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -21833,6 +21833,8 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	//import Zones from '../containers/Zones'
+	
 	
 	var Home = function (_Component) {
 	    _inherits(Home, _Component);
@@ -21854,14 +21856,10 @@
 	                    { className: 'row' },
 	                    _react2.default.createElement(
 	                        'div',
-	                        { className: 'col-md-4 col-sm-4' },
-	                        _react2.default.createElement(_Zones2.default, null)
+	                        { className: 'col-md-6 col-sm-6' },
+	                        _react2.default.createElement(_Polls2.default, null)
 	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'col-md-8 col-sm-8' },
-	                        _react2.default.createElement(_Comments2.default, null)
-	                    )
+	                    _react2.default.createElement('div', { className: 'col-md-6 col-sm-6' })
 	                )
 	            );
 	        }
@@ -21873,250 +21871,8 @@
 	exports.default = Home;
 
 /***/ },
-/* 184 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _Zone = __webpack_require__(185);
-	
-	var _Zone2 = _interopRequireDefault(_Zone);
-	
-	var _CreateZone = __webpack_require__(198);
-	
-	var _CreateZone2 = _interopRequireDefault(_CreateZone);
-	
-	var _ApiManager = __webpack_require__(187);
-	
-	var _ApiManager2 = _interopRequireDefault(_ApiManager);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // render a list of Zones
-	// a Container component (will perform CRUD)
-	//"use strict"; // maybe need this?
-	
-	
-	//var tempList = [1,2,3];
-	
-	var Zones = function (_Component) {
-		_inherits(Zones, _Component);
-	
-		function Zones() {
-			_classCallCheck(this, Zones);
-	
-			var _this = _possibleConstructorReturn(this, (Zones.__proto__ || Object.getPrototypeOf(Zones)).call(this));
-	
-			_this.state = {
-				selected: 0,
-				list: []
-			};
-			return _this;
-		}
-	
-		// override this function
-	
-	
-		_createClass(Zones, [{
-			key: 'componentDidMount',
-			value: function componentDidMount() {
-				var _this2 = this;
-	
-				console.log('componentDidMount: ');
-				_ApiManager2.default.get('/api/zone', null, function (err, response) {
-					if (err) {
-						alert("Error: " + err);
-						return;
-					}
-	
-					console.log('RESULTS: ' + JSON.stringify(response.message));
-	
-					_this2.setState({
-						list: response.message
-					});
-				});
-	
-				// /*superagent
-				// 	.get('api/zone')
-				// 	.query(null)
-				// 	.set('Accept', 'application/json')
-				// 	.end((err, response) => {
-				// 		if (err) { alert("Error: " + err); return;}
-				// 		console.log(JSON.stringify(response.body));
-	
-				// 		let results = response.body.message;
-	
-				// 		this.setState({
-				// 			list: results
-				// 		})
-				// 	})
-				// */
-			}
-		}, {
-			key: 'updateZone',
-			value: function updateZone(event) {
-				console.log('update zone: ' + event.target.id + ' = ' + event.target.value);
-				var updatedZone = Object.assign({}, this.state.zone);
-				updatedZone[event.target.id] = event.target.value;
-				// change the state
-				this.setState({
-					zone: updatedZone
-				});
-			}
-		}, {
-			key: 'addZone',
-			value: function addZone(newZone) {
-				var _this3 = this;
-	
-				console.log('add zone: ' + newZone);
-				var updatedZone = Object.assign({}, newZone);
-				// set ZipCodes to be an array - break up the string
-				updatedZone['zipCodes'] = updatedZone.zipCode.split(',');
-	
-				_ApiManager2.default.post('/api/zone', updatedZone, function (err, response) {
-					if (err) {
-						alert("Error: " + err);return;
-					}
-	
-					console.log('Creating a ZONE...' + response);
-					var updatedList = Object.assign([], _this3.state.list);
-					updatedList.push(response.result);
-	
-					_this3.setState({
-						list: updatedList
-					});
-				});
-	
-				// This adds a Zone to the local state
-				/*let updatedList = Object.assign([], this.state.list);
-	   updatedList.push(this.state.zone);
-	   this.setState({
-	   	list: updatedList
-	   })*/
-			}
-		}, {
-			key: 'render',
-			value: function render() {
-				//const listItems = this.state.list.map((zone,i)=>{
-	
-				var listItems = this.state.list.map(function (zone, i) {
-					return _react2.default.createElement(
-						'li',
-						{ key: i },
-						_react2.default.createElement(_Zone2.default, { currentZone: zone })
-					);
-				});
-				return _react2.default.createElement(
-					'div',
-					null,
-					_react2.default.createElement(
-						'ol',
-						null,
-						listItems
-					),
-					_react2.default.createElement(_CreateZone2.default, { onCreate: this.addZone.bind(this) })
-				);
-			}
-		}]);
-	
-		return Zones;
-	}(_react.Component);
-	
-	exports.default = Zones;
-
-/***/ },
-/* 185 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _styles = __webpack_require__(186);
-	
-	var _styles2 = _interopRequireDefault(_styles);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // presentational componet
-	// "use strict"; // maybe need this?
-	
-	
-	var Zone = function (_Component) {
-	    _inherits(Zone, _Component);
-	
-	    function Zone() {
-	        _classCallCheck(this, Zone);
-	
-	        return _possibleConstructorReturn(this, (Zone.__proto__ || Object.getPrototypeOf(Zone)).apply(this, arguments));
-	    }
-	
-	    _createClass(Zone, [{
-	        key: 'render',
-	        value: function render() {
-	
-	            var zoneStyle = _styles2.default.zone; // needs to be inside the render func!
-	            var zipCode1 = this.props.currentZone.zipCodes[0];
-	            return _react2.default.createElement(
-	                'div',
-	                { style: zoneStyle.container },
-	                _react2.default.createElement(
-	                    'h2',
-	                    { style: zoneStyle.header },
-	                    _react2.default.createElement(
-	                        'a',
-	                        { style: zoneStyle.title, href: '#' },
-	                        this.props.currentZone.name
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'span',
-	                    { className: 'detail' },
-	                    zipCode1
-	                ),
-	                _react2.default.createElement('br', null),
-	                _react2.default.createElement(
-	                    'span',
-	                    null,
-	                    this.props.currentZone.numComments,
-	                    ' comments'
-	                )
-	            );
-	        }
-	    }]);
-	
-	    return Zone;
-	}(_react.Component);
-	
-	exports.default = Zone;
-
-/***/ },
+/* 184 */,
+/* 185 */,
 /* 186 */
 /***/ function(module, exports) {
 
@@ -22157,7 +21913,8 @@
 	};
 
 /***/ },
-/* 187 */
+/* 187 */,
+/* 188 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22166,7 +21923,7 @@
 					value: true
 	});
 	
-	var _superagent = __webpack_require__(188);
+	var _superagent = __webpack_require__(189);
 	
 	var _superagent2 = _interopRequireDefault(_superagent);
 	
@@ -22194,6 +21951,7 @@
 					post: function post(url, body, callback) {
 									_superagent2.default.post(url).send(body).set('Accept', 'application/json').end(function (err, response) {
 													if (err) {
+																	console.log(err);
 																	callback(err, null);
 																	return;
 													}
@@ -22212,7 +21970,7 @@
 	};
 
 /***/ },
-/* 188 */
+/* 189 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -22229,11 +21987,11 @@
 	  root = this;
 	}
 	
-	var Emitter = __webpack_require__(189);
-	var RequestBase = __webpack_require__(190);
-	var isObject = __webpack_require__(191);
-	var isFunction = __webpack_require__(192);
-	var ResponseBase = __webpack_require__(193);
+	var Emitter = __webpack_require__(190);
+	var RequestBase = __webpack_require__(191);
+	var isObject = __webpack_require__(192);
+	var isFunction = __webpack_require__(193);
+	var ResponseBase = __webpack_require__(194);
 	
 	/**
 	 * Noop.
@@ -23122,7 +22880,7 @@
 
 
 /***/ },
-/* 189 */
+/* 190 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -23291,13 +23049,13 @@
 
 
 /***/ },
-/* 190 */
+/* 191 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Module of mixed-in functions shared between node and client code
 	 */
-	var isObject = __webpack_require__(191);
+	var isObject = __webpack_require__(192);
 	
 	/**
 	 * Expose `RequestBase`.
@@ -23831,7 +23589,7 @@
 
 
 /***/ },
-/* 191 */
+/* 192 */
 /***/ function(module, exports) {
 
 	/**
@@ -23850,7 +23608,7 @@
 
 
 /***/ },
-/* 192 */
+/* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -23860,7 +23618,7 @@
 	 * @return {Boolean}
 	 * @api private
 	 */
-	var isObject = __webpack_require__(191);
+	var isObject = __webpack_require__(192);
 	
 	function isFunction(fn) {
 	  var tag = isObject(fn) ? Object.prototype.toString.call(fn) : '';
@@ -23871,7 +23629,7 @@
 
 
 /***/ },
-/* 193 */
+/* 194 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -23879,7 +23637,7 @@
 	 * Module dependencies.
 	 */
 	
-	var utils = __webpack_require__(194);
+	var utils = __webpack_require__(195);
 	
 	/**
 	 * Expose `ResponseBase`.
@@ -24010,7 +23768,7 @@
 
 
 /***/ },
-/* 194 */
+/* 195 */
 /***/ function(module, exports) {
 
 	
@@ -24084,7 +23842,7 @@
 
 
 /***/ },
-/* 195 */
+/* 196 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24099,11 +23857,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Comment = __webpack_require__(196);
+	var _Comment = __webpack_require__(197);
 	
 	var _Comment2 = _interopRequireDefault(_Comment);
 	
-	var _CreateComment = __webpack_require__(197);
+	var _CreateComment = __webpack_require__(198);
 	
 	var _CreateComment2 = _interopRequireDefault(_CreateComment);
 	
@@ -24111,7 +23869,7 @@
 	
 	var _styles2 = _interopRequireDefault(_styles);
 	
-	var _ApiManager = __webpack_require__(187);
+	var _ApiManager = __webpack_require__(188);
 	
 	var _ApiManager2 = _interopRequireDefault(_ApiManager);
 	
@@ -24216,7 +23974,7 @@
 	exports.default = Comments;
 
 /***/ },
-/* 196 */
+/* 197 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24282,7 +24040,7 @@
 	exports.default = Comment;
 
 /***/ },
-/* 197 */
+/* 198 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24297,11 +24055,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Comment = __webpack_require__(196);
+	var _Comment = __webpack_require__(197);
 	
 	var _Comment2 = _interopRequireDefault(_Comment);
 	
-	var _ApiManager = __webpack_require__(187);
+	var _ApiManager = __webpack_require__(188);
 	
 	var _ApiManager2 = _interopRequireDefault(_ApiManager);
 	
@@ -24382,7 +24140,7 @@
 	exports.default = CreateComment;
 
 /***/ },
-/* 198 */
+/* 199 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24397,11 +24155,84 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Zone = __webpack_require__(185);
+	var _styles = __webpack_require__(186);
 	
-	var _Zone2 = _interopRequireDefault(_Zone);
+	var _styles2 = _interopRequireDefault(_styles);
 	
-	var _ApiManager = __webpack_require__(187);
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // presentational componet
+	// "use strict"; // maybe need this?
+	
+	
+	var Poll = function (_Component) {
+	    _inherits(Poll, _Component);
+	
+	    function Poll() {
+	        _classCallCheck(this, Poll);
+	
+	        return _possibleConstructorReturn(this, (Poll.__proto__ || Object.getPrototypeOf(Poll)).apply(this, arguments));
+	    }
+	
+	    _createClass(Poll, [{
+	        key: 'render',
+	        value: function render() {
+	
+	            var zoneStyle = _styles2.default.zone; // needs to be inside the render func!
+	
+	            return _react2.default.createElement(
+	                'div',
+	                { style: zoneStyle.container },
+	                _react2.default.createElement(
+	                    'h2',
+	                    { style: zoneStyle.header },
+	                    _react2.default.createElement(
+	                        'a',
+	                        { style: zoneStyle.title, href: '#' },
+	                        this.props.currentPoll.pollquestion
+	                    )
+	                ),
+	                _react2.default.createElement('br', null),
+	                _react2.default.createElement(
+	                    'span',
+	                    null,
+	                    'by ',
+	                    this.props.currentPoll.author
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return Poll;
+	}(_react.Component);
+	
+	exports.default = Poll;
+
+/***/ },
+/* 200 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _Poll = __webpack_require__(199);
+	
+	var _Poll2 = _interopRequireDefault(_Poll);
+	
+	var _ApiManager = __webpack_require__(188);
 	
 	var _ApiManager2 = _interopRequireDefault(_ApiManager);
 	
@@ -24411,69 +24242,143 @@
 	
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // render a list of Polls
+	// a Container component (will perform CRUD)
+	//"use strict"; // maybe need this?
 	
-	var CreateZone = function (_Component) {
-	    _inherits(CreateZone, _Component);
+	// import CreateZone from '../presentation/CreateZone';
 	
-	    function CreateZone() {
-	        _classCallCheck(this, CreateZone);
 	
-	        var _this = _possibleConstructorReturn(this, (CreateZone.__proto__ || Object.getPrototypeOf(CreateZone)).call(this));
+	//var tempList = [1,2,3];
 	
-	        _this.state = {
-	            zone: {
-	                name: '',
-	                zipCodes: ''
-	            }
-	        };
-	        return _this;
-	    }
+	var Polls = function (_Component) {
+		_inherits(Polls, _Component);
 	
-	    _createClass(CreateZone, [{
-	        key: 'updateZone',
-	        value: function updateZone(event) {
+		function Polls() {
+			_classCallCheck(this, Polls);
 	
-	            var updatedZone = Object.assign({}, this.state.zone);
-	            updatedZone[event.target.id] = event.target.value;
+			var _this = _possibleConstructorReturn(this, (Polls.__proto__ || Object.getPrototypeOf(Polls)).call(this));
 	
-	            this.setState({
-	                comment: updatedZone
-	            });
-	        }
-	    }, {
-	        key: 'submitZone',
-	        value: function submitZone(event) {
-	            console.log("Submitting zone (CreateZone): " + JSON.stringify(this.state.zone));
-	            // call the function from the container (not here as this is presentation layer)
-	            this.props.onCreate(this.state.zone);
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement(
-	                'div',
-	                null,
-	                'Add a Zone:',
-	                _react2.default.createElement('br', null),
-	                _react2.default.createElement('input', { id: 'name', onChange: this.updateZone.bind(this), className: 'form-control', type: 'text', placeholder: 'Name' }),
-	                _react2.default.createElement('br', null),
-	                _react2.default.createElement('input', { id: 'zip', onChange: this.updateZone.bind(this), className: 'form-control', type: 'text', placeholder: 'Zip Code' }),
-	                _react2.default.createElement('br', null),
-	                _react2.default.createElement('br', null),
-	                _react2.default.createElement(
-	                    'button',
-	                    { onClick: this.submitZone.bind(this), className: 'btn btn-info' },
-	                    'Add Zone'
-	                )
-	            );
-	        }
-	    }]);
+			_this.state = {
+				selected: 0,
+				list: []
+			};
+			return _this;
+		}
 	
-	    return CreateZone;
+		// override this function
+	
+	
+		_createClass(Polls, [{
+			key: 'componentDidMount',
+			value: function componentDidMount() {
+				var _this2 = this;
+	
+				console.log('componentDidMount: ');
+				_ApiManager2.default.get('/api/polls', null, function (err, response) {
+					if (err) {
+						alert("Error: " + err);
+						return;
+					}
+	
+					console.log('RESULTS: ' + JSON.stringify(response.message));
+	
+					_this2.setState({
+						list: response.message
+					});
+				});
+	
+				// /*superagent
+				// 	.get('api/zone')
+				// 	.query(null)
+				// 	.set('Accept', 'application/json')
+				// 	.end((err, response) => {
+				// 		if (err) { alert("Error: " + err); return;}
+				// 		console.log(JSON.stringify(response.body));
+	
+				// 		let results = response.body.message;
+	
+				// 		this.setState({
+				// 			list: results
+				// 		})
+				// 	})
+				// */
+			}
+		}, {
+			key: 'updatePoll',
+			value: function updatePoll(event) {
+				var updPoll = Object.assign({}, this.state.poll);
+				updPoll[event.target.id] = event.target.value;
+				this.setState({
+					poll: updPoll
+				});
+			}
+		}, {
+			key: 'addPoll',
+			value: function addPoll(newPoll) {
+				var _this3 = this;
+	
+				console.log('add zone: ' + JSON.stringify(newPoll));
+				var thisPoll = Object.assign({}, newPoll);
+				// set ZipCodes to be an array - break up the string
+				// if(updatedZone.zipCodes.indexOf(';') > -1) {
+				// 	updatedZone['zipCodes'] = updatedZone.zipCodes.split(',');
+				// } else {
+				// 	updatedZone['zipCodes'] = updatedZone.zipCodes;
+				// }
+	
+	
+				_ApiManager2.default.post('/api/poll', thisPoll, function (err, response) {
+					if (err) {
+						alert("Error: " + err);return;
+					}
+	
+					console.log('Creating a Poll...' + response);
+					var updatedList = Object.assign([], _this3.state.list);
+					updatedList.push(response.result);
+	
+					_this3.setState({
+						list: updatedList
+					});
+				});
+	
+				// This adds a Zone to the local state
+				/*let updatedList = Object.assign([], this.state.list);
+	   updatedList.push(this.state.zone);
+	   this.setState({
+	   	list: updatedList
+	   })*/
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+	
+				var listItems = this.state.list.map(function (poll, i) {
+					return _react2.default.createElement(
+						'li',
+						{ key: i },
+						_react2.default.createElement(_Poll2.default, { currentPoll: poll })
+					);
+				});
+				return _react2.default.createElement(
+					'div',
+					null,
+					_react2.default.createElement(
+						'ol',
+						null,
+						listItems
+					)
+				);
+			}
+		}]);
+	
+		return Polls;
 	}(_react.Component);
+	// Todo: add this
+	// 	<CreatePoll onCreate={this.addPoll.bind(this)} />
 	
-	exports.default = CreateZone;
+	
+	exports.default = Polls;
 
 /***/ }
 /******/ ]);

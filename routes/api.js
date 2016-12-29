@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var ZoneCtlr = require('../controllers/ZoneController');
+var PollsCtlr = require('../controllers/PollsController');
 var controllers = require("../controllers");
 
 router.get("/:resource", function(req, res, next){

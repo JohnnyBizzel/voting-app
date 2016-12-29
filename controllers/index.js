@@ -1,7 +1,7 @@
-var ZoneController = require("./ZoneController");
+var PollsController = require("./PollsController");
 var CommentController = require("./CommentController");
 
 module.exports = {
     comment: CommentController,
-    zone: ZoneController
+    polls: PollsController
 };

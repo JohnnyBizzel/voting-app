@@ -28,6 +28,7 @@ export default {
             .set('Accept', 'application/json')
             .end((err, response) => {
                 if (err) { 
+                	console.log(err);
 				    callback(err, null);
 				    return;}
 				// here check for API failures

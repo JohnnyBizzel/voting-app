@@ -12,6 +12,10 @@ router.get("/createzone",function(req,res,next){
 res.render("createzone",null);
 
 });
+router.get("/createpolls",function(req,res,next){
+res.render("createpolls",null);
+
+});
 
 router.get("/createcomment",function(req,res,next){
 res.render("createcomment",null);

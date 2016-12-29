@@ -1,5 +1,5 @@
-This is from a series in 5 parts "Full Stack React & Node JS Project" by velocity360
+FCC Full Stack Project
+*Voting App*
+To run this app, the command is:
 
-To run the command is
-
-node ./bin/www
+`node ./bin/www`

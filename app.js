@@ -5,7 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose =require("mongoose");
-var dbUrl = 'mongodb://terrytester:test123@ds139448.mlab.com:39448/yikyak';
+var dbUrl = 'mongodb://asjb:326382l@ds053718.mlab.com:53718/fcc-polls';
 
 mongoose.connect(dbUrl, function(err, res){
   if (err){

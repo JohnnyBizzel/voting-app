@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import Zones from '../containers/Zones'
+//import Zones from '../containers/Zones'
 import Comments from '../containers/Comments'
+import Polls from '../containers/Polls'
 
 class Home extends Component {
     
@@ -8,11 +9,11 @@ class Home extends Component {
         return (
             <div className="container">
                 <div className="row">
-                    <div className="col-md-4 col-sm-4">
-                        <Zones />
+                    <div className="col-md-6 col-sm-6">
+                        <Polls />
                     </div>
-                    <div className="col-md-8 col-sm-8">
-                        <Comments />
+                    <div className="col-md-6 col-sm-6">
+                        
                     </div>
                 </div>
             </div>
