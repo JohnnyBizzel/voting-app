@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 //import Zones from '../containers/Zones'
 import EditPoll from '../presentation/EditPoll'
-import Polls from '../containers/Polls'
+import Polls from '../containers/Polls';
+import {Link} from 'react-router';
 
 class Home extends Component {
     
@@ -18,6 +19,7 @@ class Home extends Component {
                     </div>
                     
                 </div>
+                <Link to="waste">waste page here</Link>
                 
             </div>
         )

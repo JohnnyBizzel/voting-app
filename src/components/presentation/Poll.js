@@ -21,7 +21,7 @@ class Poll extends Component {
        
 				    
 				    <h2 style={zoneStyle.header}>
-				    <Link to="Polldetailfull">Some question</Link>
+				    <Link to="Polldetailfull">{this.props.currentPoll.pollquestion}</Link>
 				    
 				    
 				        

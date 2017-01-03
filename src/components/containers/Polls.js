@@ -109,7 +109,7 @@ class Polls extends Component {
 				<ol>
 				   {listItems}
 				</ol>
-				{this.props.children}
+				
 			
 			</div>
 	)}
