@@ -95,7 +95,7 @@ class Polls extends Component {
 	
 	
 	render() {
-
+//	
 
 		const listItems = this.state.list.map((poll, i) =>  {
 			return (
@@ -109,7 +109,7 @@ class Polls extends Component {
 				<ol>
 				   {listItems}
 				</ol>
-				
+				{this.props.children}
 			
 			</div>
 	)}

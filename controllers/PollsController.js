@@ -6,6 +6,7 @@ var Polls = require("../models/Polls");
 module.exports = {
     
     find: function(params, callback){
+        console.log("PollsControler : find function")
         Polls.find(params, function(err, poll){
             if (err) {
                 callback(err, null);
@@ -15,6 +16,7 @@ module.exports = {
         });
     },
     findById:function(id, callback){
+        console.log("PollsControler : find by ID function")
         Polls.findById(id, function(err, poll){
             if (err) {
                 callback(err, null);
@@ -24,7 +26,8 @@ module.exports = {
         });
     },
     create:function(params, callback){
-        // split up an array of zip codes
+        console.log("PollsControler : create function")
+        // split up an array of poll responses
         
         var responses = params['responses'];
         var responseAry = responses.split(';');
@@ -35,7 +38,7 @@ module.exports = {
         params['responses'] = newAry;
         
         
-       // var pollquestion = params['pollquestion'];
+        // var pollquestion = params['pollquestion'];
         
         
         //console.log(params);
@@ -50,6 +53,7 @@ module.exports = {
         });      
     },
     update:function(id,params, callback){
+        console.log("PollsControler : update function")
         Polls.findByIdAndUpdate(id, params,{new:true}, function(err, poll){
             if (err) {
                 callback(err, null);

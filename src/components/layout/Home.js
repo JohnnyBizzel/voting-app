@@ -11,11 +11,14 @@ class Home extends Component {
                 <div className="row">
                     <div className="col-md-6 col-sm-6">
                         <Polls />
+                        
                     </div>
                     <div className="col-md-6 col-sm-6">
                         <EditPoll />
                     </div>
+                    
                 </div>
+                
             </div>
         )
     }

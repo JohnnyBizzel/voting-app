@@ -1,8 +1,13 @@
+require('@risingstack/trace');
+
+// your application's code
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
+
+// your application's code
 var bodyParser = require('body-parser');
 var mongoose =require("mongoose");
 var dbUrl = 'mongodb://asjb:326382l@ds053718.mlab.com:53718/fcc-polls';
@@ -19,6 +24,7 @@ mongoose.connect(dbUrl, function(err, res){
 
 var index = require('./routes/index');
 var api = require('./routes/api');
+var polldetail = require("./routes/polldetail");
 
 var app = express();
 
@@ -36,6 +42,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/api', api);
+//app.use('/polldetail', polldetail);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
