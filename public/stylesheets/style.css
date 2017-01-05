@@ -37,3 +37,4 @@ nav ul, nav li {
 	text-decoration: none;
 	background: #313233;
 }
+ul { list-style: square }

@@ -42,6 +42,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/api', api);
+app.use('/Polldetailfull/:id', index);
 
 console.log("moving to 404");
 

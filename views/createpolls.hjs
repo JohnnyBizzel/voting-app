@@ -7,9 +7,9 @@
   <body>
     <h1>Create a poll</h1>
     <form action="/api/polls" method="post">
-        <input type="text" name="pollquestion" placeholder="Poll question" />
+        <input type="text" name="pollquestion" placeholder="Poll question" required />
         <br/>
-        <input type="text" name="responses" placeholder="responses" /> (separated with ; )
+        <input type="text" name="responses" placeholder="responses" required /> (separated with ; )
         <br/>
         
         <input type="submit" value="Create poll" />

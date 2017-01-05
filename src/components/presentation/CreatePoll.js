@@ -10,7 +10,7 @@ class CreatePoll extends Component {
                     pollquestion: '',
                     author: '',
                     timestamp: '',
-                    responses: []
+                    responses: ['',0]
                 }
         };
     }
@@ -29,7 +29,7 @@ class CreatePoll extends Component {
     
 
     submitPoll(event){
-        console.log("Submitting comment (from CreatePoll): " + JSON.stringify(this.state.poll));
+        console.log("Submitting new poll (from CreatePoll): " + JSON.stringify(this.state.poll));
         // call the function from the container (not here as this is presentation layer)
         this.props.onCreate(this.state.poll);
     }

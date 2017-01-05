@@ -33,7 +33,9 @@ module.exports = {
         var responseAry = responses.split(';');
         var newAry = [];
         responseAry.forEach(function(resp){
-           newAry.push(resp.trim()); 
+            var respObj = { "response": resp.trim(), 
+                            "votes" : 0 }
+           newAry.push(respObj); 
         });
         params['responses'] = newAry;
         
