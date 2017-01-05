@@ -9,6 +9,19 @@ class Home extends Component {
     render() {
         return (
             <div className="container">
+            <h1>The Polling Station</h1>
+            <nav role="navigation">
+             <div className="container-fluid">
+                <div className="navbar-header">
+                    <ul className="nav navbar-nav navbar-right">
+                      <li><a href="/login" title="signin">Sign in</a></li>
+                      <li><a href="#" title="register">Register</a></li>
+                   
+                    </ul>
+                </div>
+             </div>
+            </nav>
+
                 <div className="row">
                     <div className="col-md-6 col-sm-6">
                         <Polls />

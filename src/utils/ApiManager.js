@@ -1,5 +1,5 @@
 import superagent from 'superagent';
-console.log('in API manager');
+
 export default {
     get: (url, params, callback) => {
         superagent

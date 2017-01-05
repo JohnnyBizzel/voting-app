@@ -106,9 +106,9 @@ class Polls extends Component {
 		});
 		return (
 			<div>
-				<ol>
+				<ul>
 				   {listItems}
-				</ol>
+				</ul>
 				
 			
 			</div>

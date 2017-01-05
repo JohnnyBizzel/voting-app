@@ -42,7 +42,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/api', api);
-//app.use('/polldetail', polldetail);
+
+console.log("moving to 404");
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

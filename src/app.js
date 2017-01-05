@@ -20,7 +20,7 @@ ReactDOM.render( <Router history={browserHistory}>
     <Route path="/" component={Container}>
     <IndexRoute component={Home} />
       <Route path="login" component={Login} />
-      <Route path="Polldetailfull" component={Polldetail} />
+      <Route path="Polldetailfull/:id" component={Polldetail} />
       <Route path="waste" component={Waste} />
       
     </Route>

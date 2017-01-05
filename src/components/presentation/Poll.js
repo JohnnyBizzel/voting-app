@@ -8,20 +8,23 @@ import { Router, Route, IndexRoute, Link, IndexLink, browserHistory } from 'reac
 //{this.props.currentPoll.pollquestion}  use this instead of go to
 //<a style={zoneStyle.title} href="#">Some question</a>
 //<Link to="/Polldetail">Some question</Link>
-
+//<Link to={`/user/${_id}`}>
+//<Link to={{ pathname: 'Polldetailfull/', query: { id: this.props.currentPoll._id } }}>{this.props.currentPoll.pollquestion}</Link>
 class Poll extends Component {
+    componentDidMount(){
+        console.log("here's the id",this.props.currentPoll._id)
+    }
     
     render() {
         
         const zoneStyle = styles.zone; // needs to be inside the render func!
-        /*
-      
-        */
+        
         return ( <div style={zoneStyle.container}>
        
 				    
 				    <h2 style={zoneStyle.header}>
-				    <Link to="Polldetailfull">{this.props.currentPoll.pollquestion}</Link>
+				    
+				    <Link to={`/Polldetailfull/${this.props.currentPoll._id}`}>{this.props.currentPoll.pollquestion}</Link>
 				    
 				    
 				        
