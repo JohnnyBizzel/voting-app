@@ -38,3 +38,17 @@ nav ul, nav li {
 	background: #313233;
 }
 ul { list-style: square }
+.boldText {
+	font-weight: bold;
+}
+.width25pct {
+	width: 220px;
+}
+.responseBox {
+	border: 1px solid #ddd;
+	background-color: #f2f2f2;
+	margin: 3px;
+	padding: 5px;
+	padding-left: 15px;
+	width: 80%;
+}

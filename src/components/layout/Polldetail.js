@@ -37,9 +37,11 @@ class Polldetail extends Component {
         this.eachPollResponse = this.eachPollResponse.bind(this);
         this.handleClick=this.handleClick.bind(this);
         
+        
   
         this.state = {
             selected: 0,
+            radfunc:function(){console.log("yipee")},
             list: {
                     responses: []
                    },
@@ -66,8 +68,12 @@ class Polldetail extends Component {
             radiovalue:""
         };
 
+ 
     }
+    
+    
     componentWillMount(){
+        
         console.log('componentDidMount (Polldetail): ' + this.props.location.pathname);
         var urlWithId =this.props.location.pathname;
         var pollID = urlWithId.split('/').pop();
@@ -96,8 +102,12 @@ class Polldetail extends Component {
     }
     //because this is not a pure function, we need to bind this eachPollresponse function also
     eachPollResponse(resp) {
-                return 
+                return ;
     }
+    
+   
+    
+   
 
     handleClick() {
         console.log("Chart data: " + this.state.data.datasets); 
@@ -123,20 +133,34 @@ class Polldetail extends Component {
       //this.setState({this.state.data.datasets[0].data=myData})
     }
     
-
+   adfunc(key){
+        console.log('Item clicked: ', this.state.list.responses[key].id);
+    }
     render() {
-        
+        let _this = this
+       return (
+         this.state.list.responses.map((item, key)=>{
+             <button onClick={_this.adfunc.bind(_this, key)}>{item.name}</button>
+         })
+       )
+    
+        /*
         const responsesfinal = this.state.list.responses.map(function(i){
             function handleSelect(e) {
                             e.preventDefault();
                             
                             // TODO not sure how to set state from here:
+                            console.log("this here",this);
                             alert('You selected: ' + e.target.value);
                             //this.setState({radiovalue:e.target.value});
+                            console.log("previous radio value",this.state.bind(this))
+                            console.log("new radio value",e.target.value)
+                            
             }
-                        
+                //I am experimenting with handleSelecttwo func        
             return (<div className="radio">
-                        <label><input key={i.key} name="megha" onChange={handleSelect} 
+            <button onClick={(event)=>console.log("button")}>{i}</button>
+                        <label><input key={i.key} name="megha" onChange={this.state.radfunc.bind(this)} 
                         type="radio" placeholder="bawa" value={i.response}  />
                         {i.response}
                         </label>
@@ -144,6 +168,7 @@ class Polldetail extends Component {
                     </div>
             )
         })
+        */
      
      
 
@@ -155,7 +180,7 @@ class Polldetail extends Component {
                         <h2>{this.state.list.pollquestion}</h2>
                       {responsesfinal}
                         <button onClick={this.vote}>Submit</button>
-
+                         
                         </div>
 
                     <div className="col-md-6">

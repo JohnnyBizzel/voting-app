@@ -8,8 +8,9 @@ import Container from './containers/Container.js'
 
 import Home from './layout/Home'
 import Login from '../Login/Login'
-import Polldetail from './layout/Polldetail.js';
-//import Poll from './containers/Container.js';
+//import Polldetail from './layout/Polldetail.js'; // removed for testing
+import PollDetails from './layout/PollDetails.js';
+
 //export const makeMainRoutes = () =>
 class makeMainRoutes extends React.Component  {
   render() {
@@ -19,7 +20,7 @@ class makeMainRoutes extends React.Component  {
        
         
         <Route path="login" component={Login} />
-        <Route path="Polldetailfull" component={Polldetail} />
+        <Route path="Polldetailfull" component={PollDetails} />
         
       </Route>
       
