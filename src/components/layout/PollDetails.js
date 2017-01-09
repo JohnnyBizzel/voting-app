@@ -1,75 +1,89 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import styles from '../layout/styles';
 import {Doughnut} from 'react-chartjs-2';
 import Api from '../../utils/ApiManager';
 import Chart from 'chart.js';
 import {Link} from 'react-router';
 
+class RadioButtons extends Component {
+    
+    
+}
 
 class RadioRows extends Component {
 
     constructor(props) {
          
         super(props);
-       // this.responsesfinal=this.responsesfinal.bind(this);
-        
+        this.state = {
+            currentVoteResponse: '',
+            currentPollId: this.props.pollId
+        }
     }   
-    // responsesfinal() {
-    //     this.state.list.responses.map(function(i){
-    //         function handleSelect(e) {
-    //                         e.preventDefault();
-                            
-    //                         // TODO not sure how to set state from here:
-    //                         alert('You selected: ' + e.target.value);
-    //                         //this.setState({radiovalue:e.target.value});
-    //                         console.log("previous radio value",this.state.bind(this))
-    //                         console.log("new radio value",e.target.value)
-                            
+   
+    // userVote(){  
+    //     console.log('You selected: 12-13 ID ='+ this.props.pollId + ' RESP='  + ' this.props.resp=' +  this.props.resp);
+    //     var resp = this.props.resp;
+    //     /* Api.put('/api/polls/' + resp, null, (err, response) => {
+    //         if (err) { 
+    //             alert("Error: " + err); 
+    //             return;
     //         }
-                        
-    //         return (<div className="radio">
-    //                     <label><input key={i.key} name="megha" onChange={handleSelect} 
-    //                     type="radio" placeholder="bawa" value={i.response}  />
-    //                     {i.response}
-    //                     </label>
-                        
-    //                 </div>
-    //         )
-    //     })
+    //       */  
+
     // }
     
-    vote(){  alert('You selected: '+  this.props.resp);
+    // update() {
+    //     console.log("Updated: " + this.props.resp + " key=" + this.props.pollId);
+    // }
+    render(){
+   
         
-        
+            return (
+            <div key={this.props.index} className="responseBox">
+                
+                <label><input  name="radiobtns" 
+                        
+                        type="radio" 
+                        placeholder="bawa" 
+                        value={this.props.resp}
+                        />
+                            &emsp;{this.props.resp}
+                        </label>&emsp;
+                current score: {this.props.votes}
+            </div>
+            );
+//onClick={this.userVote.bind(this)}
     }
     
-    render(){
-        let handleSelector = function handleSelect(e) {
-                            e.preventDefault();
+  
+}
+
+
+RadioRows.propTypes = {
+  resp: PropTypes.string.isRequired,
+  votes: PropTypes.number.isRequired,
+ // userVote: PropTypes.func.isRequired
+};
+/*
+ let handleSelector = function handleSelect(e,f) {
+                            //e.preventDefault();
                             
                             // TODO not sure how to set state from here:
-                            alert('You selected: ' + e.target.value);
+                            alert(e + 'You selected: ' + f);
+                            //this.sendVote(e, f)
                             //this.setState({radiovalue:e.target.value});
                             console.log("previous radio value",this.state.bind(this))
                             console.log("new radio value",e.target.value)
                             
             }
-    console.log("Rendering RadioRows");
-    console.log(this.props.resp);
-            return (
-            <div className="responseBox">
-                <div className="boldText width25pct"> {this.props.resp} </div>
-                <label><input key={this.props.key} name="megha" onChange={handleSelector} 
-                        type="radio" placeholder="bawa" value={this.props.resp}  />
-                        {this.props.resp}
-                        </label>
-               <button key={this.props.key} onClick={this.vote.bind(this)}>Vote</button> current score: {this.props.votes}
-            </div>
-            );
+*/
 
-    }
-}
-
+  // () => this.sendVote(this.props.pollId, this.props.resp)
+    
+    // <div className="boldText width25pct"> {this.props.resp} </div>
+    //  <button key={this.props.key} onClick={this.vote.bind(this)}>Vote</button> (not needed)
+    
 class PollDetails extends Component {
 
     constructor() {
@@ -100,12 +114,13 @@ class PollDetails extends Component {
                     '#FFCE56'
                     ]
                 }]
-                },
-            radiovalue:""
+            },
+            currentVoteResponse: ''
         };
 
+        this.handleFormSubmit = this.handleFormSubmit.bind(this);
     }
-    componentWillMount(){
+    componentDidMount(){
         console.log('componentDidMount (Polldetail): ' + this.props.location.pathname);
         var urlWithId =this.props.location.pathname;
         var pollID = urlWithId.split('/').pop();
@@ -158,23 +173,43 @@ class PollDetails extends Component {
 
 
 
-    sendVote(){ console.log("vote TODO")}
-
-    render() {
-        var responseList = this.state.list.responses.map(function(i){
-            return (
-                <RadioRows key={i.key} resp={i.response} votes={i.votes} />
-            )
-        }.bind(this));
+    handleFormSubmit(e, childData) { 
+        // call API
+        e.preventDefault();
+        //Api.put()
+        var form = e.target
+        var selectedRadio = form.elements.radiobtns.value
+        var pollId = this.state.list._id
+        console.log("vote " + pollId + ' : response was: ' + selectedRadio);
         
+    }
+    
+    // castVote={this.sendVote(this.state.list._id,item.response)} 
+    selectItem(currentVoteResponse) {
+        this.setState({currentVoteResponse})
+    }
+
+        // onClick={this.handleChildClick.bind(null,item)}
+    render() {
+
+        let responseList = this.state.list.responses.map(function(item, index){
+            return (
+                <RadioRows  key={index} 
+                pollId={this.state.list._id} resp={item.response} votes={item.votes} />
+            )
+        }.bind(this)); // bind the onClick handle event
+        // <button onClick={this.handleChildClick}>Submit</button>
         return(<div className="container">
                 <div className="row">
                     <div className="col-md-6">
                         <Link to="/">Back</Link>
                             <h2>{this.state.list.pollquestion}</h2>
+                            <form onSubmit={this.handleFormSubmit}>
                                 {responseList}
                                 <br/>
-                                <button onClick={this.sendVote}>Submit</button>
+                                
+                                 <input type="submit" name="submitBtn"  value="Cast your vote"/>
+                            </form>
                     </div>
 
                     <div className="col-md-6">
@@ -185,5 +220,6 @@ class PollDetails extends Component {
             </div>);
     }
 }
+
 
 export default PollDetails;

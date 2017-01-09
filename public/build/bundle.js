@@ -66,7 +66,7 @@
 	
 	var _Waste2 = _interopRequireDefault(_Waste);
 	
-	var _PollDetails = __webpack_require__(415);
+	var _PollDetails = __webpack_require__(254);
 	
 	var _PollDetails2 = _interopRequireDefault(_PollDetails);
 	
@@ -22154,12 +22154,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // render a list of Polls
 	// a Container component (will perform CRUD)
-	//"use strict"; // maybe need this?
 	
-	// import CreateZone from '../presentation/CreateZone';
-	
-	
-	//var tempList = [1,2,3];
 	
 	var Polls = function (_Component) {
 		_inherits(Polls, _Component);
@@ -22197,22 +22192,6 @@
 						list: response.message
 					});
 				});
-	
-				// /*superagent
-				// 	.get('api/zone')
-				// 	.query(null)
-				// 	.set('Accept', 'application/json')
-				// 	.end((err, response) => {
-				// 		if (err) { alert("Error: " + err); return;}
-				// 		console.log(JSON.stringify(response.body));
-	
-				// 		let results = response.body.message;
-	
-				// 		this.setState({
-				// 			list: results
-				// 		})
-				// 	})
-				// */
 			}
 		}, {
 			key: 'updatePoll',
@@ -22230,13 +22209,6 @@
 	
 				console.log('add zone: ' + JSON.stringify(newPoll));
 				var thisPoll = Object.assign({}, newPoll);
-				// set ZipCodes to be an array - break up the string
-				// if(updatedZone.zipCodes.indexOf(';') > -1) {
-				// 	updatedZone['zipCodes'] = updatedZone.zipCodes.split(',');
-				// } else {
-				// 	updatedZone['zipCodes'] = updatedZone.zipCodes;
-				// }
-	
 	
 				_ApiManager2.default.post('/api/poll', thisPoll, function (err, response) {
 					if (err) {
@@ -22251,19 +22223,10 @@
 						list: updatedList
 					});
 				});
-	
-				// This adds a Zone to the local state
-				/*let updatedList = Object.assign([], this.state.list);
-	   updatedList.push(this.state.zone);
-	   this.setState({
-	   	list: updatedList
-	   })*/
 			}
 		}, {
 			key: 'render',
 			value: function render() {
-				//	
-	
 				var listItems = this.state.list.map(function (poll, i) {
 					return _react2.default.createElement(
 						'li',
@@ -27426,7 +27389,23 @@
 													callback(response, response.body);
 									});
 					},
-					put: function put() {},
+					put: function put(url, body, callback) {
+									_superagent2.default.put(url).send(body).set('Accept', 'application/json').end(function (err, response) {
+													if (err) {
+																	console.log(err);
+																	callback(err, null);
+																	return;
+													}
+													// here check for API failures
+													var confirmation = response.body.confirmation;
+													if (confirmation != 'success') {
+																	// send a failure message
+																	callback({ message: response.body.message, null: null });
+																	return;
+													}
+													callback(response, response.body);
+									});
+					},
 					del: function del() {}
 	};
 
@@ -29415,7 +29394,287 @@
 	exports.default = Waste;
 
 /***/ },
-/* 254 */,
+/* 254 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _styles = __webpack_require__(185);
+	
+	var _styles2 = _interopRequireDefault(_styles);
+	
+	var _reactChartjs = __webpack_require__(255);
+	
+	var _ApiManager = __webpack_require__(244);
+	
+	var _ApiManager2 = _interopRequireDefault(_ApiManager);
+	
+	var _chart = __webpack_require__(411);
+	
+	var _chart2 = _interopRequireDefault(_chart);
+	
+	var _reactRouter = __webpack_require__(188);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var RadioButtons = function (_Component) {
+	    _inherits(RadioButtons, _Component);
+	
+	    function RadioButtons() {
+	        _classCallCheck(this, RadioButtons);
+	
+	        return _possibleConstructorReturn(this, (RadioButtons.__proto__ || Object.getPrototypeOf(RadioButtons)).apply(this, arguments));
+	    }
+	
+	    return RadioButtons;
+	}(_react.Component);
+	
+	var RadioRows = function (_Component2) {
+	    _inherits(RadioRows, _Component2);
+	
+	    function RadioRows(props) {
+	        _classCallCheck(this, RadioRows);
+	
+	        var _this2 = _possibleConstructorReturn(this, (RadioRows.__proto__ || Object.getPrototypeOf(RadioRows)).call(this, props));
+	
+	        _this2.state = {
+	            currentVoteResponse: '',
+	            currentPollId: _this2.props.pollId
+	        };
+	        return _this2;
+	    }
+	
+	    // userVote(){  
+	    //     console.log('You selected: 12-13 ID ='+ this.props.pollId + ' RESP='  + ' this.props.resp=' +  this.props.resp);
+	    //     var resp = this.props.resp;
+	    //     /* Api.put('/api/polls/' + resp, null, (err, response) => {
+	    //         if (err) { 
+	    //             alert("Error: " + err); 
+	    //             return;
+	    //         }
+	    //       */  
+	
+	    // }
+	
+	    // update() {
+	    //     console.log("Updated: " + this.props.resp + " key=" + this.props.pollId);
+	    // }
+	
+	
+	    _createClass(RadioRows, [{
+	        key: 'render',
+	        value: function render() {
+	
+	            return _react2.default.createElement(
+	                'div',
+	                { key: this.props.index, className: 'responseBox' },
+	                _react2.default.createElement(
+	                    'label',
+	                    null,
+	                    _react2.default.createElement('input', { name: 'radiobtns',
+	
+	                        type: 'radio',
+	                        placeholder: 'bawa',
+	                        value: this.props.resp
+	                    }),
+	                    '\u2003',
+	                    this.props.resp
+	                ),
+	                '\u2003 current score: ',
+	                this.props.votes
+	            );
+	            //onClick={this.userVote.bind(this)}
+	        }
+	    }]);
+	
+	    return RadioRows;
+	}(_react.Component);
+	
+	RadioRows.propTypes = {
+	    resp: _react.PropTypes.string.isRequired,
+	    votes: _react.PropTypes.number.isRequired
+	};
+	/*
+	 let handleSelector = function handleSelect(e,f) {
+	                            //e.preventDefault();
+	                            
+	                            // TODO not sure how to set state from here:
+	                            alert(e + 'You selected: ' + f);
+	                            //this.sendVote(e, f)
+	                            //this.setState({radiovalue:e.target.value});
+	                            console.log("previous radio value",this.state.bind(this))
+	                            console.log("new radio value",e.target.value)
+	                            
+	            }
+	*/
+	
+	// () => this.sendVote(this.props.pollId, this.props.resp)
+	
+	// <div className="boldText width25pct"> {this.props.resp} </div>
+	//  <button key={this.props.key} onClick={this.vote.bind(this)}>Vote</button> (not needed)
+	
+	var PollDetails = function (_Component3) {
+	    _inherits(PollDetails, _Component3);
+	
+	    function PollDetails() {
+	        _classCallCheck(this, PollDetails);
+	
+	        var _this3 = _possibleConstructorReturn(this, (PollDetails.__proto__ || Object.getPrototypeOf(PollDetails)).call(this));
+	
+	        _this3.state = {
+	            selected: 0,
+	            list: {
+	                responses: []
+	            },
+	            data: {
+	                labels: ['Red', 'Green', 'Yellow'],
+	                datasets: [{
+	                    data: [300, 50, 100],
+	                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+	                    hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+	                }]
+	            },
+	            currentVoteResponse: ''
+	        };
+	
+	        _this3.handleFormSubmit = _this3.handleFormSubmit.bind(_this3);
+	        return _this3;
+	    }
+	
+	    _createClass(PollDetails, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _this4 = this;
+	
+	            console.log('componentDidMount (Polldetail): ' + this.props.location.pathname);
+	            var urlWithId = this.props.location.pathname;
+	            var pollID = urlWithId.split('/').pop();
+	            _ApiManager2.default.get('/api/polls/' + pollID, null, function (err, response) {
+	                if (err) {
+	                    alert("Error: " + err);
+	                    return;
+	                }
+	
+	                console.log('This particular polldetail RESULTS: ' + JSON.stringify(response.message));
+	
+	                _this4.setState({
+	                    list: response.message
+	                });
+	
+	                console.log("responses are ", _this4.state.list.responses);
+	
+	                // update chart
+	                var myData = _this4.state.data.datasets;
+	                var votesSoFar = _this4.state.list.responses.map(function (rv) {
+	                    return rv.votes;
+	                });
+	                var respLabels = _this4.state.list.responses.map(function (r) {
+	                    return r.response;
+	                });
+	
+	                // TODO :  create an array of random colours for the chart.
+	
+	                var newElement = {
+	                    data: votesSoFar,
+	                    backgroundColor: ['#DB6384', '#36EBA2', '#FFCE56', '#1AAE56'],
+	                    hoverBackgroundColor: ['#DB6384', '#36EBA2', '#FFCE56', '#1AAE56']
+	                };
+	                myData.push(newElement);
+	                myData.shift();
+	                _this4.setState(_this4.state.data.datasets = myData);
+	                _this4.setState(_this4.state.data.labels = respLabels);
+	            });
+	        }
+	    }, {
+	        key: 'handleFormSubmit',
+	        value: function handleFormSubmit(e, childData) {
+	            // call API
+	            e.preventDefault();
+	            //Api.put()
+	            var form = e.target;
+	            var selectedRadio = form.elements.radiobtns.value;
+	            var pollId = this.state.list._id;
+	            console.log("vote " + pollId + ' : response was: ' + selectedRadio);
+	        }
+	
+	        // castVote={this.sendVote(this.state.list._id,item.response)} 
+	
+	    }, {
+	        key: 'selectItem',
+	        value: function selectItem(currentVoteResponse) {
+	            this.setState({ currentVoteResponse: currentVoteResponse });
+	        }
+	
+	        // onClick={this.handleChildClick.bind(null,item)}
+	
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	
+	            var responseList = this.state.list.responses.map(function (item, index) {
+	                return _react2.default.createElement(RadioRows, { key: index,
+	                    pollId: this.state.list._id, resp: item.response, votes: item.votes });
+	            }.bind(this)); // bind the onClick handle event
+	            // <button onClick={this.handleChildClick}>Submit</button>
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'container' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'row' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-md-6' },
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/' },
+	                            'Back'
+	                        ),
+	                        _react2.default.createElement(
+	                            'h2',
+	                            null,
+	                            this.state.list.pollquestion
+	                        ),
+	                        _react2.default.createElement(
+	                            'form',
+	                            { onSubmit: this.handleFormSubmit },
+	                            responseList,
+	                            _react2.default.createElement('br', null),
+	                            _react2.default.createElement('input', { type: 'submit', name: 'submitBtn', value: 'Cast your vote' })
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-md-6' },
+	                        _react2.default.createElement(_reactChartjs.Doughnut, { data: this.state.data })
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return PollDetails;
+	}(_react.Component);
+	
+	exports.default = PollDetails;
+
+/***/ },
 /* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -61078,7 +61337,7 @@
 	
 	var _Login2 = _interopRequireDefault(_Login);
 	
-	var _PollDetails = __webpack_require__(415);
+	var _PollDetails = __webpack_require__(254);
 	
 	var _PollDetails2 = _interopRequireDefault(_PollDetails);
 	
@@ -61124,254 +61383,6 @@
 	}(_react2.default.Component);
 	
 	exports.default = makeMainRoutes;
-
-/***/ },
-/* 415 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _styles = __webpack_require__(185);
-	
-	var _styles2 = _interopRequireDefault(_styles);
-	
-	var _reactChartjs = __webpack_require__(255);
-	
-	var _ApiManager = __webpack_require__(244);
-	
-	var _ApiManager2 = _interopRequireDefault(_ApiManager);
-	
-	var _chart = __webpack_require__(411);
-	
-	var _chart2 = _interopRequireDefault(_chart);
-	
-	var _reactRouter = __webpack_require__(188);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var RadioRows = function (_Component) {
-	    _inherits(RadioRows, _Component);
-	
-	    function RadioRows(props) {
-	        _classCallCheck(this, RadioRows);
-	
-	        return _possibleConstructorReturn(this, (RadioRows.__proto__ || Object.getPrototypeOf(RadioRows)).call(this, props));
-	        // this.responsesfinal=this.responsesfinal.bind(this);
-	    }
-	    // responsesfinal() {
-	    //     this.state.list.responses.map(function(i){
-	    //         function handleSelect(e) {
-	    //                         e.preventDefault();
-	
-	    //                         // TODO not sure how to set state from here:
-	    //                         alert('You selected: ' + e.target.value);
-	    //                         //this.setState({radiovalue:e.target.value});
-	    //                         console.log("previous radio value",this.state.bind(this))
-	    //                         console.log("new radio value",e.target.value)
-	
-	    //         }
-	
-	    //         return (<div className="radio">
-	    //                     <label><input key={i.key} name="megha" onChange={handleSelect} 
-	    //                     type="radio" placeholder="bawa" value={i.response}  />
-	    //                     {i.response}
-	    //                     </label>
-	
-	    //                 </div>
-	    //         )
-	    //     })
-	    // }
-	
-	    _createClass(RadioRows, [{
-	        key: 'vote',
-	        value: function vote() {
-	            alert('You selected: ' + this.props.resp);
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            var handleSelector = function handleSelect(e) {
-	                e.preventDefault();
-	
-	                // TODO not sure how to set state from here:
-	                alert('You selected: ' + e.target.value);
-	                //this.setState({radiovalue:e.target.value});
-	                console.log("previous radio value", this.state.bind(this));
-	                console.log("new radio value", e.target.value);
-	            };
-	            console.log("Rendering RadioRows");
-	            console.log(this.props.resp);
-	            return _react2.default.createElement(
-	                'div',
-	                { className: 'responseBox' },
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'boldText width25pct' },
-	                    ' ',
-	                    this.props.resp,
-	                    ' '
-	                ),
-	                _react2.default.createElement(
-	                    'label',
-	                    null,
-	                    _react2.default.createElement('input', { key: this.props.key, name: 'megha', onChange: handleSelector,
-	                        type: 'radio', placeholder: 'bawa', value: this.props.resp }),
-	                    this.props.resp
-	                ),
-	                _react2.default.createElement(
-	                    'button',
-	                    { key: this.props.key, onClick: this.vote.bind(this) },
-	                    'Vote'
-	                ),
-	                ' current score: ',
-	                this.props.votes
-	            );
-	        }
-	    }]);
-	
-	    return RadioRows;
-	}(_react.Component);
-	
-	var PollDetails = function (_Component2) {
-	    _inherits(PollDetails, _Component2);
-	
-	    function PollDetails() {
-	        _classCallCheck(this, PollDetails);
-	
-	        var _this2 = _possibleConstructorReturn(this, (PollDetails.__proto__ || Object.getPrototypeOf(PollDetails)).call(this));
-	
-	        _this2.state = {
-	            selected: 0,
-	            list: {
-	                responses: []
-	            },
-	            data: {
-	                labels: ['Red', 'Green', 'Yellow'],
-	                datasets: [{
-	                    data: [300, 50, 100],
-	                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-	                    hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
-	                }]
-	            },
-	            radiovalue: ""
-	        };
-	
-	        return _this2;
-	    }
-	
-	    _createClass(PollDetails, [{
-	        key: 'componentWillMount',
-	        value: function componentWillMount() {
-	            var _this3 = this;
-	
-	            console.log('componentDidMount (Polldetail): ' + this.props.location.pathname);
-	            var urlWithId = this.props.location.pathname;
-	            var pollID = urlWithId.split('/').pop();
-	            _ApiManager2.default.get('/api/polls/' + pollID, null, function (err, response) {
-	                if (err) {
-	                    alert("Error: " + err);
-	                    return;
-	                }
-	
-	                console.log('This particular polldetail RESULTS: ' + JSON.stringify(response.message));
-	
-	                _this3.setState({
-	                    list: response.message
-	                });
-	
-	                console.log("responses are ", _this3.state.list.responses);
-	
-	                // update chart
-	                var myData = _this3.state.data.datasets;
-	                var votesSoFar = _this3.state.list.responses.map(function (rv) {
-	                    return rv.votes;
-	                });
-	                var respLabels = _this3.state.list.responses.map(function (r) {
-	                    return r.response;
-	                });
-	
-	                // TODO :  create an array of random colours for the chart.
-	
-	                var newElement = {
-	                    data: votesSoFar,
-	                    backgroundColor: ['#DB6384', '#36EBA2', '#FFCE56', '#1AAE56'],
-	                    hoverBackgroundColor: ['#DB6384', '#36EBA2', '#FFCE56', '#1AAE56']
-	                };
-	                myData.push(newElement);
-	                myData.shift();
-	                _this3.setState(_this3.state.data.datasets = myData);
-	                _this3.setState(_this3.state.data.labels = respLabels);
-	            });
-	        }
-	    }, {
-	        key: 'sendVote',
-	        value: function sendVote() {
-	            console.log("vote TODO");
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            var responseList = this.state.list.responses.map(function (i) {
-	                return _react2.default.createElement(RadioRows, { key: i.key, resp: i.response, votes: i.votes });
-	            }.bind(this));
-	
-	            return _react2.default.createElement(
-	                'div',
-	                { className: 'container' },
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'row' },
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'col-md-6' },
-	                        _react2.default.createElement(
-	                            _reactRouter.Link,
-	                            { to: '/' },
-	                            'Back'
-	                        ),
-	                        _react2.default.createElement(
-	                            'h2',
-	                            null,
-	                            this.state.list.pollquestion
-	                        ),
-	                        responseList,
-	                        _react2.default.createElement('br', null),
-	                        _react2.default.createElement(
-	                            'button',
-	                            { onClick: this.sendVote },
-	                            'Submit'
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'col-md-6' },
-	                        _react2.default.createElement(_reactChartjs.Doughnut, { data: this.state.data })
-	                    )
-	                )
-	            );
-	        }
-	    }]);
-	
-	    return PollDetails;
-	}(_react.Component);
-	
-	exports.default = PollDetails;
 
 /***/ }
 /******/ ]);
