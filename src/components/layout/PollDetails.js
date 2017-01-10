@@ -5,11 +5,6 @@ import Api from '../../utils/ApiManager';
 import Chart from 'chart.js';
 import {Link} from 'react-router';
 
-class RadioButtons extends Component {
-    
-    
-}
-
 class RadioRows extends Component {
 
     constructor(props) {
@@ -21,69 +16,29 @@ class RadioRows extends Component {
         }
     }   
    
-    // userVote(){  
-    //     console.log('You selected: 12-13 ID ='+ this.props.pollId + ' RESP='  + ' this.props.resp=' +  this.props.resp);
-    //     var resp = this.props.resp;
-    //     /* Api.put('/api/polls/' + resp, null, (err, response) => {
-    //         if (err) { 
-    //             alert("Error: " + err); 
-    //             return;
-    //         }
-    //       */  
 
-    // }
-    
-    // update() {
-    //     console.log("Updated: " + this.props.resp + " key=" + this.props.pollId);
-    // }
     render(){
-   
-        
             return (
             <div key={this.props.index} className="responseBox">
                 
                 <label><input  name="radiobtns" 
-                        
                         type="radio" 
-                        placeholder="bawa" 
                         value={this.props.resp}
-                        />
-                            &emsp;{this.props.resp}
-                        </label>&emsp;
-                current score: {this.props.votes}
+                        />&emsp;{this.props.resp}
+                </label>&emsp;current score: {this.props.votes}
             </div>
             );
-//onClick={this.userVote.bind(this)}
+
     }
-    
-  
+   
 }
 
 
 RadioRows.propTypes = {
   resp: PropTypes.string.isRequired,
-  votes: PropTypes.number.isRequired,
- // userVote: PropTypes.func.isRequired
+  votes: PropTypes.number.isRequired
 };
-/*
- let handleSelector = function handleSelect(e,f) {
-                            //e.preventDefault();
-                            
-                            // TODO not sure how to set state from here:
-                            alert(e + 'You selected: ' + f);
-                            //this.sendVote(e, f)
-                            //this.setState({radiovalue:e.target.value});
-                            console.log("previous radio value",this.state.bind(this))
-                            console.log("new radio value",e.target.value)
-                            
-            }
-*/
 
-  // () => this.sendVote(this.props.pollId, this.props.resp)
-    
-    // <div className="boldText width25pct"> {this.props.resp} </div>
-    //  <button key={this.props.key} onClick={this.vote.bind(this)}>Vote</button> (not needed)
-    
 class PollDetails extends Component {
 
     constructor() {
@@ -173,8 +128,7 @@ class PollDetails extends Component {
 
 
 
-    handleFormSubmit(e, childData) { 
-        // call API
+    handleFormSubmit(e) { 
         e.preventDefault();
         //Api.put()
         var form = e.target
@@ -182,14 +136,30 @@ class PollDetails extends Component {
         var pollId = this.state.list._id
         console.log("vote " + pollId + ' : response was: ' + selectedRadio);
         
+        // call API - update poll
+        // TODO:: test
+        var idx = this.state.list.responses.findIndex(function(elem) { 
+                                    return elem.response == selectedRadio;});
+        var totalVotes = this.state.list.responses[idx].votes + 1;
+        var newVotesObj = { response: selectedRadio, votes: totalVotes};
+        
+        Api.put('/api/polls/' + pollId, newVotesObj, (err, response) => {
+             if (err) { 
+                 console.log("Error: " + JSON.stringify(err)); 
+                 return;
+             }
+             else{
+                 
+                 console.log("response from server",response)
+             }
+        });
+
+        
     }
     
-    // castVote={this.sendVote(this.state.list._id,item.response)} 
-    selectItem(currentVoteResponse) {
-        this.setState({currentVoteResponse})
-    }
+    
 
-        // onClick={this.handleChildClick.bind(null,item)}
+        
     render() {
 
         let responseList = this.state.list.responses.map(function(item, index){
@@ -197,8 +167,7 @@ class PollDetails extends Component {
                 <RadioRows  key={index} 
                 pollId={this.state.list._id} resp={item.response} votes={item.votes} />
             )
-        }.bind(this)); // bind the onClick handle event
-        // <button onClick={this.handleChildClick}>Submit</button>
+        }.bind(this)); 
         return(<div className="container">
                 <div className="row">
                     <div className="col-md-6">

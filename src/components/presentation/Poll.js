@@ -36,5 +36,3 @@ class Poll extends Component {
 }
 
 export default Poll;
-
-// <Link to="/Polldetail">Go to</Link>

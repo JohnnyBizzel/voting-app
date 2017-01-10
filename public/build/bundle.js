@@ -22341,8 +22341,6 @@
 	}(_react.Component);
 	
 	exports.default = Poll;
-	
-	// <Link to="/Polldetail">Go to</Link>
 
 /***/ },
 /* 188 */
@@ -27354,6 +27352,9 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	//var mongo = require('mongodb').MongoClient
+	
+	
 	exports.default = {
 					get: function get(url, params, callback) {
 									_superagent2.default.get(url).query(params).set('Accept', 'application/json').end(function (err, response) {
@@ -27390,9 +27391,14 @@
 									});
 					},
 					put: function put(url, body, callback) {
-									_superagent2.default.put(url).send(body).set('Accept', 'application/json').end(function (err, response) {
+									// Api.put('/api/polls/' + pollId, newVotesObj, (err, response) => {
+									console.log('put ' + url);
+									console.log('obj ' + body);
+	
+									_superagent2.default.put(url).set('Accept', 'application/json').send(body).end(function (err, response) {
 													if (err) {
-																	console.log(err);
+																	console.log('SuperAgent PUT error= ' + err);
+	
 																	callback(err, null);
 																	return;
 													}
@@ -27400,13 +27406,36 @@
 													var confirmation = response.body.confirmation;
 													if (confirmation != 'success') {
 																	// send a failure message
+																	console.log('SuperAgent PUT success');
 																	callback({ message: response.body.message, null: null });
 																	return;
 													}
 													callback(response, response.body);
 									});
+									// check console log and this get's called:
+									// It does not reach the .end callback
+									console.log('SuperAgent... what happened?');
 					},
 					del: function del() {}
+					/*,
+	    update: (url,body,callback) => { 
+	    
+	    var dbUrl = 'mongodb://asjb:326382l@ds053718.mlab.com:53718/fcc-polls';
+	    mongo.connect(url, function(err, db) {
+	    if (err) throw err
+	    var collection = db.collection('fcc-polls')
+	    collection.update({
+	      _id: 'tinatime'
+	    }, {
+	      $set: {
+	        age: 40
+	      }
+	    }, function(err) {
+	      if (err) throw err
+	      db.close()
+	    })
+	    })
+	    }*/
 	};
 
 /***/ },
@@ -29433,54 +29462,24 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var RadioButtons = function (_Component) {
-	    _inherits(RadioButtons, _Component);
-	
-	    function RadioButtons() {
-	        _classCallCheck(this, RadioButtons);
-	
-	        return _possibleConstructorReturn(this, (RadioButtons.__proto__ || Object.getPrototypeOf(RadioButtons)).apply(this, arguments));
-	    }
-	
-	    return RadioButtons;
-	}(_react.Component);
-	
-	var RadioRows = function (_Component2) {
-	    _inherits(RadioRows, _Component2);
+	var RadioRows = function (_Component) {
+	    _inherits(RadioRows, _Component);
 	
 	    function RadioRows(props) {
 	        _classCallCheck(this, RadioRows);
 	
-	        var _this2 = _possibleConstructorReturn(this, (RadioRows.__proto__ || Object.getPrototypeOf(RadioRows)).call(this, props));
+	        var _this = _possibleConstructorReturn(this, (RadioRows.__proto__ || Object.getPrototypeOf(RadioRows)).call(this, props));
 	
-	        _this2.state = {
+	        _this.state = {
 	            currentVoteResponse: '',
-	            currentPollId: _this2.props.pollId
+	            currentPollId: _this.props.pollId
 	        };
-	        return _this2;
+	        return _this;
 	    }
-	
-	    // userVote(){  
-	    //     console.log('You selected: 12-13 ID ='+ this.props.pollId + ' RESP='  + ' this.props.resp=' +  this.props.resp);
-	    //     var resp = this.props.resp;
-	    //     /* Api.put('/api/polls/' + resp, null, (err, response) => {
-	    //         if (err) { 
-	    //             alert("Error: " + err); 
-	    //             return;
-	    //         }
-	    //       */  
-	
-	    // }
-	
-	    // update() {
-	    //     console.log("Updated: " + this.props.resp + " key=" + this.props.pollId);
-	    // }
-	
 	
 	    _createClass(RadioRows, [{
 	        key: 'render',
 	        value: function render() {
-	
 	            return _react2.default.createElement(
 	                'div',
 	                { key: this.props.index, className: 'responseBox' },
@@ -29488,18 +29487,15 @@
 	                    'label',
 	                    null,
 	                    _react2.default.createElement('input', { name: 'radiobtns',
-	
 	                        type: 'radio',
-	                        placeholder: 'bawa',
 	                        value: this.props.resp
 	                    }),
 	                    '\u2003',
 	                    this.props.resp
 	                ),
-	                '\u2003 current score: ',
+	                '\u2003current score: ',
 	                this.props.votes
 	            );
-	            //onClick={this.userVote.bind(this)}
 	        }
 	    }]);
 	
@@ -29510,34 +29506,16 @@
 	    resp: _react.PropTypes.string.isRequired,
 	    votes: _react.PropTypes.number.isRequired
 	};
-	/*
-	 let handleSelector = function handleSelect(e,f) {
-	                            //e.preventDefault();
-	                            
-	                            // TODO not sure how to set state from here:
-	                            alert(e + 'You selected: ' + f);
-	                            //this.sendVote(e, f)
-	                            //this.setState({radiovalue:e.target.value});
-	                            console.log("previous radio value",this.state.bind(this))
-	                            console.log("new radio value",e.target.value)
-	                            
-	            }
-	*/
 	
-	// () => this.sendVote(this.props.pollId, this.props.resp)
-	
-	// <div className="boldText width25pct"> {this.props.resp} </div>
-	//  <button key={this.props.key} onClick={this.vote.bind(this)}>Vote</button> (not needed)
-	
-	var PollDetails = function (_Component3) {
-	    _inherits(PollDetails, _Component3);
+	var PollDetails = function (_Component2) {
+	    _inherits(PollDetails, _Component2);
 	
 	    function PollDetails() {
 	        _classCallCheck(this, PollDetails);
 	
-	        var _this3 = _possibleConstructorReturn(this, (PollDetails.__proto__ || Object.getPrototypeOf(PollDetails)).call(this));
+	        var _this2 = _possibleConstructorReturn(this, (PollDetails.__proto__ || Object.getPrototypeOf(PollDetails)).call(this));
 	
-	        _this3.state = {
+	        _this2.state = {
 	            selected: 0,
 	            list: {
 	                responses: []
@@ -29553,14 +29531,14 @@
 	            currentVoteResponse: ''
 	        };
 	
-	        _this3.handleFormSubmit = _this3.handleFormSubmit.bind(_this3);
-	        return _this3;
+	        _this2.handleFormSubmit = _this2.handleFormSubmit.bind(_this2);
+	        return _this2;
 	    }
 	
 	    _createClass(PollDetails, [{
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
-	            var _this4 = this;
+	            var _this3 = this;
 	
 	            console.log('componentDidMount (Polldetail): ' + this.props.location.pathname);
 	            var urlWithId = this.props.location.pathname;
@@ -29573,18 +29551,18 @@
 	
 	                console.log('This particular polldetail RESULTS: ' + JSON.stringify(response.message));
 	
-	                _this4.setState({
+	                _this3.setState({
 	                    list: response.message
 	                });
 	
-	                console.log("responses are ", _this4.state.list.responses);
+	                console.log("responses are ", _this3.state.list.responses);
 	
 	                // update chart
-	                var myData = _this4.state.data.datasets;
-	                var votesSoFar = _this4.state.list.responses.map(function (rv) {
+	                var myData = _this3.state.data.datasets;
+	                var votesSoFar = _this3.state.list.responses.map(function (rv) {
 	                    return rv.votes;
 	                });
-	                var respLabels = _this4.state.list.responses.map(function (r) {
+	                var respLabels = _this3.state.list.responses.map(function (r) {
 	                    return r.response;
 	                });
 	
@@ -29597,32 +29575,38 @@
 	                };
 	                myData.push(newElement);
 	                myData.shift();
-	                _this4.setState(_this4.state.data.datasets = myData);
-	                _this4.setState(_this4.state.data.labels = respLabels);
+	                _this3.setState(_this3.state.data.datasets = myData);
+	                _this3.setState(_this3.state.data.labels = respLabels);
 	            });
 	        }
 	    }, {
 	        key: 'handleFormSubmit',
-	        value: function handleFormSubmit(e, childData) {
-	            // call API
+	        value: function handleFormSubmit(e) {
 	            e.preventDefault();
 	            //Api.put()
 	            var form = e.target;
 	            var selectedRadio = form.elements.radiobtns.value;
 	            var pollId = this.state.list._id;
 	            console.log("vote " + pollId + ' : response was: ' + selectedRadio);
+	
+	            // call API - update poll
+	            // TODO:: test
+	            var idx = this.state.list.responses.findIndex(function (elem) {
+	                return elem.response == selectedRadio;
+	            });
+	            var totalVotes = this.state.list.responses[idx].votes + 1;
+	            var newVotesObj = { response: selectedRadio, votes: totalVotes };
+	
+	            _ApiManager2.default.put('/api/polls/' + pollId, newVotesObj, function (err, response) {
+	                if (err) {
+	                    console.log("Error: " + JSON.stringify(err));
+	                    return;
+	                } else {
+	
+	                    console.log("response from server", response);
+	                }
+	            });
 	        }
-	
-	        // castVote={this.sendVote(this.state.list._id,item.response)} 
-	
-	    }, {
-	        key: 'selectItem',
-	        value: function selectItem(currentVoteResponse) {
-	            this.setState({ currentVoteResponse: currentVoteResponse });
-	        }
-	
-	        // onClick={this.handleChildClick.bind(null,item)}
-	
 	    }, {
 	        key: 'render',
 	        value: function render() {
@@ -29630,8 +29614,7 @@
 	            var responseList = this.state.list.responses.map(function (item, index) {
 	                return _react2.default.createElement(RadioRows, { key: index,
 	                    pollId: this.state.list._id, resp: item.response, votes: item.votes });
-	            }.bind(this)); // bind the onClick handle event
-	            // <button onClick={this.handleChildClick}>Submit</button>
+	            }.bind(this));
 	            return _react2.default.createElement(
 	                'div',
 	                { className: 'container' },

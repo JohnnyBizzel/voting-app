@@ -24,7 +24,7 @@ mongoose.connect(dbUrl, function(err, res){
 
 var index = require('./routes/index');
 var api = require('./routes/api');
-var polldetail = require("./routes/polldetail");
+//var polldetail = require("./routes/polldetail");
 
 var app = express();
 
