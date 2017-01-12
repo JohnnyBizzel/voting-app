@@ -62,7 +62,7 @@ module.exports = {
         //var responses = param['responses'];
         // This updated ...
         Polls.where({ _id: id}).where({'responses.response': respVal } )
-                .update({ $set: { 'responses.$.votes]': voteVal}}, function(err, poll){
+                .update({ $set: { 'responses.$.votes': voteVal}}, function(err, poll){
                     if (err) {
                         callback(err, null);
                         return;

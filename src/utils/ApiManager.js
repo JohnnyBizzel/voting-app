@@ -46,9 +46,7 @@ export default {
         
     },
     put: (url,body,callback) => {  // Api.put('/api/polls/' + pollId, newVotesObj, (err, response) => {
-		console.log('put ' + url);
-		console.log('obj ' + body);
-	
+		
     	superagent
             .put(url)
             .set('Accept', 'application/json')
@@ -63,11 +61,12 @@ export default {
 				const confirmation = response.body.confirmation;
 				if (confirmation != 'success') {
 				    // send a failure message
-				    console.log('SuperAgent PUT success');
+				    console.log('SuperAgent PUT failed');
 				    callback({message:response.body.message, null});
 				    return;
 				}
-				callback(response, response.body);
+				console.log('SuperAgent worked!');
+				callback(null, response.body);
             })
         // check console log and this get's called:
         // It does not reach the .end callback

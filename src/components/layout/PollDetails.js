@@ -73,7 +73,7 @@ class PollDetails extends Component {
             currentVoteResponse: ''
         };
 
-        this.handleFormSubmit = this.handleFormSubmit.bind(this);
+        this.handleNewVote = this.handleNewVote.bind(this);
     }
     componentDidMount(){
         console.log('componentDidMount (Polldetail): ' + this.props.location.pathname);
@@ -100,21 +100,28 @@ class PollDetails extends Component {
             var respLabels = this.state.list.responses.map(function(r) { return r.response; });
             
             // TODO :  create an array of random colours for the chart.
+          //  const numResponses = this.state.list.responses.length;
+          
+            let colorsArray = []
+            colorsArray = this.state.list.responses.map(function(respColor) {
+                      return "rgb(" + Math.floor(Math.random()*255) +","+
+                            Math.floor(Math.random()*255) + ","+
+                            Math.floor(Math.random()*255) + ")";
+            //     return ["'rgb(" + Math.floor(Math.random()*255) + ","+
+            //                       Math.floor(Math.random()*255) + "," +
+            //                       Math.floor(Math.random()*255) + ")'"]
+            })
             
+            // [
+            //             '#DB6384',
+            //             '#36EBA2',
+            //             '#FFCE56',
+            //             '#1AAE56'
+            //             ]
             var newElement =  {
                         data: votesSoFar,
-                        backgroundColor: [
-                        '#DB6384',
-                        '#36EBA2',
-                        '#FFCE56',
-                        '#1AAE56'
-                        ],
-                        hoverBackgroundColor: [
-                        '#DB6384',
-                        '#36EBA2',
-                        '#FFCE56',
-                        '#1AAE56'
-                        ]
+                        backgroundColor: colorsArray,
+                        hoverBackgroundColor: colorsArray
                     };
             myData.push(newElement);
             myData.shift();
@@ -125,10 +132,7 @@ class PollDetails extends Component {
 
     }
    
-
-
-
-    handleFormSubmit(e) { 
+    handleNewVote(e) { 
         e.preventDefault();
         //Api.put()
         var form = e.target
@@ -136,22 +140,38 @@ class PollDetails extends Component {
         var pollId = this.state.list._id
         console.log("vote " + pollId + ' : response was: ' + selectedRadio);
         
-        // call API - update poll
-        // TODO:: test
+       
+        let updatedList = Object.assign([], this.state.list);
         var idx = this.state.list.responses.findIndex(function(elem) { 
                                     return elem.response == selectedRadio;});
         var totalVotes = this.state.list.responses[idx].votes + 1;
         var newVotesObj = { response: selectedRadio, votes: totalVotes};
-        
+       
+        // call API - update poll
         Api.put('/api/polls/' + pollId, newVotesObj, (err, response) => {
-             if (err) { 
+            console.log(JSON.stringify(this.state.list.responses));
+            if (err) { 
                  console.log("Error: " + JSON.stringify(err)); 
                  return;
-             }
-             else{
-                 
-                 console.log("response from server",response)
-             }
+            }
+            console.log("response from server",response); // doesn't tell me a lot
+            
+            // Success so update the state with the correct scores
+       
+            var listLen = updatedList.responses.length;
+            for (let i = 0; i < listLen; i++) {
+                console.log(updatedList.responses[i]);
+                if (updatedList.responses[i]['response'] == selectedRadio)
+                    updatedList.responses[i]['votes'] = totalVotes;
+            }
+            
+            this.setState({
+                list: updatedList
+            })
+            
+            // TODO: Get doughnut to re-draw chart.
+            // this.setState(this.state.data.datasets = (myData));
+            //this.setState(this.state.data.labels = respLabels);
         });
 
         
@@ -173,7 +193,7 @@ class PollDetails extends Component {
                     <div className="col-md-6">
                         <Link to="/">Back</Link>
                             <h2>{this.state.list.pollquestion}</h2>
-                            <form onSubmit={this.handleFormSubmit}>
+                            <form onSubmit={this.handleNewVote}>
                                 {responseList}
                                 <br/>
                                 

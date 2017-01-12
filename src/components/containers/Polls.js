@@ -47,9 +47,9 @@ class Polls extends Component {
 		console.log('add zone: ' + JSON.stringify(newPoll));
 		let thisPoll = Object.assign({}, newPoll);
 	
-		
+		// Insert
 		Api.post('/api/poll', thisPoll, (err, response) => {
-			if (err) { alert("Error: " + err); return;}
+			if (err) { alert("Error adding poll: " + JSON.stringify(err)); return;}
 			
 			console.log('Creating a Poll...' + response);
 			let updatedList = Object.assign([], this.state.list);

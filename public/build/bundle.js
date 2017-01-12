@@ -22210,9 +22210,10 @@
 				console.log('add zone: ' + JSON.stringify(newPoll));
 				var thisPoll = Object.assign({}, newPoll);
 	
+				// Insert
 				_ApiManager2.default.post('/api/poll', thisPoll, function (err, response) {
 					if (err) {
-						alert("Error: " + err);return;
+						alert("Error adding poll: " + JSON.stringify(err));return;
 					}
 	
 					console.log('Creating a Poll...' + response);
@@ -27392,8 +27393,6 @@
 					},
 					put: function put(url, body, callback) {
 									// Api.put('/api/polls/' + pollId, newVotesObj, (err, response) => {
-									console.log('put ' + url);
-									console.log('obj ' + body);
 	
 									_superagent2.default.put(url).set('Accept', 'application/json').send(body).end(function (err, response) {
 													if (err) {
@@ -27406,11 +27405,12 @@
 													var confirmation = response.body.confirmation;
 													if (confirmation != 'success') {
 																	// send a failure message
-																	console.log('SuperAgent PUT success');
+																	console.log('SuperAgent PUT failed');
 																	callback({ message: response.body.message, null: null });
 																	return;
 													}
-													callback(response, response.body);
+													console.log('SuperAgent worked!');
+													callback(null, response.body);
 									});
 									// check console log and this get's called:
 									// It does not reach the .end callback
@@ -29531,7 +29531,7 @@
 	            currentVoteResponse: ''
 	        };
 	
-	        _this2.handleFormSubmit = _this2.handleFormSubmit.bind(_this2);
+	        _this2.handleNewVote = _this2.handleNewVote.bind(_this2);
 	        return _this2;
 	    }
 	
@@ -29567,11 +29567,26 @@
 	                });
 	
 	                // TODO :  create an array of random colours for the chart.
+	                //  const numResponses = this.state.list.responses.length;
 	
+	                var colorsArray = [];
+	                colorsArray = _this3.state.list.responses.map(function (respColor) {
+	                    return "rgb(" + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + ")";
+	                    //     return ["'rgb(" + Math.floor(Math.random()*255) + ","+
+	                    //                       Math.floor(Math.random()*255) + "," +
+	                    //                       Math.floor(Math.random()*255) + ")'"]
+	                });
+	
+	                // [
+	                //             '#DB6384',
+	                //             '#36EBA2',
+	                //             '#FFCE56',
+	                //             '#1AAE56'
+	                //             ]
 	                var newElement = {
 	                    data: votesSoFar,
-	                    backgroundColor: ['#DB6384', '#36EBA2', '#FFCE56', '#1AAE56'],
-	                    hoverBackgroundColor: ['#DB6384', '#36EBA2', '#FFCE56', '#1AAE56']
+	                    backgroundColor: colorsArray,
+	                    hoverBackgroundColor: colorsArray
 	                };
 	                myData.push(newElement);
 	                myData.shift();
@@ -29580,8 +29595,10 @@
 	            });
 	        }
 	    }, {
-	        key: 'handleFormSubmit',
-	        value: function handleFormSubmit(e) {
+	        key: 'handleNewVote',
+	        value: function handleNewVote(e) {
+	            var _this4 = this;
+	
 	            e.preventDefault();
 	            //Api.put()
 	            var form = e.target;
@@ -29589,22 +29606,37 @@
 	            var pollId = this.state.list._id;
 	            console.log("vote " + pollId + ' : response was: ' + selectedRadio);
 	
-	            // call API - update poll
-	            // TODO:: test
+	            var updatedList = Object.assign([], this.state.list);
 	            var idx = this.state.list.responses.findIndex(function (elem) {
 	                return elem.response == selectedRadio;
 	            });
 	            var totalVotes = this.state.list.responses[idx].votes + 1;
 	            var newVotesObj = { response: selectedRadio, votes: totalVotes };
 	
+	            // call API - update poll
 	            _ApiManager2.default.put('/api/polls/' + pollId, newVotesObj, function (err, response) {
+	                console.log(JSON.stringify(_this4.state.list.responses));
 	                if (err) {
 	                    console.log("Error: " + JSON.stringify(err));
 	                    return;
-	                } else {
-	
-	                    console.log("response from server", response);
 	                }
+	                console.log("response from server", response); // doesn't tell me a lot
+	
+	                // Success so update the state with the correct scores
+	
+	                var listLen = updatedList.responses.length;
+	                for (var i = 0; i < listLen; i++) {
+	                    console.log(updatedList.responses[i]);
+	                    if (updatedList.responses[i]['response'] == selectedRadio) updatedList.responses[i]['votes'] = totalVotes;
+	                }
+	
+	                _this4.setState({
+	                    list: updatedList
+	                });
+	
+	                // TODO: Get doughnut to re-draw chart.
+	                // this.setState(this.state.data.datasets = (myData));
+	                //this.setState(this.state.data.labels = respLabels);
 	            });
 	        }
 	    }, {
@@ -29636,7 +29668,7 @@
 	                        ),
 	                        _react2.default.createElement(
 	                            'form',
-	                            { onSubmit: this.handleFormSubmit },
+	                            { onSubmit: this.handleNewVote },
 	                            responseList,
 	                            _react2.default.createElement('br', null),
 	                            _react2.default.createElement('input', { type: 'submit', name: 'submitBtn', value: 'Cast your vote' })
