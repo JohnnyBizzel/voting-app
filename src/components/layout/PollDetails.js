@@ -20,12 +20,14 @@ class RadioRows extends Component {
     render(){
             return (
             <div key={this.props.index} className="responseBox">
-                
+                <span className="float-right">
+                    current score: {this.props.votes}
+                </span>
                 <label><input  name="radiobtns" 
                         type="radio" 
                         value={this.props.resp}
                         />&emsp;{this.props.resp}
-                </label>&emsp;current score: {this.props.votes}
+                </label>
             </div>
             );
 
@@ -46,7 +48,7 @@ class PollDetails extends Component {
         super();
 
         this.state = {
-            selected: 0,
+            selected: -1,
             list: {
                     responses: []
                    },
@@ -57,20 +59,19 @@ class PollDetails extends Component {
                     'Yellow'
                 ],
                 datasets: [{
-                    data: [300, 50, 100],
+                    data: [60 ,60, 60],
                     backgroundColor: [
                     '#FF6384',
                     '#36A2EB',
-                    '#FFCE56'
+                    '#A1CF1F'
                     ],
                     hoverBackgroundColor: [
                     '#FF6384',
                     '#36A2EB',
-                    '#FFCE56'
+                    '#A1CF1F'
                     ]
                 }]
-            },
-            currentVoteResponse: ''
+            }
         };
 
         this.handleNewVote = this.handleNewVote.bind(this);
@@ -138,10 +139,9 @@ class PollDetails extends Component {
         var form = e.target
         var selectedRadio = form.elements.radiobtns.value
         var pollId = this.state.list._id
-        console.log("vote " + pollId + ' : response was: ' + selectedRadio);
-        
-       
+
         let updatedList = Object.assign([], this.state.list);
+        let chartValues = Object.assign({}, this.state.data);
         var idx = this.state.list.responses.findIndex(function(elem) { 
                                     return elem.response == selectedRadio;});
         var totalVotes = this.state.list.responses[idx].votes + 1;
@@ -160,28 +160,30 @@ class PollDetails extends Component {
        
             var listLen = updatedList.responses.length;
             for (let i = 0; i < listLen; i++) {
-                console.log(updatedList.responses[i]);
                 if (updatedList.responses[i]['response'] == selectedRadio)
                     updatedList.responses[i]['votes'] = totalVotes;
             }
             
-            this.setState({
-                list: updatedList
-            })
+  
             
-            // TODO: Get doughnut to re-draw chart.
-            // this.setState(this.state.data.datasets = (myData));
-            //this.setState(this.state.data.labels = respLabels);
+            // Get doughnut to re-draw chart. (using a data store?)
+            var votesSoFar = updatedList.responses.map(function(rv) { return rv.votes; });
+            chartValues.datasets[0].data = votesSoFar
+            // changing state but component does not re-draw
+            //          this.setState({ data : chartValues });
+            this.setState({ 
+              data: chartValues,
+              list: updatedList
+            });
+            
+
         });
 
         
     }
-    
-    
-
-        
+   
     render() {
-
+        //let chartData = this.state.data;
         let responseList = this.state.list.responses.map(function(item, index){
             return (
                 <RadioRows  key={index} 

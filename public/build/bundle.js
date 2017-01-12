@@ -29484,6 +29484,12 @@
 	                'div',
 	                { key: this.props.index, className: 'responseBox' },
 	                _react2.default.createElement(
+	                    'span',
+	                    { className: 'float-right' },
+	                    'current score: ',
+	                    this.props.votes
+	                ),
+	                _react2.default.createElement(
 	                    'label',
 	                    null,
 	                    _react2.default.createElement('input', { name: 'radiobtns',
@@ -29492,9 +29498,7 @@
 	                    }),
 	                    '\u2003',
 	                    this.props.resp
-	                ),
-	                '\u2003current score: ',
-	                this.props.votes
+	                )
 	            );
 	        }
 	    }]);
@@ -29516,19 +29520,18 @@
 	        var _this2 = _possibleConstructorReturn(this, (PollDetails.__proto__ || Object.getPrototypeOf(PollDetails)).call(this));
 	
 	        _this2.state = {
-	            selected: 0,
+	            selected: -1,
 	            list: {
 	                responses: []
 	            },
 	            data: {
 	                labels: ['Red', 'Green', 'Yellow'],
 	                datasets: [{
-	                    data: [300, 50, 100],
-	                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-	                    hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+	                    data: [60, 60, 60],
+	                    backgroundColor: ['#FF6384', '#36A2EB', '#A1CF1F'],
+	                    hoverBackgroundColor: ['#FF6384', '#36A2EB', '#A1CF1F']
 	                }]
-	            },
-	            currentVoteResponse: ''
+	            }
 	        };
 	
 	        _this2.handleNewVote = _this2.handleNewVote.bind(_this2);
@@ -29604,9 +29607,9 @@
 	            var form = e.target;
 	            var selectedRadio = form.elements.radiobtns.value;
 	            var pollId = this.state.list._id;
-	            console.log("vote " + pollId + ' : response was: ' + selectedRadio);
 	
 	            var updatedList = Object.assign([], this.state.list);
+	            var chartValues = Object.assign({}, this.state.data);
 	            var idx = this.state.list.responses.findIndex(function (elem) {
 	                return elem.response == selectedRadio;
 	            });
@@ -29626,23 +29629,26 @@
 	
 	                var listLen = updatedList.responses.length;
 	                for (var i = 0; i < listLen; i++) {
-	                    console.log(updatedList.responses[i]);
 	                    if (updatedList.responses[i]['response'] == selectedRadio) updatedList.responses[i]['votes'] = totalVotes;
 	                }
 	
+	                // Get doughnut to re-draw chart. (using a data store?)
+	                var votesSoFar = updatedList.responses.map(function (rv) {
+	                    return rv.votes;
+	                });
+	                chartValues.datasets[0].data = votesSoFar;
+	                // changing state but component does not re-draw
+	                //          this.setState({ data : chartValues });
 	                _this4.setState({
+	                    data: chartValues,
 	                    list: updatedList
 	                });
-	
-	                // TODO: Get doughnut to re-draw chart.
-	                // this.setState(this.state.data.datasets = (myData));
-	                //this.setState(this.state.data.labels = respLabels);
 	            });
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	
+	            //let chartData = this.state.data;
 	            var responseList = this.state.list.responses.map(function (item, index) {
 	                return _react2.default.createElement(RadioRows, { key: index,
 	                    pollId: this.state.list._id, resp: item.response, votes: item.votes });
