@@ -9,6 +9,7 @@
 
 <!-- Optional theme -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap-theme.min.css">
+<script src="https://use.fontawesome.com/f19e167ed9.js"></script>
   </head>
   <body>
     <div id="root"></div>

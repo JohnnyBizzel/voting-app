@@ -31,9 +31,10 @@ module.exports = {
         var responses = params['responses'];
         var responseAry = responses.split(';');
         var newAry = [];
-        responseAry.forEach(function(resp){
+        responseAry.forEach(function(resp, index){
             var respObj = { "response": resp.trim(), 
-                            "votes" : 0 }
+                            "votes" : 0,
+                            "respID": index+1}
            newAry.push(respObj); 
         });   
         params['responses'] = newAry;
@@ -47,40 +48,84 @@ module.exports = {
             callback(null, poll);
         });      
     },
-    update:function(id, param,  callback){
-        var returnNewUpdatedDoc = {new:true};
-        console.log("in polls controller ",param)
-        /*code from ankur
-        Polls.update({response)
-        
-        
-        */
-        var respVal = param['response'];
-        var voteVal = param['votes'];
-        console.log("Setting Param Values: ",respVal)
-        console.log("Setting Vote Values: ",voteVal)
-        //var responses = param['responses'];
-        // This updated ...
-        Polls.where({ _id: id}).where({'responses.response': respVal } )
-                .update({ $set: { 'responses.$.votes': voteVal}}, function(err, poll){
+    //this is great,awesome
+    update:function(id, param,  callback,editPoll){
+        console.log("this is params",param)
+        editPoll  = param.editpoll || false;  
+        if(editPoll===true){
+            console.log("editpoll is true")
+            console.log("param editpoll",param.editpoll)
+            console.log("response value",param["response"])
+            console.log("poll value",param["poll"])
+            console.log("poll is this",param.poll)
+            console.log("this is param",param)
+            
+            //johnny put code here ,,
+             Polls.where({ _id: id}).update(param, function(err, poll){
                     if (err) {
                         callback(err, null);
                         return;
                     }
-                    callback(err, poll);
+                    else{
+                        console.log("got something",poll)
+                        callback(err, poll);
+                    }
+                    
 
         });
-        // var findByIdAndUpObj = { 
-        // $set: { param }};
+            
+        }
+        else{
+            console.log("editpoll is false")
+            
+            //new circus begins 18 jan , 6 pm, setting editpolfalse code
+             var returnNewUpdatedDoc = {new:true};
+        var respVal = param['response'];
+        var voteVal = param['votes'];
+        console.log("Setting Param Values: ",respVal)
+        console.log("Setting Vote Values: ",voteVal)
+        Polls.where({ _id: id}).where({'responses.response': respVal } )
+                .update({ $set: { 'responses.$.votes': voteVal, 
+                    'responses.$.response': respVal, 
+                }}, function(err, poll){
+                    if (err) {
+                        callback(err, null);
+                        return;
+                    }
+                    else{
+                        console.log("got something",poll)
+                        callback(err, poll);
+                    }
+                    
 
-        // Polls.findByIdAndUpdate(id, updateObj,returnNewUpdatedDoc, function(err, poll){
-        //     if (err) {
-        //         callback(err, null);
-        //         return;
-        //     }
-        //     callback(err, poll);
+        });
+            
+            
+        }
+        
+        /*
+        var returnNewUpdatedDoc = {new:true};
+        var respVal = param['response'];
+        var voteVal = param['votes'];
+        console.log("Setting Param Values: ",respVal)
+        console.log("Setting Vote Values: ",voteVal)
+        Polls.where({ _id: id}).where({'responses.response': respVal } )
+                .update({ $set: { 'responses.$.votes': voteVal, 
+                    'responses.$.response': respVal, 
+                }}, function(err, poll){
+                    if (err) {
+                        callback(err, null);
+                        return;
+                    }
+                    else{
+                        console.log("got something",poll)
+                        callback(err, poll);
+                    }
+                    
 
-        // });
+        });
+        
+      */
         
     },
 

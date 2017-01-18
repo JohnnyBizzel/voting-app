@@ -10,7 +10,8 @@ var PollsSchema = new mongoose.Schema({
   pollquestion:{type:String,default:''},
   author:{type:String,default:'unknown'},
   responses:{type:Array,default:[
-                                  {response: String, 
+                                  {respID: Number,
+                                  response: String, 
                                   votes: Number}
                                 ]},
   timestamp: {type:Date, default:Date.now()}

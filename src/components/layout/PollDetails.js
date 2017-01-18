@@ -4,7 +4,9 @@ import {Doughnut} from 'react-chartjs-2';
 import Api from '../../utils/ApiManager';
 import Chart from 'chart.js';
 import {Link} from 'react-router';
+import EditPoll from '../presentation/EditPoll';
 
+var pollidagain;
 class RadioRows extends Component {
 
     constructor(props) {
@@ -49,6 +51,7 @@ class PollDetails extends Component {
 
         this.state = {
             selected: -1,
+            editVisible: true,
             list: {
                     responses: []
                    },
@@ -79,7 +82,9 @@ class PollDetails extends Component {
     componentDidMount(){
         console.log('componentDidMount (Polldetail): ' + this.props.location.pathname);
         var urlWithId =this.props.location.pathname;
+        
         var pollID = urlWithId.split('/').pop();
+        pollidagain =pollID;
         Api.get('/api/polls/' + pollID, null, (err, response) => {
             if (err) { 
                 alert("Error: " + err); 
@@ -132,10 +137,41 @@ class PollDetails extends Component {
         
 
     }
+    deletefunc(){
+        console.log("deletefunc this",this)
+        console.log('deletefunc pathname: ' + this.props.location.pathname);
+        console.log("pollidagain value",pollidagain)
+        
+        Api.del('/api/polls/' + pollidagain, null, (err, response) => {
+            if (err) { 
+                alert("Error: " + err); 
+                return;
+            }
+            else if(err==null&&response==null)
+        
+            {
+                console.log("everything went well")
+            }
+            else{
+                console.log("I dont know what happene")
+            }
+        
+        })
+        
+    }
    
     handleNewVote(e) { 
         e.preventDefault();
-        //Api.put()
+        //set something in storage to check on what polls user already voted.
+    //     //currentPollId
+    //   if (typeof(Storage) !== "undefined") {
+    // // Code for localStorage/sessionStorage.
+    //     this.localStorage.setItem("lastname", "Smith");
+    //   } else {
+    // // Sorry! No Web Storage support..
+    //   }
+        
+  
         var form = e.target
         var selectedRadio = form.elements.radiobtns.value
         var pollId = this.state.list._id
@@ -149,12 +185,10 @@ class PollDetails extends Component {
        
         // call API - update poll
         Api.put('/api/polls/' + pollId, newVotesObj, (err, response) => {
-            console.log(JSON.stringify(this.state.list.responses));
             if (err) { 
                  console.log("Error: " + JSON.stringify(err)); 
                  return;
             }
-            console.log("response from server",response); // doesn't tell me a lot
             
             // Success so update the state with the correct scores
        
@@ -164,13 +198,9 @@ class PollDetails extends Component {
                     updatedList.responses[i]['votes'] = totalVotes;
             }
             
-  
-            
             // Get doughnut to re-draw chart. (using a data store?)
             var votesSoFar = updatedList.responses.map(function(rv) { return rv.votes; });
             chartValues.datasets[0].data = votesSoFar
-            // changing state but component does not re-draw
-            //          this.setState({ data : chartValues });
             this.setState({ 
               data: chartValues,
               list: updatedList
@@ -183,34 +213,41 @@ class PollDetails extends Component {
     }
    
     render() {
-        //let chartData = this.state.data;
         let responseList = this.state.list.responses.map(function(item, index){
             return (
                 <RadioRows  key={index} 
                 pollId={this.state.list._id} resp={item.response} votes={item.votes} />
             )
         }.bind(this)); 
+  
         return(<div className="container">
-                <div className="row">
-                    <div className="col-md-6">
-                        <Link to="/">Back</Link>
-                            <h2>{this.state.list.pollquestion}</h2>
-                            <form onSubmit={this.handleNewVote}>
-                                {responseList}
-                                <br/>
-                                
-                                 <input type="submit" name="submitBtn"  value="Cast your vote"/>
-                            </form>
+                    <div className="row">
+                        <div className="col-md-6">
+                            <Link to="/">Back</Link>
+                                <h2>{this.state.list.pollquestion}</h2>
+                                    <form onSubmit={this.handleNewVote}>
+                                    {responseList}
+                                    <br/>
+                                    <input type="submit" name="submitBtn"  value="Cast your vote"/>
+                                    </form>
+                                    <button onClick={() => this.deletefunc()} type="button">Delete</button>
+                                    <button><Link to={`/editdamnpoll/${pollidagain}`}>Edit the damn  Poll </Link> </button>
+                        </div>
+                        <div className="col-md-6">
+                            <Doughnut data={this.state.data} />
+                        </div>
                     </div>
-
-                    <div className="col-md-6">
-                        <Doughnut data={this.state.data} />
+                    <div className="row">
+                        <div className="col-md-*">
+                            <EditPoll visible={this.state.editVisible} 
+                                question={this.state.list.pollquestion} 
+                                author={this.state.list.author}
+                                someResponses={this.state.list.responses} />
+                        </div>
                     </div>
-
-                </div>
-            </div>);
+                
+                </div>);
     }
 }
-
 
 export default PollDetails;

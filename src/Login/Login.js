@@ -1,16 +1,40 @@
-import React, { Component } from 'react';
+import React, { PropTypes as T } from 'react'
+import {ButtonToolbar, Button} from 'react-bootstrap'
+import AuthService from '../utils/AuthService'
 
 
-class Login extends Component {
+
+export class Login extends React.Component {
     
-    render() {
-        
-        //const zoneStyle = styles.zone; // needs to be inside the render func!
-        
-        return(<div>
-                <h2> Login page is here </h2>
-                </div>);
-    }
+    static contextTypes = {
+    router: T.object
+  }
+  
+  
+  static propTypes = {
+    location: T.object,
+    auth: T.instanceOf(AuthService)
+  }
+  componentWillMount(){
+      
+      console.log("ankur");
+      console.log("this is props",this.props)
+    
+    console.log("authservice 2 ",this.AuthService)
+  }
+
+  render() {
+    const { auth } = this.props
+    
+    return (
+      <div>
+        <h2>Login</h2>
+        <ButtonToolbar>
+          <Button bsStyle="primary" onClick={auth.login.bind(this)}>Login2</Button>
+        </ButtonToolbar>
+      </div>
+    )
+  }
 }
 
-export default Login
+export default Login;
