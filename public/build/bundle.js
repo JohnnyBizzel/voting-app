@@ -30075,9 +30075,6 @@
 	  return Login;
 	}(_react2.default.Component);
 	
-	Login.contextTypes = {
-	  router: _react.PropTypes.object
-	};
 	Login.propTypes = {
 	  location: _react.PropTypes.object,
 	  auth: _react.PropTypes.instanceOf(_AuthService2.default)
@@ -113507,6 +113504,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
+	//
 	var Container = function (_Component) {
 	    _inherits(Container, _Component);
 	

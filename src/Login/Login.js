@@ -6,10 +6,7 @@ import AuthService from '../utils/AuthService'
 
 export class Login extends React.Component {
     
-    static contextTypes = {
-    router: T.object
-  }
-  
+   
   
   static propTypes = {
     location: T.object,

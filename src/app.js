@@ -12,7 +12,7 @@ import createPoll from './components/presentation/CreatePoll'
 import Container from './components/containers/Container.js';
 
 
-import {Route,Router,browserHistory,hashHistory,IndexRoute} from 'react-router'
+import {Route,Router,IndexRedirect,browserHistory,hashHistory,IndexRoute} from 'react-router'
 import makeMainRoutes from './components/routes'
 import AuthService from './utils/AuthService'
 
@@ -35,7 +35,7 @@ ReactDOM.render( <Router history={browserHistory}>
       <Route path="login" component={Login} />
       <Route path="Polldetailfull/:id" component={PollDetails}  />
       <Route path="waste" component={Waste}  />
-      <Route path="createPoll" component={createPoll} />
+      <Route path="createPoll" component={createPoll}  />
       <route path="editdamnpoll/:pollid" component={Editdamnpoll} />
       
     </Route>
