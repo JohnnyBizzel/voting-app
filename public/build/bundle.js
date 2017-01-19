@@ -21841,10 +21841,6 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _EditPoll = __webpack_require__(184);
-	
-	var _EditPoll2 = _interopRequireDefault(_EditPoll);
-	
 	var _Polls = __webpack_require__(186);
 	
 	var _Polls2 = _interopRequireDefault(_Polls);
@@ -21935,7 +21931,9 @@
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'col-md-6 col-sm-6' },
-	                        _react2.default.createElement(_EditPoll2.default, null)
+	                        'Select a poll to vote on it.',
+	                        _react2.default.createElement('br', null),
+	                        'Sign up to create your own polls.'
 	                    )
 	                ),
 	                _react2.default.createElement(

@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 //import Zones from '../containers/Zones'
-import EditPoll from '../presentation/EditPoll'
 import Polls from '../containers/Polls';
 import {Link} from 'react-router';
 
@@ -29,7 +28,8 @@ class Home extends Component {
                         
                     </div>
                     <div className="col-md-6 col-sm-6">
-                        <EditPoll />
+                        Select a poll to vote on it.<br/>
+                        Sign up to create your own polls.
                     </div>
                     
                 </div>
