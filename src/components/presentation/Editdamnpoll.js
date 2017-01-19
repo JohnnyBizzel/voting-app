@@ -98,7 +98,13 @@ class Editdamnpoll extends Component {
         console.log("state polls",this.state)
         
         var newVotesObj = Object.assign({},this.state.poll);
-        
+        // Trim space characters from the response:
+        var trimmedObjResponses = newVotesObj.responses.map(function(item) {
+            var respObj = Object.assign({}, item);
+            respObj.response = respObj.response.trim();
+            return respObj;
+        });
+        newVotesObj.responses = trimmedObjResponses;
         if(this.state.valid){
                  Api.put('/api/polls/' + pollID, newVotesObj, (err, response) => {
                      console.log("newVotesObj value",newVotesObj)
