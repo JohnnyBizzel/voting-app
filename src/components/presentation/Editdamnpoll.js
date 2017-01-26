@@ -243,7 +243,8 @@ class Editdamnpoll extends Component {
                
                 <div key={index} >
               
-           <input type="text" id={index} onChange={this.valuechangetext.bind(this)} value={i ||''} /> &nbsp; <button onClick={this.deletefun.bind(this)} id={index}  >X</button> <br /><br />
+           <input type="text" id={index} onChange={this.valuechangetext.bind(this)} value={i ||''} /> 
+           &nbsp; <button className="btn btn-xs btn-danger" onClick={this.deletefun.bind(this)} id={index}  >X</button> <br /><br />
            </div>
                
              
@@ -255,7 +256,7 @@ class Editdamnpoll extends Component {
         
         return (
             <div>
-            <h2>Edit the damn poll here!!</h2>
+            <h2>Edit the poll here!</h2>
             <h4>{this.state.pollquestion}</h4>
             <p>author:{this.state.author}</p>
             <form onSubmit={this.handleedit.bind(this)}>

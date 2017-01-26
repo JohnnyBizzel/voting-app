@@ -239,10 +239,7 @@ class PollDetails extends Component {
                     </div>
                     <div className="row">
                         <div className="col-md-*">
-                            <EditPoll visible={this.state.editVisible} 
-                                question={this.state.list.pollquestion} 
-                                author={this.state.list.author}
-                                someResponses={this.state.list.responses} />
+
                         </div>
                     </div>
                 
@@ -251,3 +248,8 @@ class PollDetails extends Component {
 }
 
 export default PollDetails;
+
+                            // <EditPoll visible={this.state.editVisible} 
+                            //     question={this.state.list.pollquestion} 
+                            //     author={this.state.list.author}
+                            //     someResponses={this.state.list.responses} />

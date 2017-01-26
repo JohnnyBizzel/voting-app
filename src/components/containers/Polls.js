@@ -68,18 +68,14 @@ class Polls extends Component {
 	render() {
 		const listItems = this.state.list.map((poll, i) =>  {
 			return (
-				<li key={i}>
+				<div key={i} className="box">
 					<Poll currentPoll={poll} /> 
-				</li>
+				</div>
 			)
 		});
 		return (
 			<div>
-				<ul>
-				   {listItems}
-				</ul>
-				
-			
+			   {listItems}
 			</div>
 	)}
 	

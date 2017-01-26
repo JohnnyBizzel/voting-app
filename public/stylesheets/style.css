@@ -56,3 +56,20 @@ ul { list-style: square }
 .float-right {
   float:right;
 }
+.flex-container {
+	display:-webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	margin: 1em 0;
+	width: auto;
+	border: 1px solid #333;
+	-webkit-flex-flow: row wrap;
+	-ms-flex-flow: row wrap;
+	flex-flow: row wrap;
+}
+.box {
+	display: inline-block;
+	background: #fff;
+	padding: 6px;
+	height: 180px;
+}

@@ -20,18 +20,14 @@ class Poll extends Component {
         return ( <div style={zoneStyle.container}>
        
 				    
-				    <h2 style={zoneStyle.header}>
+				    <h3 style={zoneStyle.header}>
 				    
-				    <Link to={`/Polldetailfull/${this.props.currentPoll._id}`}>{this.props.currentPoll.pollquestion}</Link>
-				    
-				    
-				        
-				    </h2>
+    				    <Link to={`/Polldetailfull/${this.props.currentPoll._id}`}>{this.props.currentPoll.pollquestion}</Link>
+				    </h3>
 				        <br/>
-				        <span>by {this.props.currentPoll.author}</span>
-				        <Link to="login">Log in to your account</Link>
-				</div>
-                );
+			        <span>by {this.props.currentPoll.author}</span>
+			        <Link to="login">Log in to your account</Link>
+			</div>);
     }
 }
 
