@@ -1,21 +1,35 @@
 {
   "name": "workspace",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "node ./bin/www"
   },
   "dependencies": {
     "@risingstack/trace": "^3.0.2",
+    "bcryptjs": "*",
     "body-parser": "~1.15.2",
     "chart.js": "^1.1.1",
+    "connect-ensure-login": "^0.1.1",
+    "connect-flash": "*",
     "cookie-parser": "~1.4.3",
     "debug": "~2.2.0",
+    "dotenv": "^4.0.0",
     "express": "~4.14.0",
+    "express-handlebars": "^3.0.0",
+    "express-messages": "*",
+    "express-session": "^1.14.2",
+    "express-validator": "*",
+    "handlebars": "^4.0.6",
     "hjs": "~0.0.6",
+    "json-loader": "^0.5.4",
     "mongoose": "^4.7.3",
     "morgan": "~1.7.0",
     "nodemon": "^1.11.0",
+    "passport": "^0.3.2",
+    "passport-github2": "^0.1.10",
+    "passport-http": "*",
+    "passport-local": "*",
     "plotly.js": "^1.21.2",
     "react": "^15.4.1",
     "react-bootstrap": "^0.30.7",
@@ -30,6 +44,7 @@
     "babel-loader": "^6.2.10",
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-react": "^6.16.0",
+    "babel-preset-stage-0": "^6.16.0",
     "webpack": "^1.14.0"
   }
 }

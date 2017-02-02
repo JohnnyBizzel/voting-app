@@ -31,9 +31,10 @@ module.exports = {
         var responses = params['responses'];
         var responseAry = responses.split(';');
         var newAry = [];
-        responseAry.forEach(function(resp){
+        responseAry.forEach(function(resp, index){
             var respObj = { "response": resp.trim(), 
-                            "votes" : 0 }
+                            "votes" : 0,
+                            "respID": index+1}
            newAry.push(respObj); 
         });   
         params['responses'] = newAry;
@@ -47,40 +48,32 @@ module.exports = {
             callback(null, poll);
         });      
     },
+    //this is great,awesome
     update:function(id, param,  callback){
+        
         var returnNewUpdatedDoc = {new:true};
-        console.log("in polls controller ",param)
-        /*code from ankur
-        Polls.update({response)
-        
-        
-        */
+        var respID = param['respID'];
         var respVal = param['response'];
         var voteVal = param['votes'];
         console.log("Setting Param Values: ",respVal)
         console.log("Setting Vote Values: ",voteVal)
-        //var responses = param['responses'];
-        // This updated ...
-        Polls.where({ _id: id}).where({'responses.response': respVal } )
-                .update({ $set: { 'responses.$.votes': voteVal}}, function(err, poll){
+        Polls.where({ _id: id}).where({'responses.respID': respID } )
+                .update({ $set: { 'responses.$.votes': voteVal, 
+                    'responses.$.response': respVal 
+                }}, function(err, poll){
                     if (err) {
                         callback(err, null);
                         return;
                     }
-                    callback(err, poll);
+                    else{
+                        console.log("got something",poll)
+                        callback(err, poll);
+                    }
+                    
 
         });
-        // var findByIdAndUpObj = { 
-        // $set: { param }};
-
-        // Polls.findByIdAndUpdate(id, updateObj,returnNewUpdatedDoc, function(err, poll){
-        //     if (err) {
-        //         callback(err, null);
-        //         return;
-        //     }
-        //     callback(err, poll);
-
-        // });
+        
+      
         
     },
 

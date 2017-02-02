@@ -14,8 +14,9 @@ class Home extends Component {
              <div className="container-fluid">
                 <div className="navbar-header">
                     <ul className="nav navbar-nav navbar-right">
-                      <li><a href="/login" title="signin">Sign in</a></li>
-                      <li><a href="#" title="register">Register</a></li>
+                      <li><a href="/user/login" title="signin">Sign in</a></li>
+                      <li><a href="/user/register" title="register">Register</a></li>
+                      <li><Link to="createPoll">Create Poll</Link></li>
                    
                     </ul>
                 </div>

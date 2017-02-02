@@ -29,6 +29,7 @@ class Poll extends Component {
 				    </h2>
 				        <br/>
 				        <span>by {this.props.currentPoll.author}</span>
+				        <Link to={`/editthepoll/${this.props.currentPoll._id}`}>Edit this Poll</Link>
 				        <Link to="login">Log in to your account</Link>
 				</div>
                 );

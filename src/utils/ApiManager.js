@@ -45,12 +45,13 @@ export default {
             })
         
     },
-    put: (url,body,callback) => {  // Api.put('/api/polls/' + pollId, newVotesObj, (err, response) => {
-		
+    put: (url,body,callback,editpoll) => {  // Api.put('/api/polls/' + pollId, newVotesObj, (err, response) => {
+		console.log("apimanager value of editpoll",editpoll)
     	superagent
             .put(url)
             .set('Accept', 'application/json')
             .send(body)
+            .send({editpoll:editpoll})
             .end((err, response) => {
                 if (err) { 
                 	console.log('SuperAgent PUT error= ' + err);
@@ -72,7 +73,25 @@ export default {
         // It does not reach the .end callback
         console.log('SuperAgent... what happened?');
     },
-    del: () => {
+    del: (url,params,callback) => {
+    	superagent
+            .del(url)
+            .send(params)
+            .set('Accept', 'application/json')
+            .end((err, response) => {
+                if (err) { 
+                	console.log(err);
+				    callback(err, null);
+				    return;}
+				// here check for API failures
+				const confirmation = response.body.confirmation;
+				if (confirmation != 'success') {
+				    // send a failure message
+				    callback({message:response.body.message, null});
+				    return;
+				}
+				callback(null,null);
+            })
         
     }
     /*,
