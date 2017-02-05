@@ -28,20 +28,7 @@ class PollDetail extends React.Component {
 		event.preventDefault();
 		this.setState({editText:event.target.value})
 	}
-	submit = (event) => {
-		event.preventDefault();
-		alert("Current state: " + this.state.editText)
-		this.setState({editing: false})
-		  // call API - update poll
-		    //  update = (ev) => {
-// 		var updatedResponses = this.state.someResponses.map(
-// 						response => (response.response !== response) ? 
-// 											response: { ...response,
-// 														response: newText }
-// 						)
-// 				this.setState({updatedResponses})
-		alert("update " + this.state.editText + " ID : "+ this.props.id );
-	}
+
        
 	remove() {
 		this.props.onRemove(this.props.response)
@@ -53,7 +40,7 @@ class PollDetail extends React.Component {
 	renderForm() {
 	
 			return (<div className="responseBox">
-						<form onSubmit={this.submit}>
+						<form onSubmit={this.props.onSubmit}>
 						<input ref="newText" type="text"
 							className="form-control" onChange={this.save}
 							value={this.state.editText} />
@@ -95,17 +82,53 @@ class PollResponse extends Component {
 		const remove = () => {} 
 		
 		return (<PollDetail key={resp.respID} 
-				id={resp.respID} onChange={this.props.update} onRemove={remove} 
+				id={resp.respID} onSubmit={this.submit} onRemove={remove} 
 	             >
 				{resp.response}</PollDetail>)
 	}
+	
+	submit = (event) => {
+		event.preventDefault();
+		alert("Current state: " + this.props.children)
+		this.setState({editing: false})
+		  // call API - update poll
+	
+	        console.log("state polls",this.state)
+	        
+	        var newVotesObj = Object.assign({},this.props.thePoll);
+	        // Trim space characters from the response:
+	        var trimmedObjResponses = newVotesObj.responses.map(function(item) {
+	            var respObj = Object.assign({}, item);
+	            respObj.response = respObj.response.trim();
+	            return respObj;
+	        });
+	        newVotesObj.responses = trimmedObjResponses;
+	  //      if(this.state.valid){
+	  //               Api.put('/api/polls/' + pollID, newVotesObj, (err, response) => {
+	  //                   console.log("newVotesObj value",newVotesObj)
+	  //                  if (err) { 
+	  //                       console.log("Error: " + JSON.stringify(err)); 
+	  //                       return;
+	  //                  }
+	  //                  else{
+	  //                      alert("your data is succesfully saved" + JSON.stringify(response))
+	  //                  }
+	                 
+	  //               },true);
+	  //      }
+	  //      else{
+	  //          alert("something wrong with your options.")
+			// }
+		alert("update " + this.props.children + " ID : "+ this.props.id );
+	}
   
-
+  
+//thePoll={this.props.thePoll}
     render() {
-        return (<div className="responses" onChange={this.props.update}>
+        return (<div className="responses">
         			
         		 <code>{this.state.typed}</code>
-                    {this.props.someResponses.responses.map(this.eachPollResponse)}
+                    {this.props.someResponses.map(this.eachPollResponse)}
                 </div>
                 )
     }
@@ -177,13 +200,14 @@ class EditPoll extends Component {
     }
     
 
-    update = (newText, id) => {
-		var updatedResponses = this.state.someResponses.map(
-						response => (response.response !== response) ? 
-											response: { ...response,
-														response: newText }
-						)
-				this.setState({updatedResponses})
+    update = (event, id) => {
+		// var updatedResponses = this.state.someResponses.map(
+		// 				response => (response.response !== response) ? 
+		// 									response: { ...response,
+		// 												response: newText }
+		// 				)
+			//	this.setState({updatedResponses})
+				console.log(event +' ID: '+ id);
 	}
     
     render() {
@@ -192,9 +216,9 @@ class EditPoll extends Component {
         
         return (<div style={zoneStyle.container}>
 				    <h4 style={zoneStyle.header}>
-				        <a style={zoneStyle.title} href="#">{this.props.question}</a>
+				        <a style={zoneStyle.title} href="#">{this.state.poll.pollquestion}</a>
 				    </h4>
-				        <PollResponse onChange={this.props.update} someResponses={this.state.poll} />
+				        <PollResponse onChange={this.props.update} thePoll={this.state.poll} someResponses={this.state.poll.responses} />
 				        <br/>
 				        <span>created by {this.props.author}</span>
 				</div>

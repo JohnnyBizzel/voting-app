@@ -36,25 +36,23 @@ class CreatePoll extends Component {
         
        
         // call the function from the container (not here as this is presentation layer)
-        //this.props.onCreate(this.state.poll);fg
         
         let pollObject = Object.assign({},this.state.poll);
-        console.log("state copied",pollObject);
-        // var arr1 =this.state.poll.responses.split(","); // don't do this here
-        // var arr2=[];
-        // for(var i=0;i<arr1.length;i++){
-        //     arr2.push({response:arr1[i],votes:0})
-            
-        // }
-         // pollObject["responses"]=this.state.poll.responses;
-          console.log("final pollObject",pollObject)
+        
+        // do this to validate at least 2 options
+        if (this.state.poll.responses.indexOf(";") < 0)
+        {
+            alert("Need at least 2 options. Use ; to separate options");
+            return;
+        }
+        
+      
         	Api.post('/api/polls', pollObject, (err, response) => {
 			if (err) { 
 				alert("Error: " + JSON.stringify(err)); 
 				return;
 			}
 			
-			console.log('this is response after saving: ' + JSON.stringify(response.message));
 			
 			
 		});
@@ -79,5 +77,5 @@ class CreatePoll extends Component {
     }
     
 }
-        /* Removed Timestamp field : /*  <!-- input onChange={this.updateTimestamp.bind(this)} className="form-control" type="text" placeholder="Time"/ -->*/
+      
 export default CreatePoll

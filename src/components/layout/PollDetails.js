@@ -237,14 +237,7 @@ class PollDetails extends Component {
                             <Doughnut data={this.state.data} />
                         </div>
                     </div>
-                    <div className="row">
-                        <div className="col-md-*">
-                            <EditPoll visible={this.state.editVisible} 
-                                question={this.state.list.pollquestion} 
-                                author={this.state.list.author}
-                                someResponses={this.state.list.responses} />
-                        </div>
-                    </div>
+                   
                 
                 </div>);
     }

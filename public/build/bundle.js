@@ -21939,10 +21939,8 @@
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+		value: true
 	});
-	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
@@ -21969,280 +21967,305 @@
 	
 	
 	var PollDetail = function (_React$Component) {
-	  _inherits(PollDetail, _React$Component);
+		_inherits(PollDetail, _React$Component);
 	
-	  function PollDetail(props) {
-	    _classCallCheck(this, PollDetail);
+		function PollDetail(props) {
+			_classCallCheck(this, PollDetail);
 	
-	    var _this = _possibleConstructorReturn(this, (PollDetail.__proto__ || Object.getPrototypeOf(PollDetail)).call(this, props));
+			var _this = _possibleConstructorReturn(this, (PollDetail.__proto__ || Object.getPrototypeOf(PollDetail)).call(this, props));
 	
-	    _this.save = function (event) {
-	      event.preventDefault();
-	      _this.setState({ editText: event.target.value });
-	    };
+			_this.save = function (event) {
+				event.preventDefault();
+				_this.setState({ editText: event.target.value });
+			};
 	
-	    _this.submit = function (event) {
-	      event.preventDefault();
-	      alert("Current state: " + _this.state.editText);
-	      _this.setState({ editing: false });
-	      // call API - update poll
-	      //  update = (ev) => {
-	      // 		var updatedResponses = this.state.someResponses.map(
-	      // 						response => (response.response !== response) ? 
-	      // 											response: { ...response,
-	      // 														response: newText }
-	      // 						)
-	      // 				this.setState({updatedResponses})
-	      alert("update " + _this.state.editText + " ID : " + _this.props.id);
-	    };
+			_this.cancel = function (event) {
+				event.preventDefault();
+				_this.setState({ editing: false });
+			};
 	
-	    _this.cancel = function (event) {
-	      event.preventDefault();
-	      _this.setState({ editing: false });
-	    };
+			_this.state = {
+				editing: false,
+				editText: props.children
+			};
 	
-	    _this.state = {
-	      editing: false,
-	      editText: props.children
-	    };
+			return _this;
+		}
 	
-	    return _this;
-	  }
-	
-	  // edit() {
-	  // 	this.setState({editing: true, editText:''})
-	  // }
-	  // update(event) {
-	  // 		//var responseOption = this.state.editText;
-	  // 		this.setState({ editText: event.target.value})
-	  // },
-	  // 
+		// edit() {
+		// 	this.setState({editing: true, editText:''})
+		// }
+		// update(event) {
+		// 		//var responseOption = this.state.editText;
+		// 		this.setState({ editText: event.target.value})
+		// },
+		// 
 	
 	
-	  _createClass(PollDetail, [{
-	    key: 'remove',
-	    value: function remove() {
-	      this.props.onRemove(this.props.response);
-	    }
-	  }, {
-	    key: 'renderForm',
-	    value: function renderForm() {
+		_createClass(PollDetail, [{
+			key: 'remove',
+			value: function remove() {
+				this.props.onRemove(this.props.response);
+			}
+		}, {
+			key: 'renderForm',
+			value: function renderForm() {
 	
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'responseBox' },
-	        _react2.default.createElement(
-	          'form',
-	          { onSubmit: this.submit },
-	          _react2.default.createElement('input', { ref: 'newText', type: 'text',
-	            className: 'form-control', onChange: this.save,
-	            value: this.state.editText }),
-	          _react2.default.createElement('input', { className: 'btn btn-success', type: 'submit', value: 'Update' }),
-	          _react2.default.createElement(
-	            'button',
-	            { className: 'btn btn-default',
-	              onClick: this.cancel },
-	            'Cancel'
-	          )
-	        )
-	      );
-	    }
-	  }, {
-	    key: 'renderDisplay',
-	    value: function renderDisplay() {
-	      var _this2 = this;
+				return _react2.default.createElement(
+					'div',
+					{ className: 'responseBox' },
+					_react2.default.createElement(
+						'form',
+						{ onSubmit: this.props.onSubmit },
+						_react2.default.createElement('input', { ref: 'newText', type: 'text',
+							className: 'form-control', onChange: this.save,
+							value: this.state.editText }),
+						_react2.default.createElement('input', { className: 'btn btn-success', type: 'submit', value: 'Update' }),
+						_react2.default.createElement(
+							'button',
+							{ className: 'btn btn-default',
+								onClick: this.cancel },
+							'Cancel'
+						)
+					)
+				);
+			}
+		}, {
+			key: 'renderDisplay',
+			value: function renderDisplay() {
+				var _this2 = this;
 	
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'container-fluid' },
-	        _react2.default.createElement(
-	          'p',
-	          null,
-	          this.state.editText
-	        ),
-	        _react2.default.createElement(
-	          'span',
-	          null,
-	          _react2.default.createElement(
-	            'button',
-	            { className: 'btn btn-warning',
-	              onClick: function onClick() {
-	                return _this2.setState({ editing: true });
-	              } },
-	            'Edit'
-	          ),
-	          _react2.default.createElement(
-	            'button',
-	            { className: 'btn btn-danger', onClick: this.remove },
-	            'Delete'
-	          )
-	        )
-	      );
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return this.state.editing ? this.renderForm() : this.renderDisplay();
-	    }
-	  }]);
+				return _react2.default.createElement(
+					'div',
+					{ className: 'container-fluid' },
+					_react2.default.createElement(
+						'p',
+						null,
+						this.state.editText
+					),
+					_react2.default.createElement(
+						'span',
+						null,
+						_react2.default.createElement(
+							'button',
+							{ className: 'btn btn-warning',
+								onClick: function onClick() {
+									return _this2.setState({ editing: true });
+								} },
+							'Edit'
+						),
+						_react2.default.createElement(
+							'button',
+							{ className: 'btn btn-danger', onClick: this.remove },
+							'Delete'
+						)
+					)
+				);
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				return this.state.editing ? this.renderForm() : this.renderDisplay();
+			}
+		}]);
 	
-	  return PollDetail;
+		return PollDetail;
 	}(_react2.default.Component);
 	
 	var PollResponse = function (_Component) {
-	  _inherits(PollResponse, _Component);
+		_inherits(PollResponse, _Component);
 	
-	  function PollResponse(props) {
-	    _classCallCheck(this, PollResponse);
+		function PollResponse(props) {
+			_classCallCheck(this, PollResponse);
 	
-	    var _this3 = _possibleConstructorReturn(this, (PollResponse.__proto__ || Object.getPrototypeOf(PollResponse)).call(this, props));
+			var _this3 = _possibleConstructorReturn(this, (PollResponse.__proto__ || Object.getPrototypeOf(PollResponse)).call(this, props));
 	
-	    _this3.eachPollResponse = function (resp) {
+			_this3.eachPollResponse = function (resp) {
 	
-	      var remove = function remove() {};
+				var remove = function remove() {};
 	
-	      return _react2.default.createElement(
-	        PollDetail,
-	        { key: resp.respID,
-	          id: resp.respID, onChange: _this3.props.update, onRemove: remove
-	        },
-	        resp.response
-	      );
-	    };
+				return _react2.default.createElement(
+					PollDetail,
+					{ key: resp.respID,
+						id: resp.respID, onSubmit: _this3.submit, onRemove: remove
+					},
+					resp.response
+				);
+			};
 	
-	    _this3.state = {
-	      pollResponses: [],
-	      typed: ''
-	    };
-	    return _this3;
-	  }
+			_this3.submit = function (event) {
+				event.preventDefault();
+				alert("Current state: " + _this3.props.children);
+				_this3.setState({ editing: false });
+				// call API - update poll
 	
-	  // bound function
+				console.log("state polls", _this3.state);
+	
+				var newVotesObj = Object.assign({}, _this3.props.thePoll);
+				// Trim space characters from the response:
+				var trimmedObjResponses = newVotesObj.responses.map(function (item) {
+					var respObj = Object.assign({}, item);
+					respObj.response = respObj.response.trim();
+					return respObj;
+				});
+				newVotesObj.responses = trimmedObjResponses;
+				//      if(this.state.valid){
+				//               Api.put('/api/polls/' + pollID, newVotesObj, (err, response) => {
+				//                   console.log("newVotesObj value",newVotesObj)
+				//                  if (err) { 
+				//                       console.log("Error: " + JSON.stringify(err)); 
+				//                       return;
+				//                  }
+				//                  else{
+				//                      alert("your data is succesfully saved" + JSON.stringify(response))
+				//                  }
+	
+				//               },true);
+				//      }
+				//      else{
+				//          alert("something wrong with your options.")
+				// }
+				alert("update " + _this3.props.children + " ID : " + _this3.props.id);
+			};
+	
+			_this3.state = {
+				pollResponses: [],
+				typed: ''
+			};
+			return _this3;
+		}
+	
+		// bound function
 	
 	
-	  _createClass(PollResponse, [{
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'responses', onChange: this.props.update },
-	        _react2.default.createElement(
-	          'code',
-	          null,
-	          this.state.typed
-	        ),
-	        this.props.someResponses.responses.map(this.eachPollResponse)
-	      );
-	    }
-	  }]);
+		_createClass(PollResponse, [{
+			key: 'render',
 	
-	  return PollResponse;
+	
+			//thePoll={this.props.thePoll}
+			value: function render() {
+				return _react2.default.createElement(
+					'div',
+					{ className: 'responses' },
+					_react2.default.createElement(
+						'code',
+						null,
+						this.state.typed
+					),
+					this.props.someResponses.map(this.eachPollResponse)
+				);
+			}
+		}]);
+	
+		return PollResponse;
 	}(_react.Component);
 	
 	PollResponse.defaultProps = {
-	  someResponses: [{ _id: 1, response: "one" }, { _id: 2, response: "two" }, { _id: 3, response: "half" }, { _id: 4, response: "five" }]
+		someResponses: [{ _id: 1, response: "one" }, { _id: 2, response: "two" }, { _id: 3, response: "half" }, { _id: 4, response: "five" }]
 	};
 	
 	PollResponse.propTypes = {
-	  someResponses: _react2.default.PropTypes.array
+		someResponses: _react2.default.PropTypes.array
 	};
 	
 	var EditPoll = function (_Component2) {
-	  _inherits(EditPoll, _Component2);
+		_inherits(EditPoll, _Component2);
 	
-	  function EditPoll() {
-	    _classCallCheck(this, EditPoll);
+		function EditPoll() {
+			_classCallCheck(this, EditPoll);
 	
-	    var _this4 = _possibleConstructorReturn(this, (EditPoll.__proto__ || Object.getPrototypeOf(EditPoll)).call(this));
+			var _this4 = _possibleConstructorReturn(this, (EditPoll.__proto__ || Object.getPrototypeOf(EditPoll)).call(this));
 	
-	    _this4.update = function (newText, id) {
-	      var updatedResponses = _this4.state.someResponses.map(function (response) {
-	        return response.response !== response ? response : _extends({}, response, {
-	          response: newText });
-	      });
-	      _this4.setState({ updatedResponses: updatedResponses });
-	    };
+			_this4.update = function (event, id) {
+				// var updatedResponses = this.state.someResponses.map(
+				// 				response => (response.response !== response) ? 
+				// 									response: { ...response,
+				// 												response: newText }
+				// 				)
+				//	this.setState({updatedResponses})
+				console.log(event + ' ID: ' + id);
+			};
 	
-	    _this4.state = {
-	      poll: {
-	        pollquestion: 'ankur',
-	        author: 'ankur',
-	        responses: [1]
-	      },
-	      newresponses: [2],
-	      valid: true
-	    };
+			_this4.state = {
+				poll: {
+					pollquestion: 'ankur',
+					author: 'ankur',
+					responses: [1]
+				},
+				newresponses: [2],
+				valid: true
+			};
 	
-	    return _this4;
-	  }
+			return _this4;
+		}
 	
-	  _createClass(EditPoll, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      var _this5 = this;
+		_createClass(EditPoll, [{
+			key: 'componentDidMount',
+			value: function componentDidMount() {
+				var _this5 = this;
 	
-	      var urlWithId = this.props.location.pathname;
-	      var pollID = 2;
-	      pollID = urlWithId.split('/').pop();
-	      console.log("here's the poll id", pollID);
-	      _ApiManager2.default.get('/api/polls/' + pollID, null, function (err, response) {
-	        if (err) {
-	          alert("Error: " + err);
-	        } else {
+				var urlWithId = this.props.location.pathname;
+				var pollID = 2;
+				pollID = urlWithId.split('/').pop();
+				console.log("here's the poll id", pollID);
+				_ApiManager2.default.get('/api/polls/' + pollID, null, function (err, response) {
+					if (err) {
+						alert("Error: " + err);
+					} else {
 	
-	          var newobj = { pollquestion: response.message.pollquestion, author: response.message.author, responses: response.message.responses };
-	          _this5.setState({
-	            poll: newobj
+						var newobj = { pollquestion: response.message.pollquestion, author: response.message.author, responses: response.message.responses };
+						_this5.setState({
+							poll: newobj
 	
-	          });
-	          var newarr = _this5.state.poll.responses.map(function (i, index) {
-	            return i.response;
-	          });
-	          var tochange = _this5.state.newresponses;
-	          _this5.setState({
-	            newresponses: newarr
-	          });
-	          console.log("this is only array", _this5.state.newresponses);
-	          console.log("conventional responses", _this5.state.poll.responses);
-	        }
-	      });
-	      var isValid = Object.assign({}, this.state.valid);
-	      isValid = JSON.stringify(true);
-	      this.setState({
-	        valid: isValid
-	      });
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
+						});
+						var newarr = _this5.state.poll.responses.map(function (i, index) {
+							return i.response;
+						});
+						var tochange = _this5.state.newresponses;
+						_this5.setState({
+							newresponses: newarr
+						});
+						console.log("this is only array", _this5.state.newresponses);
+						console.log("conventional responses", _this5.state.poll.responses);
+					}
+				});
+				var isValid = Object.assign({}, this.state.valid);
+				isValid = JSON.stringify(true);
+				this.setState({
+					valid: isValid
+				});
+			}
+		}, {
+			key: 'render',
+			value: function render() {
 	
-	      var zoneStyle = _styles2.default.zone; // needs to be inside the render func!
+				var zoneStyle = _styles2.default.zone; // needs to be inside the render func!
 	
-	      return _react2.default.createElement(
-	        'div',
-	        { style: zoneStyle.container },
-	        _react2.default.createElement(
-	          'h4',
-	          { style: zoneStyle.header },
-	          _react2.default.createElement(
-	            'a',
-	            { style: zoneStyle.title, href: '#' },
-	            this.props.question
-	          )
-	        ),
-	        _react2.default.createElement(PollResponse, { onChange: this.props.update, someResponses: this.state.poll }),
-	        _react2.default.createElement('br', null),
-	        _react2.default.createElement(
-	          'span',
-	          null,
-	          'created by ',
-	          this.props.author
-	        )
-	      );
-	    }
-	  }]);
+				return _react2.default.createElement(
+					'div',
+					{ style: zoneStyle.container },
+					_react2.default.createElement(
+						'h4',
+						{ style: zoneStyle.header },
+						_react2.default.createElement(
+							'a',
+							{ style: zoneStyle.title, href: '#' },
+							this.state.poll.pollquestion
+						)
+					),
+					_react2.default.createElement(PollResponse, { onChange: this.props.update, thePoll: this.state.poll, someResponses: this.state.poll.responses }),
+					_react2.default.createElement('br', null),
+					_react2.default.createElement(
+						'span',
+						null,
+						'created by ',
+						this.props.author
+					)
+				);
+			}
+		}]);
 	
-	  return EditPoll;
+		return EditPoll;
 	}(_react.Component);
 	
 	exports.default = EditPoll;
@@ -29854,18 +29877,6 @@
 	                        'div',
 	                        { className: 'col-md-6' },
 	                        _react2.default.createElement(_reactChartjs.Doughnut, { data: this.state.data })
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'row' },
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'col-md-*' },
-	                        _react2.default.createElement(_EditPoll2.default, { visible: this.state.editVisible,
-	                            question: this.state.list.pollquestion,
-	                            author: this.state.list.author,
-	                            someResponses: this.state.list.responses })
 	                    )
 	                )
 	            );
@@ -61526,25 +61537,20 @@
 	        value: function submitPoll(event) {
 	
 	            // call the function from the container (not here as this is presentation layer)
-	            //this.props.onCreate(this.state.poll);fg
 	
 	            var pollObject = Object.assign({}, this.state.poll);
-	            console.log("state copied", pollObject);
-	            // var arr1 =this.state.poll.responses.split(","); // don't do this here
-	            // var arr2=[];
-	            // for(var i=0;i<arr1.length;i++){
-	            //     arr2.push({response:arr1[i],votes:0})
 	
-	            // }
-	            // pollObject["responses"]=this.state.poll.responses;
-	            console.log("final pollObject", pollObject);
+	            // do this to validate at least 2 options
+	            if (this.state.poll.responses.indexOf(";") < 0) {
+	                alert("Need at least 2 options. Use ; to separate options");
+	                return;
+	            }
+	
 	            _ApiManager2.default.post('/api/polls', pollObject, function (err, response) {
 	                if (err) {
 	                    alert("Error: " + JSON.stringify(err));
 	                    return;
 	                }
-	
-	                console.log('this is response after saving: ' + JSON.stringify(response.message));
 	            });
 	        }
 	    }, {
@@ -61577,8 +61583,6 @@
 	
 	    return CreatePoll;
 	}(_react.Component);
-	/* Removed Timestamp field : /*  <!-- input onChange={this.updateTimestamp.bind(this)} className="form-control" type="text" placeholder="Time"/ -->*/
-	
 	
 	exports.default = CreatePoll;
 
