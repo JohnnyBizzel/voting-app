@@ -21974,18 +21974,13 @@
 	
 			var _this = _possibleConstructorReturn(this, (PollDetail.__proto__ || Object.getPrototypeOf(PollDetail)).call(this, props));
 	
-			_this.save = function (event) {
-				event.preventDefault();
-				_this.setState({ editText: event.target.value });
-			};
-	
 			_this.cancel = function (event) {
 				event.preventDefault();
 				_this.setState({ editing: false });
 			};
 	
 			_this.state = {
-				editing: false,
+				editing: props.editMode,
 				editText: props.children
 			};
 	
@@ -22000,6 +21995,10 @@
 		// 		this.setState({ editText: event.target.value})
 		// },
 		// 
+		// save = (event) => {
+		// 	event.preventDefault();
+		// 	this.setState({editText:event.target.value})
+		// }
 	
 	
 		_createClass(PollDetail, [{
@@ -22017,9 +22016,9 @@
 					_react2.default.createElement(
 						'form',
 						{ onSubmit: this.props.onSubmit },
-						_react2.default.createElement('input', { ref: 'newText', type: 'text',
-							className: 'form-control', onChange: this.save,
-							value: this.state.editText }),
+						_react2.default.createElement('input', { ref: this.props.key, type: 'text', key: this.props.key,
+							className: 'form-control', onChange: this.props.onChange,
+							value: this.props.respText }),
 						_react2.default.createElement('input', { className: 'btn btn-success', type: 'submit', value: 'Update' }),
 						_react2.default.createElement(
 							'button',
@@ -22041,7 +22040,7 @@
 					_react2.default.createElement(
 						'p',
 						null,
-						this.state.editText
+						this.props.respText
 					),
 					_react2.default.createElement(
 						'span',
@@ -22071,6 +22070,10 @@
 	
 		return PollDetail;
 	}(_react2.default.Component);
+	// PollDetail.propTypes = {
+	// 	submit: React.PropTypes.func.isRequired
+	// }
+	
 	
 	var PollResponse = function (_Component) {
 		_inherits(PollResponse, _Component);
@@ -22087,19 +22090,26 @@
 				return _react2.default.createElement(
 					PollDetail,
 					{ key: resp.respID,
-						id: resp.respID, onSubmit: _this3.submit, onRemove: remove
-					},
+						id: resp.respID, onSubmit: _this3.submit, onChange: _this3.save,
+						editMode: _this3.state.editing,
+						onRemove: remove, respText: resp.response },
 					resp.response
 				);
 			};
 	
+			_this3.save = function (event) {
+				event.preventDefault();
+				_this3.setState({ typed: event.target.value });
+				alert("update " + event.target.value + " ID : " + event.target.ref);
+			};
+	
 			_this3.submit = function (event) {
 				event.preventDefault();
-				alert("Current state: " + _this3.props.children);
+				alert("Current event: " + event.target.value);
 				_this3.setState({ editing: false });
 				// call API - update poll
 	
-				console.log("state polls", _this3.state);
+				console.log("Submitted state polls: ", _this3.state);
 	
 				var newVotesObj = Object.assign({}, _this3.props.thePoll);
 				// Trim space characters from the response:
@@ -22130,7 +22140,8 @@
 	
 			_this3.state = {
 				pollResponses: [],
-				typed: ''
+				typed: '',
+				editing: false
 			};
 			return _this3;
 		}
@@ -22188,8 +22199,8 @@
 	
 			_this4.state = {
 				poll: {
-					pollquestion: 'ankur',
-					author: 'ankur',
+					pollquestion: '',
+					author: '',
 					responses: [1]
 				},
 				newresponses: [2],
@@ -22213,7 +22224,9 @@
 						alert("Error: " + err);
 					} else {
 	
-						var newobj = { pollquestion: response.message.pollquestion, author: response.message.author, responses: response.message.responses };
+						var newobj = { pollquestion: response.message.pollquestion,
+							author: response.message.author,
+							responses: response.message.responses };
 						_this5.setState({
 							poll: newobj
 	
@@ -22253,7 +22266,8 @@
 							this.state.poll.pollquestion
 						)
 					),
-					_react2.default.createElement(PollResponse, { onChange: this.props.update, thePoll: this.state.poll, someResponses: this.state.poll.responses }),
+					_react2.default.createElement(PollResponse, { onChange: this.props.update, thePoll: this.state.poll,
+						someResponses: this.state.poll.responses }),
 					_react2.default.createElement('br', null),
 					_react2.default.createElement(
 						'span',
