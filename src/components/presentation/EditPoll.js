@@ -10,23 +10,30 @@ class PollDetail extends React.Component {
     	super(props);
     		this.state = {
     			editing: props.editMode, 
-				editText: props.children
+				editText: props.children,
+				selectedID: props.id
     		}
+    		
+    	this.changeText = this.changeText.bind(this);
     
     }
   
-	// edit() {
-	// 	this.setState({editing: true, editText:''})
-	// }
-	// update(event) {
-	// 		//var responseOption = this.state.editText;
-	// 		this.setState({ editText: event.target.value})
-	// },
-	// 
-	// save = (event) => {
-	// 	event.preventDefault();
-	// 	this.setState({editText:event.target.value})
-	// }
+	edit() {
+		this.setState({editing: true, editText:''})
+	}
+	changeText(event) {
+			//var responseOption = this.state.editText;
+			console.log('text changing:', event.target.value)
+			console.log('text response ID:', this.props.id)
+			this.props.changetext(event.target.value, this.props.id)
+	}
+	
+	submit = (event) => {
+		event.preventDefault();
+		//this.setState({editText:event.target.value})
+		console.log(event);
+		//this.props.onSubmit()
+	}
 
        
 	remove() {
@@ -37,11 +44,11 @@ class PollDetail extends React.Component {
 		this.setState({editing:false})
 	}
 	renderForm() {
-	
+		
 			return (<div className="responseBox">
-						<form onSubmit={this.props.onSubmit}>
-						<input ref={this.props.key} type="text" key={this.props.key}
-							className="form-control" onChange={this.props.onChange}
+						<form onSubmit={this.submit}>
+						<input ref={this.props.id} type="text" 
+							className="form-control" onChange={this.changeText}
 							value={this.props.respText} />
 						<input className="btn btn-success" type="submit" value="Update" />																
 						<button className="btn btn-default" 
@@ -72,73 +79,72 @@ class PollDetail extends React.Component {
 class PollResponse extends Component {
     constructor(props) {
     	super(props);
+    		// this.state = {
+    		// 	pollResponses: '',
+    		// 	typed: '',
+    		// 	editing:false
+    		// }
     		this.state = {
-    			pollResponses: [],
-    			typed: '',
-    			editing:false
-    		}
+                // poll:{
+                //     pollquestion: '',
+                //     author: '',
+                //     responses: [1]
+                // },
+                newresponses:[2],
+                valid: true
+        };
     }
-    
-	// bound function
+
+	
+	submit = (id) => (event) => {
+		event.preventDefault();
+		alert("Current event: " + event.target.value)
+		this.setState({editing: false})
+		let newVotesObj = Object.assign({},this.state.poll);
+		console.log("update " + event.target.value + " ID : "+ id );
+        // Trim space characters from the response:
+        var trimmedObjResponses = newVotesObj.responses.map(function(item) {
+            var respObj = Object.assign({}, item);
+            respObj.response = respObj.response.trim();
+            return respObj;
+        });
+        newVotesObj.responses = trimmedObjResponses;
+        if(this.state.valid){
+			Api.put('/api/polls/' + this.props.thePollId, newVotesObj, (err, response) => {
+				console.log("newVotesObj value",newVotesObj)
+				if (err) { 
+				     console.log("Error: " + JSON.stringify(err)); 
+				     return;
+				}
+				else{
+				    alert("your data is succesfully saved" + JSON.stringify(response))
+				}
+			
+			},true);
+        }
+        else{
+            alert("something wrong with your options.")
+        }
+	}
+	
+	// bound function - renders each answer - PollDetail component
     eachPollResponse = (resp) => {
  
-		const remove = () => {} 
-		
+    console.log('Render response component',resp);
+    
+		const remove = () => {} ;
+		// onChange={this.props.save(resp.respID)}
 		return (<PollDetail key={resp.respID} 
-				id={resp.respID} onSubmit={this.submit} onChange={this.save}
+				id={resp.respID} onSubmit={this.submit(resp.respID)} 
+				changetext={this.props.onChange}
 				editMode={this.state.editing} 
 				onRemove={remove} respText={resp.response}>
 				{resp.response}</PollDetail>)
 	}
-	
-	save = (event) => {
-		event.preventDefault();
-		this.setState({typed:event.target.value});
-		alert("update " + event.target.value + " ID : "+ event.target.ref );
-	}
-	
-	submit = (event) => {
-		event.preventDefault();
-		alert("Current event: " + event.target.value)
-		this.setState({editing: false})
-		  // call API - update poll
-	
-	        console.log("Submitted state polls: ",this.state)
-	        
-	        var newVotesObj = Object.assign({},this.props.thePoll);
-	        // Trim space characters from the response:
-	        var trimmedObjResponses = newVotesObj.responses.map(function(item) {
-	            var respObj = Object.assign({}, item);
-	            respObj.response = respObj.response.trim();
-	            return respObj;
-	        });
-	        newVotesObj.responses = trimmedObjResponses;
-	  //      if(this.state.valid){
-	  //               Api.put('/api/polls/' + pollID, newVotesObj, (err, response) => {
-	  //                   console.log("newVotesObj value",newVotesObj)
-	  //                  if (err) { 
-	  //                       console.log("Error: " + JSON.stringify(err)); 
-	  //                       return;
-	  //                  }
-	  //                  else{
-	  //                      alert("your data is succesfully saved" + JSON.stringify(response))
-	  //                  }
-	                 
-	  //               },true);
-	  //      }
-	  //      else{
-	  //          alert("something wrong with your options.")
-			// }
-		alert("update " + this.props.children + " ID : "+ this.props.id );
-	}
-  
-  
-//thePoll={this.props.thePoll}
+
     render() {
         return (<div className="responses">
-        			
-        		 <code>{this.state.typed}</code>
-                    {this.props.someResponses.map(this.eachPollResponse)}
+                    {this.props.poll.responses.map(this.eachPollResponse)}
                 </div>
                 )
     }
@@ -146,18 +152,24 @@ class PollResponse extends Component {
 
 PollResponse.defaultProps = {
 	someResponses: [{ _id:1, response: "one"},
-                                { _id:2, response:"two"},
-                                { _id:3, response:"half"},
-                                { _id:4, response:"five"}]		
+                    { _id:2, response:"two"},
+                    { _id:3, response:"half"},
+                    { _id:4, response:"five"}]		
 }
 
 PollResponse.propTypes = {
 	someResponses: React.PropTypes.array
 }
 
+/////////////////////////////////////////
+//
+//  EDIT POLL COMPONENT
+//
+/////////////////////////////////////////
+
 class EditPoll extends Component {
-    constructor() {
-    	super()
+    constructor(props) {
+    	super(props)
     	this.state = {
                 poll:{
                     pollquestion: '',
@@ -168,21 +180,22 @@ class EditPoll extends Component {
                 valid: true
         };
     	
+    	this.save = this.save.bind(this);
+    	this.update = this.update.bind(this);
     }
     
-
     componentDidMount(){
-        var urlWithId =this.props.location.pathname;
-        let pollID = 2;
-        pollID = urlWithId.split('/').pop();
-        console.log("here's the poll id",pollID)
-        Api.get('/api/polls/' + pollID, null, (err, response) => {
+        //var urlWithId =this.props.location.pathname;
+        //let pollID = this.props.params.id;
+        // pollID = urlWithId.split('/').pop();
+        console.log("here's the poll id",this.props.params.id)
+        Api.get('/api/polls/' + this.props.params.id, null, (err, response) => {
             if(err){
                  alert("Error: " + err); 
                 
             }
             else{
-                
+                console.log(response.message)
                 var newobj = {pollquestion:response.message.pollquestion,
                 	author:response.message.author,
                 	responses:response.message.responses}
@@ -197,8 +210,8 @@ class EditPoll extends Component {
                 this.setState({
                     newresponses:newarr
                 })
-                console.log("this is only array",this.state.newresponses);
-                console.log("conventional responses",this.state.poll.responses)
+                
+                console.log("Api GET Loading responses:",this.state.poll.responses)
                
             }
             
@@ -211,29 +224,58 @@ class EditPoll extends Component {
         
     }
     
+    	// TODO: Fix this!!
+	save = (id) => (event) => {
+		event.preventDefault();
+		// let newVotesObj = Object.assign({},this.state.poll);
+		console.log("update " + event.target.value + " ID : "+ id );
+	
+		let newResponsesObj = Object.assign([],this.state.poll.responses);
+		
+		newResponsesObj.forEach(function(r) {
+			if (r.respID == id) {
+				r.response = event.target.value.trim();
+			}
+		})
+		console.log(newResponsesObj);
+		this.setState({
+                    poll:{
+	                    responses: newResponsesObj
+                    }
+                })
+	}
+	
+    /* update text (and update state) */
+    update = (changedText, id) => {
 
-    update = (event, id) => {
-		// var updatedResponses = this.state.someResponses.map(
-		// 				response => (response.response !== response) ? 
-		// 									response: { ...response,
-		// 												response: newText }
-		// 				)
-			//	this.setState({updatedResponses})
-				console.log(event +' ID: '+ id);
+    	let newStateResponses = {...this.state }; // == Object.assign({}, this.state);
+
+	    newStateResponses.poll.responses.forEach((rs) => {
+	      if (rs.respID === id) {
+	      	// change the record matching the id
+	        rs.response = changedText;
+	      }
+	    })
+    	this.setState(newStateResponses);
+	
 	}
     
     render() {
-
+    	let pollID = 'none';
+		if (this.props.params != undefined)
+			pollID = this.props.params.id;
+    	//pollID = urlWithId.split('/').pop();
+    	//someResponses={this.state.poll.responses}
         const zoneStyle = styles.zone; // needs to be inside the render func!
         
         return (<div style={zoneStyle.container}>
 				    <h4 style={zoneStyle.header}>
 				        <a style={zoneStyle.title} href="#">{this.state.poll.pollquestion}</a>
 				    </h4>
-				        <PollResponse onChange={this.props.update} thePoll={this.state.poll} 
-				        someResponses={this.state.poll.responses} />
+				        <PollResponse onChange={this.update} poll={this.state.poll} thePollId={pollID} 
+				        save={this.save} />
 				        <br/>
-				        <span>created by {this.props.author}</span>
+				        <span>created by {this.state.poll.author}</span>
 				</div>
                 );
     }

@@ -29,7 +29,7 @@ class Home extends Component {
                         
                     </div>
                     <div className="col-md-6 col-sm-6">
-                        <EditPoll />
+                       
                     </div>
                     
                 </div>

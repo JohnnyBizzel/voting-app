@@ -12,7 +12,11 @@ class Polls extends Component {
 			selected: 0,
 			list: []
 		}
+	
+		this.editPollOption= this.editPollOption.bind(this)
+		
 	}
+	
 
 	
 	// override this function
@@ -64,12 +68,15 @@ class Polls extends Component {
 
 	}
 	
+	editPollOption() {
+		console.log('edit poll option')
+	}
 	
 	render() {
 		const listItems = this.state.list.map((poll, i) =>  {
 			return (
 				<li key={i}>
-					<Poll currentPoll={poll} /> 
+					<Poll currentPoll={poll} editoption={this.editPollOption} /> 
 				</li>
 			)
 		});

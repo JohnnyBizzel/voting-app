@@ -21912,11 +21912,7 @@
 	                        { className: 'col-md-6 col-sm-6' },
 	                        _react2.default.createElement(_Polls2.default, null)
 	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'col-md-6 col-sm-6' },
-	                        _react2.default.createElement(_EditPoll2.default, null)
-	                    )
+	                    _react2.default.createElement('div', { className: 'col-md-6 col-sm-6' })
 	                ),
 	                _react2.default.createElement(
 	                    _reactRouter.Link,
@@ -21939,8 +21935,10 @@
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
-		value: true
+	  value: true
 	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
@@ -21967,108 +21965,117 @@
 	
 	
 	var PollDetail = function (_React$Component) {
-		_inherits(PollDetail, _React$Component);
+	  _inherits(PollDetail, _React$Component);
 	
-		function PollDetail(props) {
-			_classCallCheck(this, PollDetail);
+	  function PollDetail(props) {
+	    _classCallCheck(this, PollDetail);
 	
-			var _this = _possibleConstructorReturn(this, (PollDetail.__proto__ || Object.getPrototypeOf(PollDetail)).call(this, props));
+	    var _this = _possibleConstructorReturn(this, (PollDetail.__proto__ || Object.getPrototypeOf(PollDetail)).call(this, props));
 	
-			_this.cancel = function (event) {
-				event.preventDefault();
-				_this.setState({ editing: false });
-			};
+	    _this.submit = function (event) {
+	      event.preventDefault();
+	      //this.setState({editText:event.target.value})
+	      console.log(event);
+	      //this.props.onSubmit()
+	    };
 	
-			_this.state = {
-				editing: props.editMode,
-				editText: props.children
-			};
+	    _this.cancel = function (event) {
+	      event.preventDefault();
+	      _this.setState({ editing: false });
+	    };
 	
-			return _this;
-		}
+	    _this.state = {
+	      editing: props.editMode,
+	      editText: props.children,
+	      selectedID: props.id
+	    };
 	
-		// edit() {
-		// 	this.setState({editing: true, editText:''})
-		// }
-		// update(event) {
-		// 		//var responseOption = this.state.editText;
-		// 		this.setState({ editText: event.target.value})
-		// },
-		// 
-		// save = (event) => {
-		// 	event.preventDefault();
-		// 	this.setState({editText:event.target.value})
-		// }
+	    _this.changeText = _this.changeText.bind(_this);
 	
+	    return _this;
+	  }
 	
-		_createClass(PollDetail, [{
-			key: 'remove',
-			value: function remove() {
-				this.props.onRemove(this.props.response);
-			}
-		}, {
-			key: 'renderForm',
-			value: function renderForm() {
+	  _createClass(PollDetail, [{
+	    key: 'edit',
+	    value: function edit() {
+	      this.setState({ editing: true, editText: '' });
+	    }
+	  }, {
+	    key: 'changeText',
+	    value: function changeText(event) {
+	      //var responseOption = this.state.editText;
+	      console.log('text changing:', event.target.value);
+	      console.log('text response ID:', this.props.id);
+	      this.props.changetext(event.target.value, this.props.id);
+	    }
+	  }, {
+	    key: 'remove',
+	    value: function remove() {
+	      this.props.onRemove(this.props.response);
+	    }
+	  }, {
+	    key: 'renderForm',
+	    value: function renderForm() {
 	
-				return _react2.default.createElement(
-					'div',
-					{ className: 'responseBox' },
-					_react2.default.createElement(
-						'form',
-						{ onSubmit: this.props.onSubmit },
-						_react2.default.createElement('input', { ref: this.props.key, type: 'text', key: this.props.key,
-							className: 'form-control', onChange: this.props.onChange,
-							value: this.props.respText }),
-						_react2.default.createElement('input', { className: 'btn btn-success', type: 'submit', value: 'Update' }),
-						_react2.default.createElement(
-							'button',
-							{ className: 'btn btn-default',
-								onClick: this.cancel },
-							'Cancel'
-						)
-					)
-				);
-			}
-		}, {
-			key: 'renderDisplay',
-			value: function renderDisplay() {
-				var _this2 = this;
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'responseBox' },
+	        _react2.default.createElement(
+	          'form',
+	          { onSubmit: this.submit },
+	          _react2.default.createElement('input', { ref: this.props.id, type: 'text',
+	            className: 'form-control', onChange: this.changeText,
+	            value: this.props.respText }),
+	          _react2.default.createElement('input', { className: 'btn btn-success', type: 'submit', value: 'Update' }),
+	          _react2.default.createElement(
+	            'button',
+	            { className: 'btn btn-default',
+	              onClick: this.cancel },
+	            'Cancel'
+	          )
+	        )
+	      );
+	    }
+	  }, {
+	    key: 'renderDisplay',
+	    value: function renderDisplay() {
+	      var _this2 = this;
 	
-				return _react2.default.createElement(
-					'div',
-					{ className: 'container-fluid' },
-					_react2.default.createElement(
-						'p',
-						null,
-						this.props.respText
-					),
-					_react2.default.createElement(
-						'span',
-						null,
-						_react2.default.createElement(
-							'button',
-							{ className: 'btn btn-warning',
-								onClick: function onClick() {
-									return _this2.setState({ editing: true });
-								} },
-							'Edit'
-						),
-						_react2.default.createElement(
-							'button',
-							{ className: 'btn btn-danger', onClick: this.remove },
-							'Delete'
-						)
-					)
-				);
-			}
-		}, {
-			key: 'render',
-			value: function render() {
-				return this.state.editing ? this.renderForm() : this.renderDisplay();
-			}
-		}]);
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'container-fluid' },
+	        _react2.default.createElement(
+	          'p',
+	          null,
+	          this.props.respText
+	        ),
+	        _react2.default.createElement(
+	          'span',
+	          null,
+	          _react2.default.createElement(
+	            'button',
+	            { className: 'btn btn-warning',
+	              onClick: function onClick() {
+	                return _this2.setState({ editing: true });
+	              } },
+	            'Edit'
+	          ),
+	          _react2.default.createElement(
+	            'button',
+	            { className: 'btn btn-danger', onClick: this.remove },
+	            'Delete'
+	          )
+	        )
+	      );
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return this.state.editing ? this.renderForm() : this.renderDisplay();
+	    }
+	  }]);
 	
-		return PollDetail;
+	  return PollDetail;
 	}(_react2.default.Component);
 	// PollDetail.propTypes = {
 	// 	submit: React.PropTypes.func.isRequired
@@ -22076,210 +22083,245 @@
 	
 	
 	var PollResponse = function (_Component) {
-		_inherits(PollResponse, _Component);
+	  _inherits(PollResponse, _Component);
 	
-		function PollResponse(props) {
-			_classCallCheck(this, PollResponse);
+	  function PollResponse(props) {
+	    _classCallCheck(this, PollResponse);
 	
-			var _this3 = _possibleConstructorReturn(this, (PollResponse.__proto__ || Object.getPrototypeOf(PollResponse)).call(this, props));
+	    // this.state = {
+	    // 	pollResponses: '',
+	    // 	typed: '',
+	    // 	editing:false
+	    // }
+	    var _this3 = _possibleConstructorReturn(this, (PollResponse.__proto__ || Object.getPrototypeOf(PollResponse)).call(this, props));
 	
-			_this3.eachPollResponse = function (resp) {
+	    _this3.submit = function (id) {
+	      return function (event) {
+	        event.preventDefault();
+	        alert("Current event: " + event.target.value);
+	        _this3.setState({ editing: false });
+	        var newVotesObj = Object.assign({}, _this3.state.poll);
+	        console.log("update " + event.target.value + " ID : " + id);
+	        // Trim space characters from the response:
+	        var trimmedObjResponses = newVotesObj.responses.map(function (item) {
+	          var respObj = Object.assign({}, item);
+	          respObj.response = respObj.response.trim();
+	          return respObj;
+	        });
+	        newVotesObj.responses = trimmedObjResponses;
+	        if (_this3.state.valid) {
+	          _ApiManager2.default.put('/api/polls/' + _this3.props.thePollId, newVotesObj, function (err, response) {
+	            console.log("newVotesObj value", newVotesObj);
+	            if (err) {
+	              console.log("Error: " + JSON.stringify(err));
+	              return;
+	            } else {
+	              alert("your data is succesfully saved" + JSON.stringify(response));
+	            }
+	          }, true);
+	        } else {
+	          alert("something wrong with your options.");
+	        }
+	      };
+	    };
 	
-				var remove = function remove() {};
+	    _this3.eachPollResponse = function (resp) {
 	
-				return _react2.default.createElement(
-					PollDetail,
-					{ key: resp.respID,
-						id: resp.respID, onSubmit: _this3.submit, onChange: _this3.save,
-						editMode: _this3.state.editing,
-						onRemove: remove, respText: resp.response },
-					resp.response
-				);
-			};
+	      console.log('Render response component', resp);
 	
-			_this3.save = function (event) {
-				event.preventDefault();
-				_this3.setState({ typed: event.target.value });
-				alert("update " + event.target.value + " ID : " + event.target.ref);
-			};
+	      var remove = function remove() {};
+	      // onChange={this.props.save(resp.respID)}
+	      return _react2.default.createElement(
+	        PollDetail,
+	        { key: resp.respID,
+	          id: resp.respID, onSubmit: _this3.submit(resp.respID),
+	          changetext: _this3.props.onChange,
+	          editMode: _this3.state.editing,
+	          onRemove: remove, respText: resp.response },
+	        resp.response
+	      );
+	    };
 	
-			_this3.submit = function (event) {
-				event.preventDefault();
-				alert("Current event: " + event.target.value);
-				_this3.setState({ editing: false });
-				// call API - update poll
+	    _this3.state = {
+	      // poll:{
+	      //     pollquestion: '',
+	      //     author: '',
+	      //     responses: [1]
+	      // },
+	      newresponses: [2],
+	      valid: true
+	    };
+	    return _this3;
+	  }
 	
-				console.log("Submitted state polls: ", _this3.state);
-	
-				var newVotesObj = Object.assign({}, _this3.props.thePoll);
-				// Trim space characters from the response:
-				var trimmedObjResponses = newVotesObj.responses.map(function (item) {
-					var respObj = Object.assign({}, item);
-					respObj.response = respObj.response.trim();
-					return respObj;
-				});
-				newVotesObj.responses = trimmedObjResponses;
-				//      if(this.state.valid){
-				//               Api.put('/api/polls/' + pollID, newVotesObj, (err, response) => {
-				//                   console.log("newVotesObj value",newVotesObj)
-				//                  if (err) { 
-				//                       console.log("Error: " + JSON.stringify(err)); 
-				//                       return;
-				//                  }
-				//                  else{
-				//                      alert("your data is succesfully saved" + JSON.stringify(response))
-				//                  }
-	
-				//               },true);
-				//      }
-				//      else{
-				//          alert("something wrong with your options.")
-				// }
-				alert("update " + _this3.props.children + " ID : " + _this3.props.id);
-			};
-	
-			_this3.state = {
-				pollResponses: [],
-				typed: '',
-				editing: false
-			};
-			return _this3;
-		}
-	
-		// bound function
-	
-	
-		_createClass(PollResponse, [{
-			key: 'render',
+	  // bound function - renders each answer - PollDetail component
 	
 	
-			//thePoll={this.props.thePoll}
-			value: function render() {
-				return _react2.default.createElement(
-					'div',
-					{ className: 'responses' },
-					_react2.default.createElement(
-						'code',
-						null,
-						this.state.typed
-					),
-					this.props.someResponses.map(this.eachPollResponse)
-				);
-			}
-		}]);
+	  _createClass(PollResponse, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'responses' },
+	        this.props.poll.responses.map(this.eachPollResponse)
+	      );
+	    }
+	  }]);
 	
-		return PollResponse;
+	  return PollResponse;
 	}(_react.Component);
 	
 	PollResponse.defaultProps = {
-		someResponses: [{ _id: 1, response: "one" }, { _id: 2, response: "two" }, { _id: 3, response: "half" }, { _id: 4, response: "five" }]
+	  someResponses: [{ _id: 1, response: "one" }, { _id: 2, response: "two" }, { _id: 3, response: "half" }, { _id: 4, response: "five" }]
 	};
 	
 	PollResponse.propTypes = {
-		someResponses: _react2.default.PropTypes.array
+	  someResponses: _react2.default.PropTypes.array
 	};
 	
+	/////////////////////////////////////////
+	//
+	//  EDIT POLL COMPONENT
+	//
+	/////////////////////////////////////////
+	
 	var EditPoll = function (_Component2) {
-		_inherits(EditPoll, _Component2);
+	  _inherits(EditPoll, _Component2);
 	
-		function EditPoll() {
-			_classCallCheck(this, EditPoll);
+	  function EditPoll(props) {
+	    _classCallCheck(this, EditPoll);
 	
-			var _this4 = _possibleConstructorReturn(this, (EditPoll.__proto__ || Object.getPrototypeOf(EditPoll)).call(this));
+	    var _this4 = _possibleConstructorReturn(this, (EditPoll.__proto__ || Object.getPrototypeOf(EditPoll)).call(this, props));
 	
-			_this4.update = function (event, id) {
-				// var updatedResponses = this.state.someResponses.map(
-				// 				response => (response.response !== response) ? 
-				// 									response: { ...response,
-				// 												response: newText }
-				// 				)
-				//	this.setState({updatedResponses})
-				console.log(event + ' ID: ' + id);
-			};
+	    _this4.save = function (id) {
+	      return function (event) {
+	        event.preventDefault();
+	        // let newVotesObj = Object.assign({},this.state.poll);
+	        console.log("update " + event.target.value + " ID : " + id);
 	
-			_this4.state = {
-				poll: {
-					pollquestion: '',
-					author: '',
-					responses: [1]
-				},
-				newresponses: [2],
-				valid: true
-			};
+	        var newResponsesObj = Object.assign([], _this4.state.poll.responses);
 	
-			return _this4;
-		}
+	        newResponsesObj.forEach(function (r) {
+	          if (r.respID == id) {
+	            r.response = event.target.value.trim();
+	          }
+	        });
+	        console.log(newResponsesObj);
+	        _this4.setState({
+	          poll: {
+	            responses: newResponsesObj
+	          }
+	        });
+	      };
+	    };
 	
-		_createClass(EditPoll, [{
-			key: 'componentDidMount',
-			value: function componentDidMount() {
-				var _this5 = this;
+	    _this4.update = function (changedText, id) {
 	
-				var urlWithId = this.props.location.pathname;
-				var pollID = 2;
-				pollID = urlWithId.split('/').pop();
-				console.log("here's the poll id", pollID);
-				_ApiManager2.default.get('/api/polls/' + pollID, null, function (err, response) {
-					if (err) {
-						alert("Error: " + err);
-					} else {
+	      var newStateResponses = _extends({}, _this4.state); // == Object.assign({}, this.state);
 	
-						var newobj = { pollquestion: response.message.pollquestion,
-							author: response.message.author,
-							responses: response.message.responses };
-						_this5.setState({
-							poll: newobj
+	      newStateResponses.poll.responses.forEach(function (rs) {
+	        if (rs.respID === id) {
+	          // change the record matching the id
+	          rs.response = changedText;
+	        }
+	      });
+	      _this4.setState(newStateResponses);
+	    };
 	
-						});
-						var newarr = _this5.state.poll.responses.map(function (i, index) {
-							return i.response;
-						});
-						var tochange = _this5.state.newresponses;
-						_this5.setState({
-							newresponses: newarr
-						});
-						console.log("this is only array", _this5.state.newresponses);
-						console.log("conventional responses", _this5.state.poll.responses);
-					}
-				});
-				var isValid = Object.assign({}, this.state.valid);
-				isValid = JSON.stringify(true);
-				this.setState({
-					valid: isValid
-				});
-			}
-		}, {
-			key: 'render',
-			value: function render() {
+	    _this4.state = {
+	      poll: {
+	        pollquestion: '',
+	        author: '',
+	        responses: [1]
+	      },
+	      newresponses: [2],
+	      valid: true
+	    };
 	
-				var zoneStyle = _styles2.default.zone; // needs to be inside the render func!
+	    _this4.save = _this4.save.bind(_this4);
+	    _this4.update = _this4.update.bind(_this4);
+	    return _this4;
+	  }
 	
-				return _react2.default.createElement(
-					'div',
-					{ style: zoneStyle.container },
-					_react2.default.createElement(
-						'h4',
-						{ style: zoneStyle.header },
-						_react2.default.createElement(
-							'a',
-							{ style: zoneStyle.title, href: '#' },
-							this.state.poll.pollquestion
-						)
-					),
-					_react2.default.createElement(PollResponse, { onChange: this.props.update, thePoll: this.state.poll,
-						someResponses: this.state.poll.responses }),
-					_react2.default.createElement('br', null),
-					_react2.default.createElement(
-						'span',
-						null,
-						'created by ',
-						this.props.author
-					)
-				);
-			}
-		}]);
+	  _createClass(EditPoll, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var _this5 = this;
 	
-		return EditPoll;
+	      //var urlWithId =this.props.location.pathname;
+	      //let pollID = this.props.params.id;
+	      // pollID = urlWithId.split('/').pop();
+	      console.log("here's the poll id", this.props.params.id);
+	      _ApiManager2.default.get('/api/polls/' + this.props.params.id, null, function (err, response) {
+	        if (err) {
+	          alert("Error: " + err);
+	        } else {
+	          console.log(response.message);
+	          var newobj = { pollquestion: response.message.pollquestion,
+	            author: response.message.author,
+	            responses: response.message.responses };
+	          _this5.setState({
+	            poll: newobj
+	
+	          });
+	          var newarr = _this5.state.poll.responses.map(function (i, index) {
+	            return i.response;
+	          });
+	          var tochange = _this5.state.newresponses;
+	          _this5.setState({
+	            newresponses: newarr
+	          });
+	
+	          console.log("Api GET Loading responses:", _this5.state.poll.responses);
+	        }
+	      });
+	      var isValid = Object.assign({}, this.state.valid);
+	      isValid = JSON.stringify(true);
+	      this.setState({
+	        valid: isValid
+	      });
+	    }
+	
+	    // TODO: Fix this!!
+	
+	
+	    /* update text (and update state) */
+	
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var pollID = 'none';
+	      if (this.props.params != undefined) pollID = this.props.params.id;
+	      //pollID = urlWithId.split('/').pop();
+	      //someResponses={this.state.poll.responses}
+	      var zoneStyle = _styles2.default.zone; // needs to be inside the render func!
+	
+	      return _react2.default.createElement(
+	        'div',
+	        { style: zoneStyle.container },
+	        _react2.default.createElement(
+	          'h4',
+	          { style: zoneStyle.header },
+	          _react2.default.createElement(
+	            'a',
+	            { style: zoneStyle.title, href: '#' },
+	            this.state.poll.pollquestion
+	          )
+	        ),
+	        _react2.default.createElement(PollResponse, { onChange: this.update, poll: this.state.poll, thePollId: pollID,
+	          save: this.save }),
+	        _react2.default.createElement('br', null),
+	        _react2.default.createElement(
+	          'span',
+	          null,
+	          'created by ',
+	          this.state.poll.author
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return EditPoll;
 	}(_react.Component);
 	
 	exports.default = EditPoll;
@@ -24359,6 +24401,9 @@
 				selected: 0,
 				list: []
 			};
+	
+			_this.editPollOption = _this.editPollOption.bind(_this);
+	
 			return _this;
 		}
 	
@@ -24417,13 +24462,20 @@
 				});
 			}
 		}, {
+			key: 'editPollOption',
+			value: function editPollOption() {
+				console.log('edit poll option');
+			}
+		}, {
 			key: 'render',
 			value: function render() {
+				var _this4 = this;
+	
 				var listItems = this.state.list.map(function (poll, i) {
 					return _react2.default.createElement(
 						'li',
 						{ key: i },
-						_react2.default.createElement(_Poll2.default, { currentPoll: poll })
+						_react2.default.createElement(_Poll2.default, { currentPoll: poll, editoption: _this4.editPollOption })
 					);
 				});
 				return _react2.default.createElement(
