@@ -94,24 +94,4 @@ export default {
             })
         
     }
-    /*,
-    update: (url,body,callback) => { 
-    
-
-		var dbUrl = 'mongodb://asjb:326382l@ds053718.mlab.com:53718/fcc-polls';
-		mongo.connect(url, function(err, db) {
-		  if (err) throw err
-		  var collection = db.collection('fcc-polls')
-		  collection.update({
-		    _id: 'tinatime'
-		  }, {
-		    $set: {
-		      age: 40
-		    }
-		  }, function(err) {
-		    if (err) throw err
-		    db.close()
-		  })
-		})
-    }*/
 }

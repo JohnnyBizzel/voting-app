@@ -15,12 +15,13 @@ class PollDetail extends React.Component {
     		}
     		
     	this.changeText = this.changeText.bind(this);
-    
+    	this.submit = this.submit.bind(this);
     }
   
 	edit() {
-		this.setState({editing: true, editText:''})
+		this.setState({editing: true, editText:''});
 	}
+	
 	changeText(event) {
 			//var responseOption = this.state.editText;
 			console.log('text changing:', event.target.value)
@@ -32,7 +33,7 @@ class PollDetail extends React.Component {
 		event.preventDefault();
 		//this.setState({editText:event.target.value})
 		console.log(event);
-		//this.props.onSubmit()
+		this.props.onSubmit()
 	}
 
        
@@ -135,7 +136,7 @@ class PollResponse extends Component {
 		const remove = () => {} ;
 		// onChange={this.props.save(resp.respID)}
 		return (<PollDetail key={resp.respID} 
-				id={resp.respID} onSubmit={this.submit(resp.respID)} 
+				id={resp.respID} onSubmit={this.props.save} 
 				changetext={this.props.onChange}
 				editMode={this.state.editing} 
 				onRemove={remove} respText={resp.response}>

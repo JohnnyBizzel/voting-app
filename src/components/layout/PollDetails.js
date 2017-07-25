@@ -226,12 +226,13 @@ class PollDetails extends Component {
                             <Link to="/">Back</Link>
                                 <h2>{this.state.list.pollquestion}</h2>
                                     <form onSubmit={this.handleNewVote}>
-                                    {responseList}
-                                    <br/>
-                                    <input type="submit" name="submitBtn"  value="Cast your vote"/>
+                                        {responseList}
                                     </form>
-                                    <button onClick={() => this.deletefunc()} type="button">Delete</button>
-                                    <button><Link to={`/editdamnpoll/${pollidagain}`}>Edit the damn  Poll </Link> </button>
+                                    <div className="col-xs-12 text-center">
+                                        <input type="submit" name="submitBtn"  value="Cast your vote"/>
+                                        <button onClick={() => this.deletefunc()} type="button">Delete</button>
+                                        <button className="btn btn-primary"><Link to={`/editdamnpoll/${pollidagain}`}>Edit the damn  Poll </Link> </button>
+                                    </div>
                         </div>
                         <div className="col-md-6">
                             <Doughnut data={this.state.data} />

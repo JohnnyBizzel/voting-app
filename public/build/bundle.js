@@ -21976,7 +21976,7 @@
 	      event.preventDefault();
 	      //this.setState({editText:event.target.value})
 	      console.log(event);
-	      //this.props.onSubmit()
+	      _this.props.onSubmit();
 	    };
 	
 	    _this.cancel = function (event) {
@@ -21991,7 +21991,7 @@
 	    };
 	
 	    _this.changeText = _this.changeText.bind(_this);
-	
+	    _this.submit = _this.submit.bind(_this);
 	    return _this;
 	  }
 	
@@ -22134,7 +22134,7 @@
 	      return _react2.default.createElement(
 	        PollDetail,
 	        { key: resp.respID,
-	          id: resp.respID, onSubmit: _this3.submit(resp.respID),
+	          id: resp.respID, onSubmit: _this3.props.save,
 	          changetext: _this3.props.onChange,
 	          editMode: _this3.state.editing,
 	          onRemove: remove, respText: resp.response },
@@ -29917,26 +29917,29 @@
 	                        _react2.default.createElement(
 	                            'form',
 	                            { onSubmit: this.handleNewVote },
-	                            responseList,
-	                            _react2.default.createElement('br', null),
-	                            _react2.default.createElement('input', { type: 'submit', name: 'submitBtn', value: 'Cast your vote' })
+	                            responseList
 	                        ),
 	                        _react2.default.createElement(
-	                            'button',
-	                            { onClick: function onClick() {
-	                                    return _this5.deletefunc();
-	                                }, type: 'button' },
-	                            'Delete'
-	                        ),
-	                        _react2.default.createElement(
-	                            'button',
-	                            null,
+	                            'div',
+	                            { className: 'col-xs-12 text-center' },
+	                            _react2.default.createElement('input', { type: 'submit', name: 'submitBtn', value: 'Cast your vote' }),
 	                            _react2.default.createElement(
-	                                _reactRouter.Link,
-	                                { to: '/editdamnpoll/' + pollidagain },
-	                                'Edit the damn  Poll '
+	                                'button',
+	                                { onClick: function onClick() {
+	                                        return _this5.deletefunc();
+	                                    }, type: 'button' },
+	                                'Delete'
 	                            ),
-	                            ' '
+	                            _react2.default.createElement(
+	                                'button',
+	                                { className: 'btn btn-primary' },
+	                                _react2.default.createElement(
+	                                    _reactRouter.Link,
+	                                    { to: '/editdamnpoll/' + pollidagain },
+	                                    'Edit the damn  Poll '
+	                                ),
+	                                ' '
+	                            )
 	                        )
 	                    ),
 	                    _react2.default.createElement(
