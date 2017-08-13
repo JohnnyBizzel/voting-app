@@ -107,7 +107,7 @@ router.put("/:resource/:id", function(req, res, next){
         });
         return;
     }
-    
+
     controller.update(id, req.body, function(err, result) { // call update function of specified ctlr
        console.log("this is editpoll value...",req.editpoll)
          if (err){
@@ -121,7 +121,8 @@ router.put("/:resource/:id", function(req, res, next){
                 message: 'This is the ****SUCCESS**** from api.js' + JSON.stringify(result)
             });
         
-    },editpoll);
+    },editpoll);  
+
 
 });
 

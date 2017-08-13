@@ -50,14 +50,52 @@ module.exports = {
     },
     //this is great,awesome
     update:function(id, param,  callback){
-        
+        // update one response using it's Response ID and data
         var returnNewUpdatedDoc = {new:true};
         var respID = param['respID'];
         var respVal = param['response'];
         var voteVal = param['votes'];
         console.log("Setting Param Values: ",respVal)
-        console.log("Setting Vote Values: ",voteVal)
-        Polls.where({ _id: id}).where({'responses.respID': respID } )
+        console.log("Setting Vote Values: ",voteVal || 0)
+        // Check if deleting an option or renaming an option
+        if (respVal === '[[DELETE]]') {
+            // Delete this option from list of responses
+            // console.log('-- responses --',Polls.where({ _id: id}));
+            Polls.findOne({ _id: id}, function (err, doc) {
+                if (err) {
+                    callback(err, null);
+                    return;
+                } else {
+                    console.log('-- responses -',doc.responses);  
+                    var idx = doc.responses ? doc.responses.findIndex((x) => x.respID === respID) : -1;
+                    // is it valid?
+                    console.log('idx to delete', idx);
+                    if (idx !== -1) {
+                        // remove it from the array.
+                        doc.responses.splice(idx, 1);
+                        // save the doc
+                        doc.save(function(error) {
+                            if (error) {
+                                console.log(error);
+                                callback(error, null);
+                            } else {
+                                // send the records
+                                console.log('updated', doc);
+                                callback(err, doc);
+                            }
+                        });
+                        // stop here, otherwise 404
+                        return;
+                    }
+                    
+                }
+            });
+            
+           // Polls.where({ _id: id}).responses.pull({'respID': respID });
+            
+        } else {
+            // Edit response option value
+            Polls.where({ _id: id}).where({'responses.respID': respID } )
                 .update({ $set: { 'responses.$.votes': voteVal, 
                     'responses.$.response': respVal 
                 }}, function(err, poll){
@@ -66,15 +104,12 @@ module.exports = {
                         return;
                     }
                     else{
-                        console.log("got something",poll)
+                        console.log("Updating poll, got something",poll)
                         callback(err, poll);
                     }
-                    
+            });    
+        }
 
-        });
-        
-      
-        
     },
 
     delete:function(id, callback){

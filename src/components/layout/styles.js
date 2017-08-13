@@ -26,7 +26,34 @@ export default {
         title: {
             textDecoration:'none',
             color:'green'
-        }    
+        },
+        link: {
+            paddingLeft: 5,
+            paddingRight: 5,
+            margin: 5,
+            borderRadius: 5,
+            backgroundColor:"#dbc68e"
+        },
+        linkHover: {
+            paddingLeft: 5,
+            paddingRight: 5,
+            margin: 5,
+            borderRadius: 5,
+            backgroundColor:"orange"
+        }
+    },
+    frontpage: {
+
+    },
+    polls: {
+        flexCont: {
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'space-around'
+        },
+        pollwd: {
+            width: 320
+        }
     }
     
 }

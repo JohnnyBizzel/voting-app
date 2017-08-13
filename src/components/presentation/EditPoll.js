@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import styles from '../layout/styles';
 import Api from '../../utils/ApiManager';
+import { Router, Route, IndexRoute, Link, IndexLink, browserHistory } from 'react-router';
 
 class PollDetail extends React.Component {
 	
@@ -11,11 +12,13 @@ class PollDetail extends React.Component {
     		this.state = {
     			editing: props.editMode, 
 				editText: props.children,
-				selectedID: props.id
+				selectedID: props.id,
+				newText: ''
     		}
     		
     	this.changeText = this.changeText.bind(this);
     	this.submit = this.submit.bind(this);
+    	this.remove = this.remove.bind(this);
     }
   
 	edit() {
@@ -25,6 +28,7 @@ class PollDetail extends React.Component {
 	changeText(event) {
 			//var responseOption = this.state.editText;
 			console.log('text changing:', event.target.value)
+			this.setState({ newText: event.target.value })
 			console.log('text response ID:', this.props.id)
 			this.props.changetext(event.target.value, this.props.id)
 	}
@@ -32,13 +36,19 @@ class PollDetail extends React.Component {
 	submit = (event) => {
 		event.preventDefault();
 		//this.setState({editText:event.target.value})
-		console.log(event);
-		this.props.onSubmit()
+		console.log('update pressed',this.state.newText);
+		if (this.state.newText != '') {
+			this.props.submit(this.props.id, this.state.newText.trim())	
+			this.setState({editing: false, editText:''});
+		} else {
+			this.setState({editing: false});
+		}
 	}
 
        
 	remove() {
-		this.props.onRemove(this.props.response)
+		console.log(this.props.id);
+		this.props.onRemove(this.props.id);
 	}
 	cancel = (event) => {
 		event.preventDefault();
@@ -71,75 +81,29 @@ class PollDetail extends React.Component {
 			return (this.state.editing) ? this.renderForm() : this.renderDisplay()								
 	}
 }		
-// PollDetail.propTypes = {
-// 	submit: React.PropTypes.func.isRequired
-// }
 
-		
 
 class PollResponse extends Component {
     constructor(props) {
     	super(props);
-    		// this.state = {
-    		// 	pollResponses: '',
-    		// 	typed: '',
-    		// 	editing:false
-    		// }
     		this.state = {
-                // poll:{
-                //     pollquestion: '',
-                //     author: '',
-                //     responses: [1]
-                // },
                 newresponses:[2],
                 valid: true
         };
     }
 
-	
-	submit = (id) => (event) => {
-		event.preventDefault();
-		alert("Current event: " + event.target.value)
-		this.setState({editing: false})
-		let newVotesObj = Object.assign({},this.state.poll);
-		console.log("update " + event.target.value + " ID : "+ id );
-        // Trim space characters from the response:
-        var trimmedObjResponses = newVotesObj.responses.map(function(item) {
-            var respObj = Object.assign({}, item);
-            respObj.response = respObj.response.trim();
-            return respObj;
-        });
-        newVotesObj.responses = trimmedObjResponses;
-        if(this.state.valid){
-			Api.put('/api/polls/' + this.props.thePollId, newVotesObj, (err, response) => {
-				console.log("newVotesObj value",newVotesObj)
-				if (err) { 
-				     console.log("Error: " + JSON.stringify(err)); 
-				     return;
-				}
-				else{
-				    alert("your data is succesfully saved" + JSON.stringify(response))
-				}
-			
-			},true);
-        }
-        else{
-            alert("something wrong with your options.")
-        }
-	}
-	
+
 	// bound function - renders each answer - PollDetail component
     eachPollResponse = (resp) => {
  
-    console.log('Render response component',resp);
-    
+
 		const remove = () => {} ;
 		// onChange={this.props.save(resp.respID)}
 		return (<PollDetail key={resp.respID} 
-				id={resp.respID} onSubmit={this.props.save} 
+				id={resp.respID} submit={this.props.save} 
 				changetext={this.props.onChange}
 				editMode={this.state.editing} 
-				onRemove={remove} respText={resp.response}>
+				onRemove={this.props.deleteOpt} respText={resp.response}>
 				{resp.response}</PollDetail>)
 	}
 
@@ -152,10 +116,10 @@ class PollResponse extends Component {
 }
 
 PollResponse.defaultProps = {
-	someResponses: [{ _id:1, response: "one"},
-                    { _id:2, response:"two"},
-                    { _id:3, response:"half"},
-                    { _id:4, response:"five"}]		
+	someResponses: [{ _id:1, response: "not"},
+                    { _id:2, response:"loaded"},
+                    { _id:3, response:"yet"}
+                   ]		
 }
 
 PollResponse.propTypes = {
@@ -183,67 +147,126 @@ class EditPoll extends Component {
     	
     	this.save = this.save.bind(this);
     	this.update = this.update.bind(this);
+    	this.deleteOption = this.deleteOption.bind(this);
     }
     
     componentDidMount(){
-        //var urlWithId =this.props.location.pathname;
-        //let pollID = this.props.params.id;
-        // pollID = urlWithId.split('/').pop();
-        console.log("here's the poll id",this.props.params.id)
+        
+        // NB: pollID is a parameter of the URL (a query string)
+        
         Api.get('/api/polls/' + this.props.params.id, null, (err, response) => {
             if(err){
                  alert("Error: " + err); 
-                
             }
             else{
-                console.log(response.message)
                 var newobj = {pollquestion:response.message.pollquestion,
                 	author:response.message.author,
                 	responses:response.message.responses}
                 this.setState({
                     poll:newobj
-                    
                 });
                 var newarr = this.state.poll.responses.map(function(i,index){
-                    return i.response
-                })
-                var tochange = this.state.newresponses;
+                    return i.response;
+                });
                 this.setState({
                     newresponses:newarr
-                })
-                
-                console.log("Api GET Loading responses:",this.state.poll.responses)
-               
+                });
+                console.log("Api GET Loading:",this.state.poll.responses);
             }
-            
         });
-         let isValid = Object.assign({},this.state.valid);
-           isValid = JSON.stringify(true)
-          this.setState({
-                    valid:isValid
-                })
+        
+		let isValid = Object.assign({},this.state.valid);
+		isValid = JSON.stringify(true)
+		this.setState({
+		        valid:isValid
+		    })
         
     }
     
-    	// TODO: Fix this!!
-	save = (id) => (event) => {
-		event.preventDefault();
-		// let newVotesObj = Object.assign({},this.state.poll);
-		console.log("update " + event.target.value + " ID : "+ id );
-	
-		let newResponsesObj = Object.assign([],this.state.poll.responses);
+	save = (id, updatedText) => {
+		console.log('in the save')
 		
-		newResponsesObj.forEach(function(r) {
+		let allResponses = Object.assign([],this.state.poll.responses);
+		let updatedResponse = {};
+		// TODO: Validation - if voted on already, values should not be changed?
+		allResponses.forEach(function(r) {
 			if (r.respID == id) {
-				r.response = event.target.value.trim();
+				r.response = updatedText;
+				console.log('Modified:',r);
+				updatedResponse.response = updatedText;
+				updatedResponse.respID = r.respID;
+				updatedResponse.votes = r.votes;
 			}
 		})
-		console.log(newResponsesObj);
+		
+		console.log(updatedResponse);
 		this.setState({
-                    poll:{
-	                    responses: newResponsesObj
-                    }
-                })
+            poll:{
+                responses: allResponses
+            }
+        })
+        
+        // Now update in the database:
+        
+        if(this.state.valid){
+			Api.put('/api/polls/' + this.props.params.id, updatedResponse, (err, response) => {
+				if (err) { 
+				     console.log("Error: " + JSON.stringify(err)); 
+				     return;
+				}
+				else{
+				    console.log("changes succesfully saved" + JSON.stringify(response))
+				}
+			
+			},true);
+        }
+        else{
+            alert("something wrong with your options.")
+        }
+	}
+	
+	deleteOption = (id) => {
+		console.log('delete Opt', id);
+		// TODO: Validation... maybe stop deleting an option with votes?
+		// Update State to remove the unwanted option
+		let newStateResponses = {...this.state };
+		// need at least 2 responses
+		// TODO: warning message
+		if (newStateResponses.poll.responses.length < 2) {
+			this.setState({ valid:  false });
+			return;
+		}
+		
+	
+		// Use API to delete the option from the Db.
+		if(this.state.valid){
+			// find the index and splice out the deleted element
+			const idx = newStateResponses.poll.responses.findIndex((x) => x.respID === id);
+			console.log(idx, id);
+			if (idx < 0) return;
+		    newStateResponses.poll.responses.splice(idx, 1);
+	    	this.setState(newStateResponses);
+	    	console.log(newStateResponses);
+	    	
+	    	// deleted response object
+    		let delResponse = {};
+    		delResponse.response = '[[DELETE]]';
+			delResponse.respID = id;
+    		
+			Api.put('/api/polls/' + this.props.params.id, delResponse, (err, response) => {
+				if (err) { 
+				     console.log("Error: " + JSON.stringify(err)); 
+				     return;
+				}
+				else{
+				    console.log("delete succesfully saved" + JSON.stringify(response))
+				}
+			
+			},true);
+        }
+        else{
+            alert("You must have at least 2 options for a poll.")
+        }
 	}
 	
     /* update text (and update state) */
@@ -258,6 +281,8 @@ class EditPoll extends Component {
 	      }
 	    })
     	this.setState(newStateResponses);
+    	
+    	// TODO: Now update in the database:
 	
 	}
     
@@ -271,10 +296,12 @@ class EditPoll extends Component {
         
         return (<div style={zoneStyle.container}>
 				    <h4 style={zoneStyle.header}>
-				        <a style={zoneStyle.title} href="#">{this.state.poll.pollquestion}</a>
+				       <Link style={zoneStyle.title} to={`/Polldetailfull/${pollID}`}>{this.state.poll.pollquestion}</Link>
 				    </h4>
-				        <PollResponse onChange={this.update} poll={this.state.poll} thePollId={pollID} 
-				        save={this.save} />
+				        <PollResponse onChange={this.update} 
+				        	poll={this.state.poll} 
+				        	thePollId={pollID} save={this.save} 
+				        	deleteOpt={this.deleteOption} />
 				        <br/>
 				        <span>created by {this.state.poll.author}</span>
 				</div>

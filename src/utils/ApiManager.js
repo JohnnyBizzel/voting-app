@@ -1,8 +1,5 @@
 import superagent from 'superagent';
 
-//var mongo = require('mongodb').MongoClient
-
-
 export default {
     get: (url, params, callback) => {
         superagent
@@ -15,7 +12,6 @@ export default {
 				    return;}
 				// here check for API failures
 				const confirmation = response.body.confirmation;
-				console.log('Confirmation: '+ confirmation);
 				if (confirmation != 'success') {
 				    // send a failure message
 				    callback({message:response.body.message, null});

@@ -3,10 +3,13 @@ import React, { Component } from 'react'
 import EditPoll from '../presentation/EditPoll'
 import Polls from '../containers/Polls';
 import {Link} from 'react-router';
+import styles from './styles';
 
 class Home extends Component {
     
     render() {
+        
+        //const homeStyle = styles.frontpage; // needs to be inside the render func!
         return (
             <div className="container">
             <h1>The Polling Station</h1>
@@ -22,10 +25,12 @@ class Home extends Component {
                 </div>
              </div>
             </nav>
-
+            <div>
+                <Polls />
+            </div>
                 <div className="row">
                     <div className="col-md-6 col-sm-6">
-                        <Polls />
+                        
                         
                     </div>
                     <div className="col-md-6 col-sm-6">
@@ -33,7 +38,7 @@ class Home extends Component {
                     </div>
                     
                 </div>
-                <Link to="waste">waste page here</Link>
+                <Link to="test">test route here</Link>
                 
             </div>
         )

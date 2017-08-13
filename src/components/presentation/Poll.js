@@ -9,8 +9,26 @@ import { Router, Route, IndexRoute, Link, IndexLink, browserHistory } from 'reac
 //<Link to={{ pathname: 'Polldetailfull/', query: { id: this.props.currentPoll._id } }}>{this.props.currentPoll.pollquestion}</Link>
 
 class Poll extends Component {
+    constructor() {
+        super()
+        this.state = {
+            linkStyle: 'normal'
+        }
+        this.onHover = this.onHover.bind(this)
+        this.offHover = this.offHover.bind(this)
+    }
+    
     componentDidMount(){
-        console.log("here's the id",this.props.currentPoll._id)
+        //console.log("here's the id",this.props.currentPoll._id)
+        
+    }
+    
+    onHover(e) {
+        this.setState({ linkStyle: 'hover' });
+    }
+    
+    offHover() {
+        this.setState({ linkStyle: 'normal' });
     }
     
     render() {
@@ -29,11 +47,19 @@ class Poll extends Component {
 				    </h2>
 				        <br/>
 				        <span>by {this.props.currentPoll.author}</span>
-				        <Link to={`/editthepoll/${this.props.currentPoll._id}`}>Edit this Poll</Link>
-				        <Link to="login">Log in to your account</Link>
+				        <Link style={this.state.linkStyle == 'normal' ?
+				                    zoneStyle.link :
+				                    zoneStyle.linkHover}
+				                    onMouseOver={this.onHover}
+				                    onMouseOut={this.offHover} to={`/editthepoll/${this.props.currentPoll._id}`}>Edit Poll</Link>
 				</div>
                 );
     }
 }
 
 export default Poll;
+
+/* 
+REMOVED Login link here:
+				        <Link style={zoneStyle.link} to="login">Log in</Link>
+*/

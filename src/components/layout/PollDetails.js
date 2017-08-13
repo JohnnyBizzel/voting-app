@@ -80,7 +80,7 @@ class PollDetails extends Component {
         this.handleNewVote = this.handleNewVote.bind(this);
     }
     componentDidMount(){
-        console.log('componentDidMount (Polldetail): ' + this.props.location.pathname);
+        //console.log('componentDidMount (Polldetail): ' + this.props.location.pathname);
         var urlWithId =this.props.location.pathname;
         
         var pollID = urlWithId.split('/').pop();
@@ -91,14 +91,14 @@ class PollDetails extends Component {
                 return;
             }
         
-            console.log('This particular polldetail RESULTS: ' + JSON.stringify(response.message));
+            //console.log('This particular polldetail RESULTS: ' + JSON.stringify(response.message));
         
             this.setState({
                     list: response.message
                 });
         
             
-            console.log("responses are ",this.state.list.responses)
+            //console.log("responses are ",this.state.list.responses)
             
             // update chart
             var myData = this.state.data.datasets;
@@ -150,10 +150,10 @@ class PollDetails extends Component {
             else if(err==null&&response==null)
         
             {
-                console.log("everything went well")
+                console.log("DELETE: everything went well")
             }
             else{
-                console.log("I dont know what happene")
+                console.log("DELETE: I dont know what happene")
             }
         
         })
@@ -173,16 +173,18 @@ class PollDetails extends Component {
         
   
         var form = e.target
-        var selectedRadio = form.elements.radiobtns.value
-        var pollId = this.state.list._id
+        const selectedRadio = form.elements.radiobtns.value
+        const pollId = this.state.list._id
 
         let updatedList = Object.assign([], this.state.list);
         let chartValues = Object.assign({}, this.state.data);
-        var idx = this.state.list.responses.findIndex(function(elem) { 
+        const idx = this.state.list.responses.findIndex(function(elem) { 
                                     return elem.response == selectedRadio;});
-        var totalVotes = this.state.list.responses[idx].votes + 1;
-        var newVotesObj = { response: selectedRadio, votes: totalVotes};
+        const totalVotes = this.state.list.responses[idx].votes + 1;
+        const rId = this.state.list.responses[idx].respID
+        let newVotesObj = { respID: rId, response: selectedRadio, votes: totalVotes};
        
+        
         // call API - update poll
         Api.put('/api/polls/' + pollId, newVotesObj, (err, response) => {
             if (err) { 
@@ -225,23 +227,25 @@ class PollDetails extends Component {
                         <div className="col-md-6">
                             <Link to="/">Back</Link>
                                 <h2>{this.state.list.pollquestion}</h2>
-                                    <form onSubmit={this.handleNewVote}>
+                                <form onSubmit={this.handleNewVote}>
                                         {responseList}
-                                    </form>
                                     <div className="col-xs-12 text-center">
                                         <input type="submit" name="submitBtn"  value="Cast your vote"/>
-                                        <button onClick={() => this.deletefunc()} type="button">Delete</button>
-                                        <button className="btn btn-primary"><Link to={`/editdamnpoll/${pollidagain}`}>Edit the damn  Poll </Link> </button>
                                     </div>
+                                </form>
+    
                         </div>
                         <div className="col-md-6">
                             <Doughnut data={this.state.data} />
                         </div>
                     </div>
-                   
-                
                 </div>);
     }
 }
 
 export default PollDetails;
+
+// Removed buttons from lines 234, 235:
+
+//  <button onClick={() => this.deletefunc()} type="button">Delete</button>
+// <button className="btn btn-primary"><Link to={`/editdamnpoll/${pollidagain}`}>Edit the damn  Poll </Link> </button>

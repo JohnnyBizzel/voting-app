@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import Poll from '../presentation/Poll';
 import Api from '../../utils/ApiManager';
+import styles from '../layout/styles';
 
 
 class Polls extends Component {
@@ -21,15 +22,12 @@ class Polls extends Component {
 	
 	// override this function
 	componentDidMount(){
-		console.log('componentDidMount: ');
+		
 		Api.get('/api/polls', null, (err, response) => {
 			if (err) { 
 				alert("Error: " + err); 
 				return;
 			}
-			
-			console.log('RESULTS: ' + JSON.stringify(response.message));
-			
 			this.setState({
 					list: response.message
 				});
@@ -48,7 +46,7 @@ class Polls extends Component {
 
 	
 	addPoll(newPoll){
-		console.log('add zone: ' + JSON.stringify(newPoll));
+		console.log('add poll: ' + JSON.stringify(newPoll));
 		let thisPoll = Object.assign({}, newPoll);
 	
 		// Insert
@@ -69,24 +67,22 @@ class Polls extends Component {
 	}
 	
 	editPollOption() {
-		console.log('edit poll option')
+		console.log('edit poll option - needed?')
+		// TODO: redirect to correct 
 	}
 	
 	render() {
+		const stylePoll = styles.polls;
 		const listItems = this.state.list.map((poll, i) =>  {
 			return (
-				<li key={i}>
+				<div key={i} style={stylePoll.pollwd}>
 					<Poll currentPoll={poll} editoption={this.editPollOption} /> 
-				</li>
+				</div>
 			)
 		});
 		return (
-			<div>
-				<ul>
-				   {listItems}
-				</ul>
-				
-			
+			<div style={stylePoll.flexCont}>
+				{listItems}
 			</div>
 	)}
 	
