@@ -5,6 +5,12 @@ import styles from '../layout/styles';
 import Api from '../../utils/ApiManager';
 import { Router, Route, IndexRoute, Link, IndexLink, browserHistory } from 'react-router';
 
+/////////////////////////////
+//
+//  POLL DETAIL
+//
+////////////////////////////
+
 class PollDetail extends React.Component {
 	
 	constructor(props) {
@@ -13,7 +19,8 @@ class PollDetail extends React.Component {
     			editing: props.editMode, 
 				editText: props.children,
 				selectedID: props.id,
-				newText: ''
+				newText: '',
+            	user_feedback: '' 
     		}
     		
     	this.changeText = this.changeText.bind(this);
@@ -26,78 +33,179 @@ class PollDetail extends React.Component {
 	}
 	
 	changeText(event) {
-			//var responseOption = this.state.editText;
-			console.log('text changing:', event.target.value)
-			this.setState({ newText: event.target.value })
-			console.log('text response ID:', this.props.id)
-			this.props.changetext(event.target.value, this.props.id)
+		// Report error
+		if (!event.target.value.trim()) {
+			this.setState({ user_feedback: '* A response cannot be left blank'});
+			return;
+		}
+			
+		console.log('text changing:', event.target.value)
+		this.setState({ newText: event.target.value })
+		console.log('text response ID:', this.props.id)
+		this.props.changetext(event.target.value, this.props.id)
 	}
 	
 	submit = (event) => {
 		event.preventDefault();
-		//this.setState({editText:event.target.value})
-		console.log('update pressed',this.state.newText);
 		if (this.state.newText != '') {
 			this.props.submit(this.props.id, this.state.newText.trim())	
-			this.setState({editing: false, editText:''});
+			this.setState({editing: false, editText:'', user_feedback: ''});
 		} else {
-			this.setState({editing: false});
+			this.setState({editing: false, user_feedback: ''});
 		}
 	}
 
-       
 	remove() {
-		console.log(this.props.id);
+
 		this.props.onRemove(this.props.id);
 	}
 	cancel = (event) => {
 		event.preventDefault();
-		this.setState({editing:false})
+		this.setState({editing:false, user_feedback: '' })
 	}
 	renderForm() {
-		
-			return (<div className="responseBox">
+		const sty = styles.editPoll;
+			return (<div className="container-fluid responseBox">
+						<div className="row">
 						<form onSubmit={this.submit}>
-						<input ref={this.props.id} type="text" 
-							className="form-control" onChange={this.changeText}
-							value={this.props.respText} />
-						<input className="btn btn-success" type="submit" value="Update" />																
-						<button className="btn btn-default" 
-							onClick={this.cancel} >Cancel</button>
+							<div className="col-xs-12 col-sm-8 col-md-6">
+								<input ref={this.props.id} type="text" 
+									className="form-control" onChange={this.changeText}
+									value={this.props.respText} />
+							</div>
+							<div className="col-xs-12 col-sm-4 col-md-6">
+								<div className="float-right">
+									
+									<button className="btn-sm btn-success" 
+										style={sty.buttonSpace} 
+										type="submit" 
+										value="Update">
+										<i className="fa fa-floppy-o" aria-hidden="true"></i>
+										&nbsp;Update</button>
+									<button className="btn-sm btn-default" 
+										style={sty.buttonSpace}
+										onClick={this.cancel}>
+										<i className="fa fa-ban" aria-hidden="true"></i>
+										&nbsp;Cancel</button>
+								</div>
+							</div>
 						</form>
+						<br/>
+						<span className="error-text">{this.state.user_feedback}</span>
+						</div>
 					</div>)
 	}
 	renderDisplay() {
-			return (<div className="container-fluid">
-						<p>{this.props.respText}</p>
-						<span>
-							<button className="btn btn-warning" 
-								onClick={() => this.setState({editing:true})}>Edit</button>
-							<button className="btn btn-danger" onClick={this.remove}>Delete</button>
-						</span>
+		const sty = styles.editPoll;
+			return (<div className="container-fluid" style={sty.containerBox}>
+						<div className="row responseOption">
+							<div className="col-xs-12 col-sm-8 col-md-6">
+								{this.props.respText}
+							</div>
+								<div className="col-xs-12 col-sm-4 col-md-6">
+									<div className="float-right">
+										<button className="btn-sm btn-warning" 
+											style={sty.buttonSpace}
+											onClick={() => this.setState({editing:true})}>
+											<i className="fa fa-pencil-square-o" aria-hidden="true"></i>
+											&nbsp;Edit</button>
+										<button className="btn-sm btn-danger"
+											style={sty.buttonSpace} 
+											onClick={this.remove}>
+											<i className="fa fa-times" aria-hidden="true"></i>
+											&nbsp;Delete</button>
+									</div>
+								</div>
+							
+						</div>
 					</div>)
 	}
 	render() {
-			return (this.state.editing) ? this.renderForm() : this.renderDisplay()								
+		return (this.state.editing) ? this.renderForm() : this.renderDisplay()								
 	}
-}		
+}
 
+//////////////////////////////
+//
+//  NEW RESPONSE
+//
+//////////////////////////////
+
+class NewResponse extends Component {
+	constructor(props) {
+    	super(props);
+    		this.state = {
+                valid: true
+        };
+        // BIND EVENTS!!!
+        this.changeText = this.changeText.bind(this);
+        this.cancel = this.cancel.bind(this);
+        this.save = this.save.bind(this);
+    }
+	
+	changeText() {
+		
+	}
+	cancel() {
+		
+	}
+	save() {
+		this.props.saveNew()
+	}
+	render() {
+	const sty = styles.editPoll;
+		return (<div className="container-fluid responseBox">
+					<div className="row">
+					<form onSubmit={this.save}>
+						<div className="col-xs-12 col-sm-8 col-md-6">
+							<input type="text" 
+								className="form-control" onChange={this.changeText}
+								value='todo' />
+						</div>
+						<div className="col-xs-12 col-sm-4 col-md-6">
+							<div className="float-right">
+								<button className="btn-sm btn-success" 
+									style={sty.buttonSpace} 
+									type="submit" 
+									value="Save">
+									<i className="fa fa-floppy-o" aria-hidden="true"></i>
+									&nbsp;Save</button>
+								<button className="btn-sm btn-default" 
+									style={sty.buttonSpace}
+									onClick={this.cancel}>
+									<i className="fa fa-ban" aria-hidden="true"></i>
+									&nbsp;Cancel</button>
+							</div>
+						</div>
+					</form>
+					<br/>
+					<span className="error-text">this.state.user_feedback</span>
+					</div>
+				</div>)
+	}
+}
+
+//////////////////////////////
+//
+//   POLL RESPONSE
+//
+//////////////////////////////
 
 class PollResponse extends Component {
     constructor(props) {
     	super(props);
     		this.state = {
                 newresponses:[2],
-                valid: true
+                valid: true,
+                addMode: false
         };
+        // BIND EVENTS!!!
+        this.showAddOpt = this.showAddOpt.bind(this);
     }
-
 
 	// bound function - renders each answer - PollDetail component
     eachPollResponse = (resp) => {
- 
-
-		const remove = () => {} ;
+ 		const remove = () => {} ;
 		// onChange={this.props.save(resp.respID)}
 		return (<PollDetail key={resp.respID} 
 				id={resp.respID} submit={this.props.save} 
@@ -106,10 +214,26 @@ class PollResponse extends Component {
 				onRemove={this.props.deleteOpt} respText={resp.response}>
 				{resp.response}</PollDetail>)
 	}
+	
+	showAddOpt() {
+		console.log('add new response func')
+		this.setState({ addMode: true })
+	}
 
     render() {
-        return (<div className="responses">
-                    {this.props.poll.responses.map(this.eachPollResponse)}
+    	const sty = styles.editPoll;
+        return (<div>
+        			<div style={sty.responses}>
+                    	{this.props.poll.responses.map(this.eachPollResponse)}
+                	</div>
+                	<div>
+                		<button className="btn-sm btn-success"
+							style={sty.buttonSpace} 
+							onClick={this.showAddOpt}>
+							<i className="fa fa-plus" aria-hidden="true"></i>
+							&nbsp;New response</button>
+						{this.state.addMode ? <NewResponse saveNew={this.props.addNew} /> : '' }
+                	</div>
                 </div>
                 )
     }
@@ -133,16 +257,16 @@ PollResponse.propTypes = {
 /////////////////////////////////////////
 
 class EditPoll extends Component {
-    constructor(props) {
-    	super(props)
+    constructor() {
+    	super()
     	this.state = {
-                poll:{
-                    pollquestion: '',
-                    author: '',
-                    responses: [1]
-                },
-                newresponses:[2],
-                valid: true
+            poll:{
+                pollquestion: '',
+                author: '',
+                responses: [1]
+            },
+            newresponses:[2],
+            valid: true   
         };
     	
     	this.save = this.save.bind(this);
@@ -182,14 +306,34 @@ class EditPoll extends Component {
 		    })
         
     }
+	
+	/* update text event (and update state) */
+    update = (changedText, id) => {
+		if (!changedText.trim()) {
+			console.log('TEXT is blank ERROR!!')
+			return;
+		}
+    	let newStateResponses = {...this.state }; // == Object.assign({}, this.state);
+
+	    newStateResponses.poll.responses.forEach((rs) => {
+	      if (rs.respID === id) {
+	      	// change the record matching the id
+	        rs.response = changedText;
+	      }
+	    })
+	    //newStateResponses.user_feedback = ''; 
+    	this.setState(newStateResponses);
+    	// this.setState({ user_feedback: '' });
+	}    
     
 	save = (id, updatedText) => {
-		console.log('in the save')
+		console.log('in the save: ', this.state.poll.pollquestion)
 		
-		let allResponses = Object.assign([],this.state.poll.responses);
+		let newState = {...this.state };
+		// let allResponses = Object.assign([],this.state.poll.responses);
 		let updatedResponse = {};
 		// TODO: Validation - if voted on already, values should not be changed?
-		allResponses.forEach(function(r) {
+		newState.poll.responses.forEach(function(r) {
 			if (r.respID == id) {
 				r.response = updatedText;
 				console.log('Modified:',r);
@@ -198,13 +342,10 @@ class EditPoll extends Component {
 				updatedResponse.votes = r.votes;
 			}
 		})
-		
+		updatedResponse.operation = '[UPDATE]';
 		console.log(updatedResponse);
-		this.setState({
-            poll:{
-                responses: allResponses
-            }
-        })
+	
+		this.setState(newState);
         
         // Now update in the database:
         
@@ -218,11 +359,16 @@ class EditPoll extends Component {
 				    console.log("changes succesfully saved" + JSON.stringify(response))
 				}
 			
-			},true);
+			});
         }
         else{
             alert("something wrong with your options.")
         }
+	}
+
+	add = (newResponseText) => {
+		console.log('add a new option', newResponseText);
+		
 	}
 	
 	deleteOption = (id) => {
@@ -250,7 +396,7 @@ class EditPoll extends Component {
 	    	
 	    	// deleted response object
     		let delResponse = {};
-    		delResponse.response = '[[DELETE]]';
+    		delResponse.operation = '[DELETE]';
 			delResponse.respID = id;
     		
 			Api.put('/api/polls/' + this.props.params.id, delResponse, (err, response) => {
@@ -262,29 +408,14 @@ class EditPoll extends Component {
 				    console.log("delete succesfully saved" + JSON.stringify(response))
 				}
 			
-			},true);
+			});
         }
         else{
             alert("You must have at least 2 options for a poll.")
         }
 	}
 	
-    /* update text (and update state) */
-    update = (changedText, id) => {
 
-    	let newStateResponses = {...this.state }; // == Object.assign({}, this.state);
-
-	    newStateResponses.poll.responses.forEach((rs) => {
-	      if (rs.respID === id) {
-	      	// change the record matching the id
-	        rs.response = changedText;
-	      }
-	    })
-    	this.setState(newStateResponses);
-    	
-    	// TODO: Now update in the database:
-	
-	}
     
     render() {
     	let pollID = 'none';
@@ -299,8 +430,9 @@ class EditPoll extends Component {
 				       <Link style={zoneStyle.title} to={`/Polldetailfull/${pollID}`}>{this.state.poll.pollquestion}</Link>
 				    </h4>
 				        <PollResponse onChange={this.update} 
-				        	poll={this.state.poll} 
-				        	thePollId={pollID} save={this.save} 
+				        	poll={this.state.poll}
+				        	thePollId={pollID} save={this.save}
+				        	addNew={this.add}
 				        	deleteOpt={this.deleteOption} />
 				        <br/>
 				        <span>created by {this.state.poll.author}</span>

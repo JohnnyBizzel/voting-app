@@ -225,14 +225,14 @@ class PollDetails extends Component {
         return(<div className="container">
                     <div className="row">
                         <div className="col-md-6">
-                            <Link to="/">Back</Link>
-                                <h2>{this.state.list.pollquestion}</h2>
-                                <form onSubmit={this.handleNewVote}>
-                                        {responseList}
-                                    <div className="col-xs-12 text-center">
-                                        <input type="submit" name="submitBtn"  value="Cast your vote"/>
-                                    </div>
-                                </form>
+                            
+                            <h2>{this.state.list.pollquestion}</h2>
+                            <form onSubmit={this.handleNewVote}>
+                                    {responseList}
+                                <div className="col-xs-12 text-center">
+                                    <input type="submit" name="submitBtn"  value="Cast your vote"/>
+                                </div>
+                            </form>
     
                         </div>
                         <div className="col-md-6">

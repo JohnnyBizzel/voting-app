@@ -54,6 +54,27 @@ export default {
         pollwd: {
             width: 320
         }
+    },
+    editPoll: {
+        responses: {
+            marginTop: 5  
+        },
+        responseOption: {
+            backgroundColor: "aliceblue"
+        },
+        containerBox: {
+            backgroundColor: "aliceblue",
+            lineHeight: '40px',
+            border: '2px solid #5454A9',
+            borderRadius: 8,
+            margin: 5
+        },
+        buttonSpace: {
+            marginRight:5
+        },
+        marginR: {
+            marginRight: 5
+        } 
     }
     
 }

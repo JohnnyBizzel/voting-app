@@ -22,6 +22,16 @@ nav ul, nav li {
 	list-style: none;
 	min-height: 0;
 }
+#footer {
+   position:fixed;
+   left:0px;
+   bottom:0px;
+   height:30px;
+   width:100%;
+   background:#e0e0e0;
+   text-align: center
+}
+
 .navbar-header ul li a:not(.button) {
 	font-weight: 400;
 	font-size: 1em;
@@ -31,7 +41,7 @@ nav ul, nav li {
 	display: block;
 	max-width: 5em;
 	box-sizing: content-box;
-		background: #42659A;
+	background: #42659A;
 }
 .navbar-header ul li a:hover {
 	text-decoration: none;
@@ -46,13 +56,15 @@ ul { list-style: square }
 }
 .responseBox {
 	border: 1px solid #ddd;
+	border-radius: 8px;
 	background-color: #f2f2f2;
 	margin: 3px;
 	padding: 5px;
 	padding-left: 15px;
-	width: 80%;
- 	display: inline-block;
 }
 .float-right {
   float:right;
+}
+.error-text {
+	color: red;
 }

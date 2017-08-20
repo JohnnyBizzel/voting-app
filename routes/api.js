@@ -2,7 +2,11 @@ var express = require('express');
 var router = express.Router();
 var PollsCtlr = require('../controllers/PollsController');
 var controllers = require("../controllers");
-console.log("searching for route [api.js] ...");
+
+// This will route requests to the correct controller with params
+// (only one in our project)  which is PollsController
+console.log("Passing through request via [api.js] ...");
+
 router.get("/:resource", function(req, res, next){
     console.log('inside API js - controller route' + controllers[resourceFrom]);
     var resourceFrom = req.params.resource;
@@ -95,11 +99,10 @@ router.post("/:resource", function(req, res, next){
 router.put("/:resource/:id", function(req, res, next){
      
     var resource = req.params.resource;
-    var editpoll = req.editpoll;
-    
+    console.log(' expecting polls ', resource);
     var id = req.params.id;
     var controller = controllers[resource]; // select a controller specified in the URL
-    console.log('inside API js - controller route' + controllers[resource]);
+    console.log('inside API js - controller route for ' + JSON.stringify(controller));
     
     if (controller == null) {
         res.json({ confirmation: 'fail',
@@ -109,8 +112,8 @@ router.put("/:resource/:id", function(req, res, next){
     }
 
     controller.update(id, req.body, function(err, result) { // call update function of specified ctlr
-       console.log("this is editpoll value...",req.editpoll)
-         if (err){
+
+        if (err){
             res.json({ confirmation: 'fail',
                 message: 'This is the fail from api.js: ' + err
             });
@@ -121,7 +124,7 @@ router.put("/:resource/:id", function(req, res, next){
                 message: 'This is the ****SUCCESS**** from api.js' + JSON.stringify(result)
             });
         
-    },editpoll);  
+    });  
 
 
 });
