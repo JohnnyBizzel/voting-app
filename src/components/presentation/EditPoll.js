@@ -135,22 +135,43 @@ class NewResponse extends Component {
 	constructor(props) {
     	super(props);
     		this.state = {
-                valid: true
+                valid: true,
+                newText: '',
+                user_feedback: ''
         };
+        // TODO: Re factor out user_feedback
         // BIND EVENTS!!!
         this.changeText = this.changeText.bind(this);
         this.cancel = this.cancel.bind(this);
         this.save = this.save.bind(this);
     }
 	
-	changeText() {
-		
+	changeText = (event) => {
+		console.log(this.refs.inputNewResponse.value);
+		if (!this.refs.inputNewResponse.value) {
+			this.setState({
+				user_feedback: '* Cannot be blank',
+				valid: false
+			})
+			return;
+		} else {
+			this.setState({
+				user_feedback: '',
+				valid: true
+			})
+		}
+		this.setState({ newText: this.refs.inputNewResponse.value });
 	}
-	cancel() {
+	cancel = (e) => {
+		e.preventDefault();
 		
+		this.props.cancel();
 	}
-	save() {
-		this.props.saveNew()
+	save = (e) => {
+		e.preventDefault();
+		if (!this.refs.inputNewResponse.value) return;
+		console.log('save new resp ', this.refs.inputNewResponse.value);
+		this.props.saveNew(this.state.newText);
 	}
 	render() {
 	const sty = styles.editPoll;
@@ -158,10 +179,12 @@ class NewResponse extends Component {
 					<div className="row">
 					<form onSubmit={this.save}>
 						<div className="col-xs-12 col-sm-8 col-md-6">
-							<input type="text" 
+							<input type="text" ref="inputNewResponse"
 								className="form-control" onChange={this.changeText}
-								value='todo' />
+								placeholder="Add a new poll option"
+								value={this.state.newText} />
 						</div>
+						<span className="error-text">{this.state.user_feedback}</span>
 						<div className="col-xs-12 col-sm-4 col-md-6">
 							<div className="float-right">
 								<button className="btn-sm btn-success" 
@@ -179,7 +202,8 @@ class NewResponse extends Component {
 						</div>
 					</form>
 					<br/>
-					<span className="error-text">this.state.user_feedback</span>
+					
+					{this.props.adding}
 					</div>
 				</div>)
 	}
@@ -195,12 +219,12 @@ class PollResponse extends Component {
     constructor(props) {
     	super(props);
     		this.state = {
-                newresponses:[2],
                 valid: true,
                 addMode: false
         };
         // BIND EVENTS!!!
         this.showAddOpt = this.showAddOpt.bind(this);
+        this.cancelAddOpt = this.cancelAddOpt.bind(this);
     }
 
 	// bound function - renders each answer - PollDetail component
@@ -217,7 +241,10 @@ class PollResponse extends Component {
 	
 	showAddOpt() {
 		console.log('add new response func')
-		this.setState({ addMode: true })
+		this.setState({ addMode: true });
+	}
+	cancelAddOpt() {
+		this.setState({ addMode: false });
 	}
 
     render() {
@@ -232,7 +259,11 @@ class PollResponse extends Component {
 							onClick={this.showAddOpt}>
 							<i className="fa fa-plus" aria-hidden="true"></i>
 							&nbsp;New response</button>
-						{this.state.addMode ? <NewResponse saveNew={this.props.addNew} /> : '' }
+						{this.state.addMode ? 
+							<NewResponse 
+								adding={this.state.addMode} 
+								cancel={this.cancelAddOpt}
+								saveNew={this.props.addNew} /> : '' }
                 	</div>
                 </div>
                 )
@@ -367,7 +398,7 @@ class EditPoll extends Component {
 	}
 
 	add = (newResponseText) => {
-		console.log('add a new option', newResponseText);
+		console.log('add a new option:', newResponseText);
 		
 	}
 	
@@ -431,7 +462,8 @@ class EditPoll extends Component {
 				    </h4>
 				        <PollResponse onChange={this.update} 
 				        	poll={this.state.poll}
-				        	thePollId={pollID} save={this.save}
+				        	thePollId={pollID} 
+				        	save={this.save}
 				        	addNew={this.add}
 				        	deleteOpt={this.deleteOption} />
 				        <br/>

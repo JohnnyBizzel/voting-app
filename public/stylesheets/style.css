@@ -26,7 +26,7 @@ nav ul, nav li {
    position:fixed;
    left:0px;
    bottom:0px;
-   height:30px;
+   height:50px;
    width:100%;
    background:#e0e0e0;
    text-align: center
@@ -58,9 +58,10 @@ ul { list-style: square }
 	border: 1px solid #ddd;
 	border-radius: 8px;
 	background-color: #f2f2f2;
-	margin: 3px;
+	margin: 5px;
 	padding: 5px;
 	padding-left: 15px;
+	box-shadow: inset 0 0 5px #000;
 }
 .float-right {
   float:right;

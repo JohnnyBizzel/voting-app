@@ -47,7 +47,7 @@ class Poll extends Component {
 				    </h2>
 				        <br/>
 				        <span>by {this.props.currentPoll.author}</span>
-				        <Link style={this.state.linkStyle == 'normal' ?
+				        <Link className="btn" style={this.state.linkStyle == 'normal' ?
 				                    zoneStyle.link :
 				                    zoneStyle.linkHover}
 				                    onMouseOver={this.onHover}

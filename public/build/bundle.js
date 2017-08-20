@@ -22166,9 +22166,42 @@
 	
 			var _this3 = _possibleConstructorReturn(this, (NewResponse.__proto__ || Object.getPrototypeOf(NewResponse)).call(this, props));
 	
-			_this3.state = {
-				valid: true
+			_this3.changeText = function (event) {
+				console.log(_this3.refs.inputNewResponse.value);
+				if (!_this3.refs.inputNewResponse.value) {
+					_this3.setState({
+						user_feedback: '* Cannot be blank',
+						valid: false
+					});
+					return;
+				} else {
+					_this3.setState({
+						user_feedback: '',
+						valid: true
+					});
+				}
+				_this3.setState({ newText: _this3.refs.inputNewResponse.value });
 			};
+	
+			_this3.cancel = function (e) {
+				e.preventDefault();
+	
+				_this3.props.cancel();
+			};
+	
+			_this3.save = function (e) {
+				e.preventDefault();
+				if (!_this3.refs.inputNewResponse.value) return;
+				console.log('save new resp ', _this3.refs.inputNewResponse.value);
+				_this3.props.saveNew(_this3.state.newText);
+			};
+	
+			_this3.state = {
+				valid: true,
+				newText: '',
+				user_feedback: ''
+			};
+			// TODO: Re factor out user_feedback
 			// BIND EVENTS!!!
 			_this3.changeText = _this3.changeText.bind(_this3);
 			_this3.cancel = _this3.cancel.bind(_this3);
@@ -22177,17 +22210,6 @@
 		}
 	
 		_createClass(NewResponse, [{
-			key: 'changeText',
-			value: function changeText() {}
-		}, {
-			key: 'cancel',
-			value: function cancel() {}
-		}, {
-			key: 'save',
-			value: function save() {
-				this.props.saveNew();
-			}
-		}, {
 			key: 'render',
 			value: function render() {
 				var sty = _styles2.default.editPoll;
@@ -22203,9 +22225,15 @@
 							_react2.default.createElement(
 								'div',
 								{ className: 'col-xs-12 col-sm-8 col-md-6' },
-								_react2.default.createElement('input', { type: 'text',
+								_react2.default.createElement('input', { type: 'text', ref: 'inputNewResponse',
 									className: 'form-control', onChange: this.changeText,
-									value: 'todo' })
+									placeholder: 'Add a new poll option',
+									value: this.state.newText })
+							),
+							_react2.default.createElement(
+								'span',
+								{ className: 'error-text' },
+								this.state.user_feedback
 							),
 							_react2.default.createElement(
 								'div',
@@ -22234,11 +22262,7 @@
 							)
 						),
 						_react2.default.createElement('br', null),
-						_react2.default.createElement(
-							'span',
-							{ className: 'error-text' },
-							'this.state.user_feedback'
-						)
+						this.props.adding
 					)
 				);
 			}
@@ -22276,12 +22300,12 @@
 			};
 	
 			_this4.state = {
-				newresponses: [2],
 				valid: true,
 				addMode: false
 			};
 			// BIND EVENTS!!!
 			_this4.showAddOpt = _this4.showAddOpt.bind(_this4);
+			_this4.cancelAddOpt = _this4.cancelAddOpt.bind(_this4);
 			return _this4;
 		}
 	
@@ -22293,6 +22317,11 @@
 			value: function showAddOpt() {
 				console.log('add new response func');
 				this.setState({ addMode: true });
+			}
+		}, {
+			key: 'cancelAddOpt',
+			value: function cancelAddOpt() {
+				this.setState({ addMode: false });
 			}
 		}, {
 			key: 'render',
@@ -22317,7 +22346,10 @@
 							_react2.default.createElement('i', { className: 'fa fa-plus', 'aria-hidden': 'true' }),
 							'\xA0New response'
 						),
-						this.state.addMode ? _react2.default.createElement(NewResponse, { saveNew: this.props.addNew }) : ''
+						this.state.addMode ? _react2.default.createElement(NewResponse, {
+							adding: this.state.addMode,
+							cancel: this.cancelAddOpt,
+							saveNew: this.props.addNew }) : ''
 					)
 				);
 			}
@@ -22404,7 +22436,7 @@
 			};
 	
 			_this5.add = function (newResponseText) {
-				console.log('add a new option', newResponseText);
+				console.log('add a new option:', newResponseText);
 			};
 	
 			_this5.deleteOption = function (id) {
@@ -22524,7 +22556,8 @@
 					),
 					_react2.default.createElement(PollResponse, { onChange: this.update,
 						poll: this.state.poll,
-						thePollId: pollID, save: this.save,
+						thePollId: pollID,
+						save: this.save,
 						addNew: this.add,
 						deleteOpt: this.deleteOption }),
 					_react2.default.createElement('br', null),
@@ -22577,7 +22610,7 @@
 	        },
 	        title: {
 	            textDecoration: 'none',
-	            color: 'green'
+	            color: '#63709D'
 	        },
 	        link: {
 	            paddingLeft: 5,
@@ -22607,17 +22640,17 @@
 	    },
 	    editPoll: {
 	        responses: {
-	            marginTop: 5
+	            marginTop: 10
 	        },
 	        responseOption: {
-	            backgroundColor: "aliceblue"
+	            backgroundColor: '#FFF'
 	        },
 	        containerBox: {
-	            backgroundColor: "aliceblue",
+	            backgroundColor: '#FFF',
 	            lineHeight: '40px',
-	            border: '2px solid #5454A9',
+	            border: '2px solid rgb(132,196,254)',
 	            borderRadius: 8,
-	            margin: 5
+	            margin: '5px 1px'
 	        },
 	        buttonSpace: {
 	            marginRight: 5
@@ -29822,7 +29855,7 @@
 	                ),
 	                _react2.default.createElement(
 	                    _reactRouter.Link,
-	                    { style: this.state.linkStyle == 'normal' ? zoneStyle.link : zoneStyle.linkHover,
+	                    { className: 'btn', style: this.state.linkStyle == 'normal' ? zoneStyle.link : zoneStyle.linkHover,
 	                        onMouseOver: this.onHover,
 	                        onMouseOut: this.offHover, to: '/editthepoll/' + this.props.currentPoll._id },
 	                    'Edit Poll'

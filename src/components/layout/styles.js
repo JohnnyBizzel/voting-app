@@ -25,7 +25,7 @@ export default {
         },
         title: {
             textDecoration:'none',
-            color:'green'
+            color:'#63709D'
         },
         link: {
             paddingLeft: 5,
@@ -57,17 +57,17 @@ export default {
     },
     editPoll: {
         responses: {
-            marginTop: 5  
+            marginTop: 10  
         },
         responseOption: {
-            backgroundColor: "aliceblue"
+            backgroundColor: '#FFF'
         },
         containerBox: {
-            backgroundColor: "aliceblue",
+            backgroundColor: '#FFF',
             lineHeight: '40px',
-            border: '2px solid #5454A9',
+            border: '2px solid rgb(132,196,254)',
             borderRadius: 8,
-            margin: 5
+            margin: '5px 1px'
         },
         buttonSpace: {
             marginRight:5
