@@ -8,10 +8,10 @@ var controllers = require("../controllers");
 console.log("Passing through request via [api.js] ...");
 
 router.get("/:resource", function(req, res, next){
-    console.log('inside API js - controller route' + controllers[resourceFrom]);
     var resourceFrom = req.params.resource;
     var controller = controllers[resourceFrom];
-    
+        console.log('inside API js - controller route...',controllers[resourceFrom]);
+
     if (controller == null) {
         res.json({ confirmation: 'fail',
                     message: 'User made invalid resource request'
@@ -102,7 +102,7 @@ router.put("/:resource/:id", function(req, res, next){
     console.log(' expecting polls ', resource);
     var id = req.params.id;
     var controller = controllers[resource]; // select a controller specified in the URL
-    console.log('inside API js - controller route for ' + JSON.stringify(controller));
+    console.log('inside API js - controller route for ', controller);
     
     if (controller == null) {
         res.json({ confirmation: 'fail',

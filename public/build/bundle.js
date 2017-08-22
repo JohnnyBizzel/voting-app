@@ -22321,6 +22321,7 @@
 		}, {
 			key: 'cancelAddOpt',
 			value: function cancelAddOpt() {
+				// Change
 				this.setState({ addMode: false });
 			}
 		}, {
@@ -22715,7 +22716,9 @@
 					},
 					put: function put(url, body, callback) {
 									// Api.put('/api/polls/' + pollId, newVotesObj, (err, response) => {
-									console.log("apimanager value of body.operation:", body);
+									console.log("apimanager (put) value of body.operation:", body);
+									console.log("\n");
+									//	console.log(callback);
 									_superagent2.default.put(url).set('Accept', 'application/json').send(body).end(function (err, response) {
 													if (err) {
 																	console.log('SuperAgent PUT error= ' + err);
@@ -30038,7 +30041,7 @@
 	            }
 	        };
 	
-	        _this2.handleNewVote = _this2.handleNewVote.bind(_this2);
+	        _this2.submit = _this2.submit.bind(_this2);
 	        return _this2;
 	    }
 	
@@ -30122,11 +30125,13 @@
 	            });
 	        }
 	    }, {
-	        key: 'handleNewVote',
-	        value: function handleNewVote(e) {
+	        key: 'submit',
+	        value: function submit(e) {
 	            var _this4 = this;
 	
+	            console.log('Time to handleNewVote');
 	            e.preventDefault();
+	
 	            //set something in storage to check on what polls user already voted.
 	            //     //currentPollId
 	            //   if (typeof(Storage) !== "undefined") {
@@ -30143,12 +30148,17 @@
 	
 	            var updatedList = Object.assign([], this.state.list);
 	            var chartValues = Object.assign({}, this.state.data);
+	            console.log(this.state.list.responses);
 	            var idx = this.state.list.responses.findIndex(function (elem) {
 	                return elem.response == selectedRadio;
 	            });
+	            console.log(idx);
 	            var totalVotes = this.state.list.responses[idx].votes + 1;
 	            var rId = this.state.list.responses[idx].respID;
-	            var newVotesObj = { respID: rId, response: selectedRadio, votes: totalVotes };
+	            var newVotesObj = { respID: rId, response: selectedRadio,
+	                votes: totalVotes,
+	                operation: '[UPDATE]'
+	            };
 	
 	            // call API - update poll
 	            _ApiManager2.default.put('/api/polls/' + pollId, newVotesObj, function (err, response) {
@@ -30199,12 +30209,14 @@
 	                        ),
 	                        _react2.default.createElement(
 	                            'form',
-	                            { onSubmit: this.handleNewVote },
+	                            { onSubmit: this.submit },
 	                            responseList,
 	                            _react2.default.createElement(
 	                                'div',
 	                                { className: 'col-xs-12 text-center' },
-	                                _react2.default.createElement('input', { type: 'submit', name: 'submitBtn', value: 'Cast your vote' })
+	                                _react2.default.createElement('input', { type: 'submit',
+	                                    className: 'btn-sm',
+	                                    value: 'Vote' })
 	                            )
 	                        )
 	                    ),
@@ -30227,6 +30239,17 @@
 	
 	//  <button onClick={() => this.deletefunc()} type="button">Delete</button>
 	// <button className="btn btn-primary"><Link to={`/editdamnpoll/${pollidagain}`}>Edit the damn  Poll </Link> </button>
+	
+	/*
+	                    <form onSubmit={this.submit}>
+	                            {responseList}
+	                        <div className="col-xs-12 text-center">
+	                           <input type="submit" 
+	                            className="btn-sm"
+	                            value="Vote"/>
+	                        </div>
+	                    </form>
+	*/
 
 /***/ },
 /* 254 */

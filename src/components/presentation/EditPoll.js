@@ -244,6 +244,7 @@ class PollResponse extends Component {
 		this.setState({ addMode: true });
 	}
 	cancelAddOpt() {
+		// Change
 		this.setState({ addMode: false });
 	}
 

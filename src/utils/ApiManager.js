@@ -43,7 +43,9 @@ export default {
         
     },
     put: (url,body,callback) => {  // Api.put('/api/polls/' + pollId, newVotesObj, (err, response) => {
-		console.log("apimanager value of body.operation:",body)
+		console.log("apimanager (put) value of body.operation:",body);
+		console.log("\n");
+	//	console.log(callback);
     	superagent
             .put(url)
             .set('Accept', 'application/json')

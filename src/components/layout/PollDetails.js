@@ -77,7 +77,7 @@ class PollDetails extends Component {
             }
         };
 
-        this.handleNewVote = this.handleNewVote.bind(this);
+        this.submit = this.submit.bind(this);
     }
     componentDidMount(){
         //console.log('componentDidMount (Polldetail): ' + this.props.location.pathname);
@@ -160,8 +160,10 @@ class PollDetails extends Component {
         
     }
    
-    handleNewVote(e) { 
+    submit(e) { 
+        console.log('Time to handleNewVote')
         e.preventDefault();
+        
         //set something in storage to check on what polls user already voted.
     //     //currentPollId
     //   if (typeof(Storage) !== "undefined") {
@@ -178,11 +180,16 @@ class PollDetails extends Component {
 
         let updatedList = Object.assign([], this.state.list);
         let chartValues = Object.assign({}, this.state.data);
+        console.log(this.state.list.responses);
         const idx = this.state.list.responses.findIndex(function(elem) { 
                                     return elem.response == selectedRadio;});
+                                    console.log(idx);
         const totalVotes = this.state.list.responses[idx].votes + 1;
         const rId = this.state.list.responses[idx].respID
-        let newVotesObj = { respID: rId, response: selectedRadio, votes: totalVotes};
+        let newVotesObj = { respID: rId, response: selectedRadio, 
+                            votes: totalVotes,
+                            operation: '[UPDATE]'
+        };
        
         
         // call API - update poll
@@ -222,24 +229,29 @@ class PollDetails extends Component {
             )
         }.bind(this)); 
   
-        return(<div className="container">
-                    <div className="row">
-                        <div className="col-md-6">
-                            
-                            <h2>{this.state.list.pollquestion}</h2>
-                            <form onSubmit={this.handleNewVote}>
-                                    {responseList}
-                                <div className="col-xs-12 text-center">
-                                    <input type="submit" name="submitBtn"  value="Cast your vote"/>
-                                </div>
-                            </form>
-    
+        return(
+        <div className="container">
+            <div className="row">
+                <div className="col-md-6">
+                    
+                    <h2>{this.state.list.pollquestion}</h2>
+                    
+                    <form onSubmit={this.submit}>
+                            {responseList}
+                        <div className="col-xs-12 text-center">
+                           <input type="submit" 
+                            className="btn-sm"
+                            value="Vote"/>
                         </div>
-                        <div className="col-md-6">
-                            <Doughnut data={this.state.data} />
-                        </div>
-                    </div>
-                </div>);
+                    </form>
+                    
+                    
+                </div>
+                <div className="col-md-6">
+                    <Doughnut data={this.state.data} />
+                </div>
+            </div>
+        </div>);
     }
 }
 
@@ -249,3 +261,14 @@ export default PollDetails;
 
 //  <button onClick={() => this.deletefunc()} type="button">Delete</button>
 // <button className="btn btn-primary"><Link to={`/editdamnpoll/${pollidagain}`}>Edit the damn  Poll </Link> </button>
+
+/*
+                    <form onSubmit={this.submit}>
+                            {responseList}
+                        <div className="col-xs-12 text-center">
+                           <input type="submit" 
+                            className="btn-sm"
+                            value="Vote"/>
+                        </div>
+                    </form>
+*/                    
