@@ -54,6 +54,7 @@ module.exports = {
         var respID = param['respID'];
         var respVal = param['response'];
         var voteVal = param['votes'];
+        console.log("Setting ID Value: ",respID)
         console.log("Setting Param Values: ",respVal)
         console.log("Setting Vote Values: ",voteVal || 0)
         // Check if deleting an option or renaming an option
@@ -64,10 +65,10 @@ module.exports = {
                         callback(err, null);
                         return;
                     } else {
-                        console.log('-- responses -',doc.responses);  
+                        // console.log('-- responses -',doc.responses);  
                         var idx = doc.responses ? doc.responses.findIndex((x) => x.respID === respID) : -1;
                         // is it valid?
-                        console.log('idx to delete', idx);
+                        // console.log('idx to delete', idx);
                         if (idx !== -1) {
                             // remove it from the array.
                             doc.responses.splice(idx, 1);
@@ -78,7 +79,7 @@ module.exports = {
                                     callback(error, null);
                                 } else {
                                     // send the records
-                                    console.log('updated', doc);
+                                    // console.log('updated', doc);
                                     callback(err, doc);
                                 }
                             });
@@ -90,6 +91,7 @@ module.exports = {
                 });
                 break;
             case '[UPDATE]':
+                // This handles when a user submits a vote 
                 Polls.where({ _id: id}).where({'responses.respID': respID } )
                     .update({ $set: { 'responses.$.votes': voteVal, 
                         'responses.$.response': respVal 
@@ -99,14 +101,39 @@ module.exports = {
                             return;
                         }
                         else{
-                            console.log("Updating poll, got something",poll)
+                            // console.log("Updating poll, got something",poll)
                             callback(err, poll);
                         }
                 });
                 break;
             case '[ADD]':
-                break;
+                const newObj = { 'respID': respID,
+                                'response': respVal,
+                                'votes' : 0 }
+                Polls.findOne({ _id: id}, function (err, doc) {
+                    if (err) {
+                        callback(err, null);
+                        return;
+                    } else {
+                        //console.log('--add new response to --', doc);  
+
+                        doc.responses.push(newObj);
+                        // save the doc
+                        doc.save(function(error) {
+                            if (error) {
+                                console.log(error);
+                                callback(error, null);
+                            } else {
+                                // send the records
+                                callback(err, doc);
+                            }
+                        });
+                        // stop here, otherwise 404
+                        return;
+                    }
+                });
             
+                break;
         }
         // if (param['operation'] === '[DELETE]') {
         //     // Delete this option from list of responses

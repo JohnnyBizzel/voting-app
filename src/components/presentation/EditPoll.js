@@ -172,6 +172,8 @@ class NewResponse extends Component {
 		if (!this.refs.inputNewResponse.value) return;
 		console.log('save new resp ', this.refs.inputNewResponse.value);
 		this.props.saveNew(this.state.newText);
+		// (if) save ok, return out of edit mode
+		this.props.cancel();
 	}
 	render() {
 	const sty = styles.editPoll;
@@ -400,7 +402,33 @@ class EditPoll extends Component {
 
 	add = (newResponseText) => {
 		console.log('add a new option:', newResponseText);
+		let newStateResponses = {...this.state };
+		let highestId = -1;
+		for (let i = 0; i < newStateResponses.poll.responses.length; i++) {
+			if (newStateResponses.poll.responses[i].respID > highestId)
+				highestId = newStateResponses.poll.responses[i].respID;
+		}
+		highestId += 1;
+		const newResponse = { response: newResponseText,
+							respID : highestId,
+							votes: 0 }
+		newStateResponses.poll.responses.push(newResponse);
+		console.log('New option = ', newResponse);
+		this.setState(newStateResponses);
 		
+		// Now update in the database
+		newResponse.operation = '[ADD]';
+		
+		Api.put('/api/polls/' + this.props.params.id, newResponse, (err, response) => {
+			if (err) { 
+			     console.log("Error: " + JSON.stringify(err)); 
+			     return;
+			}
+			else{
+			    console.log("add option succesfully saved" + JSON.stringify(response))
+			}
+		
+		});
 	}
 	
 	deleteOption = (id) => {
