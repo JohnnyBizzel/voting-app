@@ -135,17 +135,7 @@ module.exports = {
             
                 break;
         }
-        // if (param['operation'] === '[DELETE]') {
-        //     // Delete this option from list of responses
-        //     // console.log('-- responses --',Polls.where({ _id: id}));
-           
-            
-        //   // Polls.where({ _id: id}).responses.pull({'respID': respID });
-            
-        // } else {
-        //     // Edit response option value
-                
-        // }
+       
 
     },
 

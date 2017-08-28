@@ -12,8 +12,9 @@ import Container from './components/containers/Container.js';
 
 
 import {Route,Router,browserHistory,hashHistory,IndexRoute} from 'react-router'
-import makeMainRoutes from './components/routes'
 
+//import makeMainRoutes from './components/routes'
+import Auth from './utils/Auth';
 
 const mountNode = document.getElementById('root');
 
@@ -21,6 +22,11 @@ const mountNode = document.getElementById('root');
 ReactDOM.render( <Router history={browserHistory}>
     <Route path="/" component={Container} >
     <IndexRoute component={Home} />
+      <Route path="login" component={Login} />
+      <Route path="logout" onEnter={(nextState, replace) => {
+        Auth.deauthenticateUser();
+        // change the current URL to /
+        replace('/');}} />
       <Route path="Polldetailfull/:id" component={PollDetails}  />
       <Route path="Editthepoll/:id" component={EditPoll}  />
       <Route path="createPoll" component={createPoll} />

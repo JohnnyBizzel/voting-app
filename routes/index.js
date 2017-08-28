@@ -18,12 +18,12 @@ router.get('/user/register', function(req, res, next) {
 
 
 
-// Render the login template
-router.get('/user/login',
-  function(req, res){
-      console.log("get /login");
-    res.render('login', { env: env });
-  });
+// // Render the login template
+// router.get('/user/login',
+//   function(req, res){
+//       console.log("get /login");
+//     res.render('login');
+//   });
 
 // Perform session logout and redirect to homepage
 router.get('/logout', function(req, res){
@@ -47,8 +47,7 @@ router.get('/', function(req, res, next) {
 
   
 router.get("/createpolls",function(req,res,next){
-res.render("index",null);
-
+  res.render("index",null);
 });
 
 
@@ -64,24 +63,20 @@ router.get('/Home', function(req, res, next) {
 });
 
 router.get('/login', function(req, res, next) {
-    
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'Log in' });
 });
 
 router.get("/Polldetailfull",function(req,res,next){
-res.render('index', { title: 'Poll detail ' });
-
+  res.render('index', { title: 'Poll detail ' });
 });
 
 router.get("/editthepoll",function(req,res,next){
-res.render('index', { title: 'Edit Poll' });
-
+  res.render('index', { title: 'Edit Poll' });
 });
 
-router.get("/editpoll",function(req,res,next){
-res.render("editpoll",null);
-
-});
+// router.get("/editpoll",function(req,res,next){
+//   res.render("editpoll",null);
+// });
 
 // POST request
 // Register User

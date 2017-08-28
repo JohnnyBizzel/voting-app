@@ -12,7 +12,8 @@ class Poll extends Component {
     constructor() {
         super()
         this.state = {
-            linkStyle: 'normal'
+            linkStyle: 'normal',
+            currentUser: 'tester'
         }
         this.onHover = this.onHover.bind(this)
         this.offHover = this.offHover.bind(this)
@@ -47,11 +48,14 @@ class Poll extends Component {
 				    </h2>
 				        <br/>
 				        <span>by {this.props.currentPoll.author}</span>
+				        { this.state.currentUser == 'tester' ?
 				        <Link className="btn" style={this.state.linkStyle == 'normal' ?
 				                    zoneStyle.link :
 				                    zoneStyle.linkHover}
 				                    onMouseOver={this.onHover}
 				                    onMouseOut={this.offHover} to={`/editthepoll/${this.props.currentPoll._id}`}>Edit Poll</Link>
+				                : this.props.currentPoll.author === this.state.currentUser ?
+				                    <Link className="btn-sm" to={`/user/login`}>Sign in to edit</Link> : ''}
 				</div>
                 );
     }

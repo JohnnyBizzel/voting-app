@@ -10,9 +10,9 @@ router.get('/register', function(req, res, next) {
   res.render('register');
 });
 
-// Get the user profile
-router.get('/login', function(req, res, next) {
-  res.render('login');
-});
+// // Get the user profile
+// router.get('/login', function(req, res, next) {
+//   res.render('login');
+// });
 
 module.exports = router;

@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "@risingstack/trace": "^3.0.2",
+    "bcrypt": "^1.0.3",
     "bcryptjs": "*",
     "body-parser": "~1.15.2",
     "chart.js": "^1.1.1",
@@ -23,6 +24,7 @@
     "handlebars": "^4.0.6",
     "hjs": "~0.0.6",
     "json-loader": "^0.5.4",
+    "jsonwebtoken": "^7.4.3",
     "mongoose": "^4.7.3",
     "morgan": "~1.7.0",
     "nodemon": "^1.11.0",
@@ -37,7 +39,8 @@
     "react-chartjs-2": "^1.6.2",
     "react-dom": "^15.4.1",
     "serve-favicon": "~2.3.0",
-    "superagent": "^3.3.1"
+    "superagent": "^3.3.1",
+    "validator": "^8.1.0"
   },
   "devDependencies": {
     "babel-core": "^6.21.0",

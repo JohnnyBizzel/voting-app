@@ -17,7 +17,13 @@ var LocalStragegy = require('passport-local').Stragegy;  // new
 // your application's code
 var bodyParser = require('body-parser');
 var mongoose =require("mongoose");
-var dbUrl = 'mongodb://asjb:326382l@ds053718.mlab.com:53718/fcc-polls';
+
+
+dotenv.load();
+
+const userpass = process.env.MONGO_USER + ':' + process.env.MONGO_PWD;
+
+var dbUrl = 'mongodb://' +userpass+ '@ds053718.mlab.com:53718/fcc-polls';
 
 mongoose.connect(dbUrl, function(err, res){
   if (err){
@@ -29,11 +35,8 @@ mongoose.connect(dbUrl, function(err, res){
   
 });
 
-dotenv.load();
 
-var index = require('./routes/index');
-var api = require('./routes/api');
-var user = require('./routes/user');
+
 
 
 var app = express();
@@ -55,16 +58,23 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-// -------------------- ADDED auth0 sample
-// Session middleware
-app.use(session({
-  secret: 'shh54321',
-  resave: true,
-  saveUninitialized: true
-}));
-app.use(passport.initialize());
-app.use(passport.session());
+// // -------------------- ADDED auth0 sample
+// // Session middleware
+// app.use(session({
+//   secret: 'shh54321',
+//   resave: true,
+//   saveUninitialized: true
+// }));
+// app.use(passport.initialize());
+// app.use(passport.session());
 //---------------- END of ADDED auth0 sample
+
+// Vlad code: load passport strategies
+const localSignupStrategy = require('./passport/local-signup');
+const localLoginStrategy = require('./passport/local-login');
+passport.use('local-signup', localSignupStrategy);
+passport.use('local-login', localLoginStrategy);
+
 
 // In this example, the formParam value is going to get morphed into form body format useful for printing. 
 app.use(expressValidator({
@@ -84,26 +94,33 @@ app.use(expressValidator({
   }
 }));
 
-app.use(flash());
+//app.use(flash());
 
-// Set global vars for flash messages...
-app.use(function(req, res, next) {
-    res.locals.success_msg = req.flash('success_msg');
-    res.locals.error_msg = req.flash('error_msg');
-    res.locals.error = req.flash('error'); // passport sets its own messages
-    next();
-})
+// // Set global vars for flash messages...
+// app.use(function(req, res, next) {
+//     res.locals.success_msg = req.flash('success_msg');
+//     res.locals.error_msg = req.flash('error_msg');
+//     res.locals.error = req.flash('error'); // passport sets its own messages
+//     next();
+// })
 
 app.use(express.static(path.join(__dirname, 'public')));
+// routes
+const index = require('./routes/index');
+const api = require('./routes/api');
+const user = require('./routes/user');
+const authRoutes = require('./routes/auth');
 
 app.use('/', index);
 app.use('/api', api);
 app.use('/user', user);
+app.use('/auth', authRoutes);
+
 //app.use('/loginA0', login);
 app.use('/Polldetailfull/:id', index);
 app.use('/editthepoll/:id', index);
 
-console.log("moving to 404");
+console.log("moving to 404 check");
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

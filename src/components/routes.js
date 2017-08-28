@@ -1,3 +1,11 @@
+////////////////////////
+/*
+
+
+NOT BEING USED
+
+
+*/
 import React from 'react'
 //import Router from 'react-router'
 import Link from 'react-router'
@@ -29,7 +37,7 @@ class makeMainRoutes extends React.Component  {
       <Route path="/" component={Container} auth={auth}>
        
         
-        <Route path="login" component={Login} />
+        <Route path="/login" component={Login} />
         <Route path="Polldetailfull" component={PollDetails} onEnter={requireAuth}/>
         <Route path="editthepoll" component={EditPoll} />
       </Route>
