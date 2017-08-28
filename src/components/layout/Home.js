@@ -6,11 +6,37 @@ import {Link} from 'react-router';
 import styles from './styles';
 import Auth from '../../utils/Auth';
 
+const locStoreKeyName = 'PollingStation_usr';
+
 class Home extends Component {
+    storageAvailable(type) {
+        try {
+          var storage = window[type],
+              x = '__storage_test__';
+          storage.setItem(x, x);
+          storage.removeItem(x);
+          return true;
+        }
+        catch(e) {
+          return false;
+        }
+    }
     
     render() {
-        console.log(Auth.isUserAuthenticated());
+        var currentUserNameMsg = '';
+        console.log('Home user is auth...', Auth.isUserAuthenticated());
+        
         //const homeStyle = styles.frontpage; // needs to be inside the render func!
+        if (this.storageAvailable('localStorage')) {
+          if(!window.localStorage.getItem(locStoreKeyName)) {  
+            // cehck
+            //this._saveToLocalStorage(locStoreKeyName, JSON.stringify(recipeData));                  
+          } else {
+            currentUserNameMsg = 'Welcome ' + window.localStorage.getItem(locStoreKeyName)  
+          }
+        } else {
+          console.log('Local storage not available - not all functions will work on this browser');
+        }
         return (
             <div className="container">
             <h1>The Polling Station</h1>
@@ -33,6 +59,7 @@ class Home extends Component {
                  }
              </div>
             </nav>
+            <p>{currentUserNameMsg}</p>
             <div>
                 <Polls />
             </div>

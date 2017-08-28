@@ -1,17 +1,16 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import Home from './components/layout/Home.js'
+import React from 'react'; // needed
+import ReactDOM from 'react-dom';
+import Home from './components/layout/Home.js';
 
-import Login from './Login/Login'
-//import    Polldetail from './components/layout/Polldetail.js'; // testing different Poll details
+import Login from './Login/Login';
 import PollDetails from './components/layout/PollDetails.js';
 import EditPoll from './components/presentation/EditPoll.js';
-import createPoll from './components/presentation/CreatePoll'
+import createPoll from './components/presentation/CreatePoll';
 
 import Container from './components/containers/Container.js';
 
 
-import {Route,Router,browserHistory,hashHistory,IndexRoute} from 'react-router'
+import {Route,Router,browserHistory,IndexRoute} from 'react-router';
 
 //import makeMainRoutes from './components/routes'
 import Auth from './utils/Auth';

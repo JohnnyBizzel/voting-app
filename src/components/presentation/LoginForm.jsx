@@ -17,11 +17,11 @@ const LoginForm = ({
       <h2 className="card-heading">Login</h2>
 
       {successMessage && <p className="success-message">{successMessage}</p>}
-      {errors.summary && <p className="error-message">{errors.summary}</p>}
+      {errors.summary && <p className="error-message bg-warning text-danger">{errors.summary}</p>}
 
       <div className="field-line">
         <input
-          floatingLabelText="Email"
+          placeholder="E-mail"
           name="email"
           errorText={errors.email}
           onChange={onChange}
@@ -31,7 +31,7 @@ const LoginForm = ({
 
       <div className="field-line">
         <input 
-          floatingLabelText="Password"
+          placeholder="Password"
           type="password"
           name="password"
           onChange={onChange}
@@ -44,7 +44,7 @@ const LoginForm = ({
         <button type="submit" label="Log in" primary>Log in</button>
       </div>
 
-      <div>Don't have an account? <Link to={'/signup'}>Create one</Link>.</div>
+      <div>Don't have an account? <a href='/user/register'>Create one</a>.</div>
     </form>
   </div>
 );

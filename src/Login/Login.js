@@ -62,9 +62,9 @@ class LoginPage extends React.Component {
         });
 
         // save the token
-        Auth.authenticateUser(xhr.response.token);
+        Auth.authenticateUser(xhr.response.token, xhr.response.user.name);
 
-
+        console.log('Login.js - ', xhr.response.user.name);
         // change the current URL to /
         this.context.router.replace('/');
       } else {
@@ -91,7 +91,6 @@ class LoginPage extends React.Component {
     const field = event.target.name;
     const user = this.state.user;
     user[field] = event.target.value;
-
     this.setState({
       user
     });

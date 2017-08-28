@@ -142,7 +142,7 @@ router.post('/login', (req, res, next) => {
       });
     }
 
-
+    console.log('logging in user::', userData);
     return res.json({
       success: true,
       message: 'You have successfully logged in!',

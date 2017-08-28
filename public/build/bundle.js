@@ -86,10 +86,10 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	//import    Polldetail from './components/layout/Polldetail.js'; // testing different Poll details
 	var mountNode = document.getElementById('root');
 	
 	//import makeMainRoutes from './components/routes'
+	// needed
 	
 	
 	_reactDom2.default.render(_react2.default.createElement(
@@ -21858,6 +21858,8 @@
 	//import Zones from '../containers/Zones'
 	
 	
+	var locStoreKeyName = 'PollingStation_usr';
+	
 	var Home = function (_Component) {
 	    _inherits(Home, _Component);
 	
@@ -21868,10 +21870,35 @@
 	    }
 	
 	    _createClass(Home, [{
+	        key: 'storageAvailable',
+	        value: function storageAvailable(type) {
+	            try {
+	                var storage = window[type],
+	                    x = '__storage_test__';
+	                storage.setItem(x, x);
+	                storage.removeItem(x);
+	                return true;
+	            } catch (e) {
+	                return false;
+	            }
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
-	            console.log(_Auth2.default.isUserAuthenticated());
+	            var currentUserNameMsg = '';
+	            console.log('Home user is auth...', _Auth2.default.isUserAuthenticated());
+	
 	            //const homeStyle = styles.frontpage; // needs to be inside the render func!
+	            if (this.storageAvailable('localStorage')) {
+	                if (!window.localStorage.getItem(locStoreKeyName)) {
+	                    // cehck
+	                    //this._saveToLocalStorage(locStoreKeyName, JSON.stringify(recipeData));                  
+	                } else {
+	                    currentUserNameMsg = 'Welcome ' + window.localStorage.getItem(locStoreKeyName);
+	                }
+	            } else {
+	                console.log('Local storage not available - not all functions will work on this browser');
+	            }
 	            return _react2.default.createElement(
 	                'div',
 	                { className: 'container' },
@@ -21938,6 +21965,11 @@
 	                            )
 	                        )
 	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'p',
+	                    null,
+	                    currentUserNameMsg
 	                ),
 	                _react2.default.createElement(
 	                    'div',
@@ -30038,8 +30070,9 @@
 	          });
 	
 	          // save the token
-	          _Auth2.default.authenticateUser(xhr.response.token);
+	          _Auth2.default.authenticateUser(xhr.response.token, xhr.response.user.name);
 	
+	          console.log('Login.js - ', xhr.response.user.name);
 	          // change the current URL to /
 	          _this2.context.router.replace('/');
 	        } else {
@@ -30069,7 +30102,6 @@
 	      var field = event.target.name;
 	      var user = this.state.user;
 	      user[field] = event.target.value;
-	
 	      this.setState({
 	        user: user
 	      });
@@ -81063,14 +81095,14 @@
 	      ),
 	      errors.summary && _react2.default.createElement(
 	        'p',
-	        { className: 'error-message' },
+	        { className: 'error-message bg-warning text-danger' },
 	        errors.summary
 	      ),
 	      _react2.default.createElement(
 	        'div',
 	        { className: 'field-line' },
 	        _react2.default.createElement('input', {
-	          floatingLabelText: 'Email',
+	          placeholder: 'E-mail',
 	          name: 'email',
 	          errorText: errors.email,
 	          onChange: onChange,
@@ -81081,7 +81113,7 @@
 	        'div',
 	        { className: 'field-line' },
 	        _react2.default.createElement('input', {
-	          floatingLabelText: 'Password',
+	          placeholder: 'Password',
 	          type: 'password',
 	          name: 'password',
 	          onChange: onChange,
@@ -81103,8 +81135,8 @@
 	        null,
 	        'Don\'t have an account? ',
 	        _react2.default.createElement(
-	          _reactRouter.Link,
-	          { to: '/signup' },
+	          'a',
+	          { href: '/user/register' },
 	          'Create one'
 	        ),
 	        '.'
@@ -81151,8 +81183,9 @@
 	     *
 	     * @param {string} token
 	     */
-	    value: function authenticateUser(token) {
+	    value: function authenticateUser(token, currentUsername) {
 	      localStorage.setItem('token', token);
+	      localStorage.setItem('PollingStation_usr', currentUsername);
 	    }
 	
 	    /**
@@ -81176,6 +81209,7 @@
 	    key: 'deauthenticateUser',
 	    value: function deauthenticateUser() {
 	      localStorage.removeItem('token');
+	      localStorage.removeItem('PollingStation_usr');
 	    }
 	
 	    /**
