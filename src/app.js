@@ -5,7 +5,7 @@ import Home from './components/layout/Home.js';
 import Login from './Login/Login';
 import PollDetails from './components/layout/PollDetails.js';
 import EditPoll from './components/presentation/EditPoll.js';
-import createPoll from './components/presentation/CreatePoll';
+import CreatePoll from './components/presentation/CreatePoll';
 
 import Container from './components/containers/Container.js';
 
@@ -28,7 +28,14 @@ ReactDOM.render( <Router history={browserHistory}>
         replace('/');}} />
       <Route path="Polldetailfull/:id" component={PollDetails}  />
       <Route path="Editthepoll/:id" component={EditPoll}  />
-      <Route path="createPoll" component={createPoll} />
+      <Route path="createPoll" getComponent={(location, callback) => {
+        if (Auth.isUserAuthenticated()) {
+          callback(null, CreatePoll);
+        } else {
+          callback(null, Home);
+        }
+        
+      }} />
 
     </Route>
     

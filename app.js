@@ -117,8 +117,10 @@ app.use('/user', user);
 app.use('/auth', authRoutes);
 
 //app.use('/loginA0', login);
+// REACT routes
 app.use('/Polldetailfull/:id', index);
 app.use('/editthepoll/:id', index);
+app.use('/createPoll', index);
 
 console.log("moving to 404 check");
 
