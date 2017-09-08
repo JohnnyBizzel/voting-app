@@ -18,9 +18,10 @@ import Auth from './utils/Auth';
 const mountNode = document.getElementById('root');
 
 
-ReactDOM.render( <Router history={browserHistory}>
+ReactDOM.render( 
+  <Router history={browserHistory}>
     <Route path="/" component={Container} >
-    <IndexRoute component={Home} />
+      <IndexRoute component={Home} />
       <Route path="login" component={Login} />
       <Route path="logout" onEnter={(nextState, replace) => {
         Auth.deauthenticateUser();
@@ -34,10 +35,6 @@ ReactDOM.render( <Router history={browserHistory}>
         } else {
           callback(null, Home);
         }
-        
       }} />
-
     </Route>
-    
-    
   </Router>,mountNode);

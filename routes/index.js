@@ -56,7 +56,7 @@ router.get("/editthepoll",function(req,res,next){
 });
 
 
-// POST request
+// POST requests
 // Register User
 router.post('/register', function(req, res){
 	var name = req.body.name;
@@ -65,17 +65,15 @@ router.post('/register', function(req, res){
 	var password = req.body.password;
 	var password2 = req.body.password2;
 
-console.log(name);
-
-
 });
 
 
-router.post('/user/login',
-  passport.authenticate('local', {successRedirect:'/', failureRedirect:'/user/login',failureFlash: true}),
-  function(req, res) {
-    res.redirect('/');
-  });
+// router.post('/user/login',
+//   passport.authenticate('local', {successRedirect:'/', failureRedirect:'/user/login',failureFlash: true}),
+//   function(req, res) {
+
+//     res.redirect('/');
+//   });
 
 router.get('/logout', function(req, res){
 	req.logout();

@@ -21893,18 +21893,9 @@
 	        value: function render() {
 	            var currentUserNameMsg = '';
 	            console.log('Home user is auth...', _Auth2.default.isUserAuthenticated());
+	            var usrIsLoggedIn = _Auth2.default.isUserAuthenticated();
 	
-	            //const homeStyle = styles.frontpage; // needs to be inside the render func!
-	            if (this.storageAvailable('localStorage')) {
-	                if (!window.localStorage.getItem(locStoreKeyName)) {
-	                    // cehck
-	                    //this._saveToLocalStorage(locStoreKeyName, JSON.stringify(recipeData));                  
-	                } else {
-	                    currentUserNameMsg = 'Welcome ' + window.localStorage.getItem(locStoreKeyName);
-	                }
-	            } else {
-	                console.log('Local storage not available - not all functions will work on this browser');
-	            }
+	            currentUserNameMsg = 'Welcome ' + _Auth2.default.getCookie('voting-username');
 	            return _react2.default.createElement(
 	                'div',
 	                { className: 'container' },
@@ -21919,7 +21910,7 @@
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'container-fluid' },
-	                        _Auth2.default.isUserAuthenticated() ? _react2.default.createElement(
+	                        usrIsLoggedIn ? _react2.default.createElement(
 	                            'div',
 	                            { className: 'navbar-header' },
 	                            _react2.default.createElement(
@@ -21975,23 +21966,12 @@
 	                _react2.default.createElement(
 	                    'p',
 	                    null,
-	                    currentUserNameMsg
+	                    usrIsLoggedIn ? currentUserNameMsg : ''
 	                ),
 	                _react2.default.createElement(
 	                    'div',
 	                    null,
 	                    _react2.default.createElement(_Polls2.default, null)
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'row' },
-	                    _react2.default.createElement('div', { className: 'col-md-6 col-sm-6' }),
-	                    _react2.default.createElement('div', { className: 'col-md-6 col-sm-6' })
-	                ),
-	                _react2.default.createElement(
-	                    _reactRouter.Link,
-	                    { to: 'test' },
-	                    'test route here'
 	                )
 	            );
 	        }
@@ -29767,7 +29747,7 @@
 				list: []
 			};
 	
-			_this.editPollOption = _this.editPollOption.bind(_this);
+			//	this.editPollOption= this.editPollOption.bind(this)
 	
 			return _this;
 		}
@@ -29822,23 +29802,21 @@
 					});
 				});
 			}
-		}, {
-			key: 'editPollOption',
-			value: function editPollOption() {
-				console.log('edit poll option - needed?');
-				// TODO: redirect to correct 
-			}
+	
+			// editPollOption() {
+			// 	console.log('edit poll option - needed?')
+			// 	
+			// }
+	
 		}, {
 			key: 'render',
 			value: function render() {
-				var _this4 = this;
-	
 				var stylePoll = _styles2.default.polls;
 				var listItems = this.state.list.map(function (poll, i) {
 					return _react2.default.createElement(
 						'div',
 						{ key: i, style: stylePoll.pollwd },
-						_react2.default.createElement(_Poll2.default, { currentPoll: poll, editoption: _this4.editPollOption })
+						_react2.default.createElement(_Poll2.default, { currentPoll: poll })
 					);
 				});
 				return _react2.default.createElement(
@@ -29851,9 +29829,6 @@
 	
 		return Polls;
 	}(_react.Component);
-	// Todo: add this
-	// 	<CreatePoll onCreate={this.addPoll.bind(this)} />
-	
 	
 	exports.default = Polls;
 
@@ -30042,6 +30017,27 @@
 	    key: 'getToken',
 	    value: function getToken() {
 	      return localStorage.getItem('token');
+	    }
+	
+	    // Get Cookie via cookie name
+	    // 
+	
+	  }, {
+	    key: 'getCookie',
+	    value: function getCookie(cname) {
+	      var name = cname + "=";
+	      var decodedCookie = decodeURIComponent(document.cookie);
+	      var ca = decodedCookie.split(';');
+	      for (var i = 0; i < ca.length; i++) {
+	        var c = ca[i];
+	        while (c.charAt(0) == ' ') {
+	          c = c.substring(1);
+	        }
+	        if (c.indexOf(name) == 0) {
+	          return c.substring(name.length, c.length);
+	        }
+	      }
+	      return "";
 	    }
 	  }]);
 	
@@ -30270,7 +30266,6 @@
 	        _react2.default.createElement('input', {
 	          placeholder: 'E-mail',
 	          name: 'email',
-	          errorText: errors.email,
 	          onChange: onChange,
 	          value: user.email
 	        })
@@ -30283,7 +30278,6 @@
 	          type: 'password',
 	          name: 'password',
 	          onChange: onChange,
-	          errorText: errors.password,
 	          value: user.password
 	        })
 	      ),
@@ -30292,7 +30286,7 @@
 	        { className: 'button-line' },
 	        _react2.default.createElement(
 	          'button',
-	          { type: 'submit', label: 'Log in', primary: true },
+	          { type: 'submit', label: 'Log in' },
 	          'Log in'
 	        )
 	      ),
@@ -30366,65 +30360,67 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var pollidagain;
+	// class RadioRows extends Component {
 	
-	var RadioRows = function (_Component) {
-	    _inherits(RadioRows, _Component);
+	//     constructor(props) {
 	
-	    function RadioRows(props) {
-	        _classCallCheck(this, RadioRows);
+	//         super(props);
+	//         this.state = {
+	//             currentVoteResponse: '',
+	//             currentPollId: this.props.pollId
+	//         }
+	//     }   
 	
-	        var _this = _possibleConstructorReturn(this, (RadioRows.__proto__ || Object.getPrototypeOf(RadioRows)).call(this, props));
 	
-	        _this.state = {
-	            currentVoteResponse: '',
-	            currentPollId: _this.props.pollId
-	        };
-	        return _this;
-	    }
+	//     render(){
+	//             return (
+	//                 <div>
+	//                 <tr>
+	//                     <td>
+	//                     <input  name="radiobtns" 
+	//                         type="radio" 
+	//                         value={this.props.resp}
+	//                         />&emsp;{this.props.resp}
+	//                     </td>
+	//                     <td>
+	//                     {this.props.votes}
+	//                     </td>
+	//                 </tr>
+	//                 </div>
+	//             );
 	
-	    _createClass(RadioRows, [{
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement(
-	                'div',
-	                { key: this.props.index, className: 'responseBox' },
-	                _react2.default.createElement(
-	                    'span',
-	                    { className: 'float-right' },
-	                    'current score: ',
-	                    this.props.votes
-	                ),
-	                _react2.default.createElement(
-	                    'label',
-	                    null,
-	                    _react2.default.createElement('input', { name: 'radiobtns',
-	                        type: 'radio',
-	                        value: this.props.resp
-	                    }),
-	                    '\u2003',
-	                    this.props.resp
-	                )
-	            );
-	        }
-	    }]);
+	//     }
 	
-	    return RadioRows;
-	}(_react.Component);
+	// }
 	
-	RadioRows.propTypes = {
-	    resp: _react.PropTypes.string.isRequired,
-	    votes: _react.PropTypes.number.isRequired
-	};
+	/*
+	            <div key={this.props.index} className="responseBox">
+	                <span className="float-right">
+	                    current score: {this.props.votes}
+	                </span>
+	                <label><input  name="radiobtns" 
+	                        type="radio" 
+	                        value={this.props.resp}
+	                        />&emsp;{this.props.resp}
+	                </label>
+	            </div>
 	
-	var PollDetails = function (_Component2) {
-	    _inherits(PollDetails, _Component2);
+	*/
+	
+	// RadioRows.propTypes = {
+	//   resp: PropTypes.string.isRequired,
+	//   votes: PropTypes.number.isRequired
+	// };
+	
+	var PollDetails = function (_Component) {
+	    _inherits(PollDetails, _Component);
 	
 	    function PollDetails() {
 	        _classCallCheck(this, PollDetails);
 	
-	        var _this2 = _possibleConstructorReturn(this, (PollDetails.__proto__ || Object.getPrototypeOf(PollDetails)).call(this));
+	        var _this = _possibleConstructorReturn(this, (PollDetails.__proto__ || Object.getPrototypeOf(PollDetails)).call(this));
 	
-	        _this2.state = {
+	        _this.state = {
 	            selected: -1,
 	            editVisible: true,
 	            list: {
@@ -30440,14 +30436,14 @@
 	            }
 	        };
 	
-	        _this2.submit = _this2.submit.bind(_this2);
-	        return _this2;
+	        _this.submit = _this.submit.bind(_this);
+	        return _this;
 	    }
 	
 	    _createClass(PollDetails, [{
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
-	            var _this3 = this;
+	            var _this2 = this;
 	
 	            //console.log('componentDidMount (Polldetail): ' + this.props.location.pathname);
 	            var urlWithId = this.props.location.pathname;
@@ -30462,18 +30458,18 @@
 	
 	                //console.log('This particular polldetail RESULTS: ' + JSON.stringify(response.message));
 	
-	                _this3.setState({
+	                _this2.setState({
 	                    list: response.message
 	                });
 	
 	                //console.log("responses are ",this.state.list.responses)
 	
 	                // update chart
-	                var myData = _this3.state.data.datasets;
-	                var votesSoFar = _this3.state.list.responses.map(function (rv) {
+	                var myData = _this2.state.data.datasets;
+	                var votesSoFar = _this2.state.list.responses.map(function (rv) {
 	                    return rv.votes;
 	                });
-	                var respLabels = _this3.state.list.responses.map(function (r) {
+	                var respLabels = _this2.state.list.responses.map(function (r) {
 	                    return r.response;
 	                });
 	
@@ -30481,7 +30477,7 @@
 	                //  const numResponses = this.state.list.responses.length;
 	
 	                var colorsArray = [];
-	                colorsArray = _this3.state.list.responses.map(function (respColor) {
+	                colorsArray = _this2.state.list.responses.map(function (respColor) {
 	                    return "rgb(" + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + ")";
 	                    //     return ["'rgb(" + Math.floor(Math.random()*255) + ","+
 	                    //                       Math.floor(Math.random()*255) + "," +
@@ -30501,37 +30497,34 @@
 	                };
 	                myData.push(newElement);
 	                myData.shift();
-	                _this3.setState(_this3.state.data.datasets = myData);
-	                _this3.setState(_this3.state.data.labels = respLabels);
+	                _this2.setState(_this2.state.data.datasets = myData);
+	                _this2.setState(_this2.state.data.labels = respLabels);
 	            });
 	        }
 	    }, {
 	        key: 'deletefunc',
 	        value: function deletefunc() {
-	            console.log("deletefunc this", this);
-	            console.log('deletefunc pathname: ' + this.props.location.pathname);
+	
 	            console.log("pollidagain value", pollidagain);
 	
 	            _ApiManager2.default.del('/api/polls/' + pollidagain, null, function (err, response) {
 	                if (err) {
 	                    alert("Error: " + err);
 	                    return;
-	                } else if (err == null && response == null) {
-	                    console.log("DELETE: everything went well");
 	                } else {
-	                    console.log("DELETE: I dont know what happene");
+	                    console.log("DELETE: No errors.");
 	                }
 	            });
 	        }
 	    }, {
 	        key: 'submit',
 	        value: function submit(e) {
-	            var _this4 = this;
+	            var _this3 = this;
 	
 	            console.log('Time to handleNewVote');
 	            e.preventDefault();
 	
-	            //set something in storage to check on what polls user already voted.
+	            // TODO : set something in storage to check on what polls user already voted.
 	            //     //currentPollId
 	            //   if (typeof(Storage) !== "undefined") {
 	            // // Code for localStorage/sessionStorage.
@@ -30578,18 +30571,53 @@
 	                    return rv.votes;
 	                });
 	                chartValues.datasets[0].data = votesSoFar;
-	                _this4.setState({
+	                _this3.setState({
 	                    data: chartValues,
 	                    list: updatedList
 	                });
 	            });
 	        }
+	
+	        /*
+	             <RadioRows  key={index} 
+	                 pollId={this.state.list._id} resp={item.response} votes={item.votes} />
+	        */
+	
 	    }, {
 	        key: 'render',
 	        value: function render() {
 	            var responseList = this.state.list.responses.map(function (item, index) {
-	                return _react2.default.createElement(RadioRows, { key: index,
-	                    pollId: this.state.list._id, resp: item.response, votes: item.votes });
+	                return _react2.default.createElement(
+	                    'div',
+	                    { key: index, className: 'responseTableRow' },
+	                    _react2.default.createElement(
+	                        'table',
+	                        { className: 'responseTable' },
+	                        _react2.default.createElement(
+	                            'tr',
+	                            null,
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                _react2.default.createElement('input', { name: 'radiobtns',
+	                                    type: 'radio',
+	                                    value: item.response
+	                                }),
+	                                '\u2003',
+	                                item.response
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                _react2.default.createElement(
+	                                    'span',
+	                                    { className: 'score float-right' },
+	                                    item.votes
+	                                )
+	                            )
+	                        )
+	                    )
+	                );
 	            }.bind(this));
 	
 	            return _react2.default.createElement(
@@ -30609,7 +30637,21 @@
 	                        _react2.default.createElement(
 	                            'form',
 	                            { onSubmit: this.submit },
-	                            responseList,
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'gridWrapper' },
+	                                _react2.default.createElement(
+	                                    'div',
+	                                    { className: 'responseHeaderRow' },
+	                                    _react2.default.createElement(
+	                                        'span',
+	                                        { className: 'float-right' },
+	                                        'Score'
+	                                    ),
+	                                    'Option'
+	                                ),
+	                                responseList
+	                            ),
 	                            _react2.default.createElement(
 	                                'div',
 	                                { className: 'col-xs-12 text-center' },
@@ -62252,6 +62294,10 @@
 	
 	var _ApiManager2 = _interopRequireDefault(_ApiManager);
 	
+	var _Auth = __webpack_require__(252);
+	
+	var _Auth2 = _interopRequireDefault(_Auth);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -62259,8 +62305,8 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
 	//waste
+	
 	
 	var CreatePoll = function (_Component) {
 	    _inherits(CreatePoll, _Component);
@@ -62281,18 +62327,26 @@
 	    }
 	
 	    _createClass(CreatePoll, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var currentUser = _Auth2.default.getCookie('voting-username');
+	            this.setState({ author: currentUser });
+	        }
+	    }, {
 	        key: 'updatePoll',
 	        value: function updatePoll(event) {
 	
 	            // WRONG!!! Never mutate state!!
 	            // this.state.comment['username'] =event.target.value; 
+	
+	            // Take a copy of state and update that
 	            var updtPoll = Object.assign({}, this.state.poll);
 	            updtPoll[event.target.id] = event.target.value;
 	
+	            // then reset the new state
 	            this.setState({
 	                poll: updtPoll
 	            });
-	            console.log("poll", this.state.poll);
 	        }
 	    }, {
 	        key: 'submitPoll',
@@ -62325,7 +62379,11 @@
 	                _react2.default.createElement('br', null),
 	                _react2.default.createElement('input', { onChange: this.updatePoll.bind(this), id: 'pollquestion', className: 'form-control', type: 'text', placeholder: 'Poll question', value: this.state.poll.pollquestion }),
 	                _react2.default.createElement('br', null),
-	                _react2.default.createElement('input', { onChange: this.updatePoll.bind(this), id: 'author', className: 'form-control', type: 'text', placeholder: 'Author' }),
+	                'Author:',
+	                _react2.default.createElement('br', null),
+	                _react2.default.createElement('input', { id: 'author', className: 'form-control', type: 'text', placeholder: 'Author', value: this.state.author }),
+	                _react2.default.createElement('br', null),
+	                'Responses:',
 	                _react2.default.createElement('br', null),
 	                _react2.default.createElement('input', { onChange: this.updatePoll.bind(this), id: 'responses', className: 'form-control', type: 'text', placeholder: 'response', value: this.state.poll.responses }),
 	                _react2.default.createElement(

@@ -7,20 +7,40 @@ import {Link} from 'react-router';
 import EditPoll from '../presentation/EditPoll';
 
 var pollidagain;
-class RadioRows extends Component {
+// class RadioRows extends Component {
 
-    constructor(props) {
+//     constructor(props) {
          
-        super(props);
-        this.state = {
-            currentVoteResponse: '',
-            currentPollId: this.props.pollId
-        }
-    }   
+//         super(props);
+//         this.state = {
+//             currentVoteResponse: '',
+//             currentPollId: this.props.pollId
+//         }
+//     }   
    
 
-    render(){
-            return (
+//     render(){
+//             return (
+//                 <div>
+//                 <tr>
+//                     <td>
+//                     <input  name="radiobtns" 
+//                         type="radio" 
+//                         value={this.props.resp}
+//                         />&emsp;{this.props.resp}
+//                     </td>
+//                     <td>
+//                     {this.props.votes}
+//                     </td>
+//                 </tr>
+//                 </div>
+//             );
+
+//     }
+   
+// }
+
+/*
             <div key={this.props.index} className="responseBox">
                 <span className="float-right">
                     current score: {this.props.votes}
@@ -31,17 +51,14 @@ class RadioRows extends Component {
                         />&emsp;{this.props.resp}
                 </label>
             </div>
-            );
 
-    }
-   
-}
+*/
 
 
-RadioRows.propTypes = {
-  resp: PropTypes.string.isRequired,
-  votes: PropTypes.number.isRequired
-};
+// RadioRows.propTypes = {
+//   resp: PropTypes.string.isRequired,
+//   votes: PropTypes.number.isRequired
+// };
 
 class PollDetails extends Component {
 
@@ -137,9 +154,9 @@ class PollDetails extends Component {
         
 
     }
+    
     deletefunc(){
-        console.log("deletefunc this",this)
-        console.log('deletefunc pathname: ' + this.props.location.pathname);
+
         console.log("pollidagain value",pollidagain)
         
         Api.del('/api/polls/' + pollidagain, null, (err, response) => {
@@ -147,13 +164,9 @@ class PollDetails extends Component {
                 alert("Error: " + err); 
                 return;
             }
-            else if(err==null&&response==null)
-        
+            else
             {
-                console.log("DELETE: everything went well")
-            }
-            else{
-                console.log("DELETE: I dont know what happene")
+                console.log("DELETE: No errors.")
             }
         
         })
@@ -164,7 +177,7 @@ class PollDetails extends Component {
         console.log('Time to handleNewVote')
         e.preventDefault();
         
-        //set something in storage to check on what polls user already voted.
+        // TODO : set something in storage to check on what polls user already voted.
     //     //currentPollId
     //   if (typeof(Storage) !== "undefined") {
     // // Code for localStorage/sessionStorage.
@@ -221,11 +234,31 @@ class PollDetails extends Component {
         
     }
    
+   /*
+        <RadioRows  key={index} 
+            pollId={this.state.list._id} resp={item.response} votes={item.votes} />
+   */
     render() {
         let responseList = this.state.list.responses.map(function(item, index){
             return (
-                <RadioRows  key={index} 
-                pollId={this.state.list._id} resp={item.response} votes={item.votes} />
+                <div key={index} className="responseTableRow">
+
+                    <table className="responseTable">
+                    <tr>
+                        <td>
+                            <input name="radiobtns" 
+                                type="radio" 
+                                value={item.response}
+                                />&emsp;{item.response}
+                        </td>
+                        <td>
+                            <span className="score float-right">
+                                {item.votes}
+                            </span>
+                        </td>
+                    </tr>
+                    </table>
+                </div>
             )
         }.bind(this)); 
   
@@ -237,7 +270,14 @@ class PollDetails extends Component {
                     <h2>{this.state.list.pollquestion}</h2>
                     
                     <form onSubmit={this.submit}>
+                        <div className="gridWrapper">
+                            <div className="responseHeaderRow">
+                             <span className="float-right">Score</span>
+                                Option 
+                            </div>
+                            
                             {responseList}
+                        </div>
                         <div className="col-xs-12 text-center">
                            <input type="submit" 
                             className="btn-sm"

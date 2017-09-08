@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Poll from './Poll';
 import Api from '../../utils/ApiManager';
 //waste
+import Auth from '../../utils/Auth';
 
 class CreatePoll extends Component {
     constructor(){
@@ -15,18 +16,25 @@ class CreatePoll extends Component {
         };
     }
     
+    componentDidMount() {
+        const currentUser = Auth.getCookie('voting-username');
+        this.setState({ author: currentUser });
+    }
+    
     updatePoll(event){
 
         // WRONG!!! Never mutate state!!
         // this.state.comment['username'] =event.target.value; 
+        
+        // Take a copy of state and update that
         let updtPoll = Object.assign({}, this.state.poll);
         updtPoll[event.target.id] = event.target.value;
         
-
+        // then reset the new state
         this.setState({
             poll: updtPoll
         });
-        console.log("poll",this.state.poll)
+
         
     }
    
@@ -63,15 +71,19 @@ class CreatePoll extends Component {
 			<div>
               Add a new poll:<br/>
                     
-                    <input onChange={this.updatePoll.bind(this)} id="pollquestion" className="form-control" type="text" placeholder="Poll question" value={this.state.poll.pollquestion}/>
-                    <br/>
-                    <input onChange={this.updatePoll.bind(this)} id="author" className="form-control" type="text" placeholder="Author"/>
-                    <br/>
-                    <input onChange={this.updatePoll.bind(this)} id="responses" className="form-control" type="text" placeholder="response" value={this.state.poll.responses}/>
-                    <p>NB: add multiple responses using ; </p>
-                 
-                    <br/>
-                    <button onClick={this.submitPoll.bind(this)} className="btn btn-info" >Send</button>
+                <input onChange={this.updatePoll.bind(this)} id="pollquestion" className="form-control" type="text" placeholder="Poll question" value={this.state.poll.pollquestion}/>
+                <br/>
+                Author:
+                <br/>
+                <input id="author" className="form-control" type="text" placeholder="Author" value={this.state.author}/>
+                <br/>
+                Responses:
+                <br/>
+                <input onChange={this.updatePoll.bind(this)} id="responses" className="form-control" type="text" placeholder="response" value={this.state.poll.responses}/>
+                <p>NB: add multiple responses using ; </p>
+             
+                <br/>
+                <button onClick={this.submitPoll.bind(this)} className="btn btn-info" >Send</button>
             </div>
 	    )
     }

@@ -70,6 +70,7 @@ function validateLoginForm(payload) {
     message = 'Check the form for errors.';
   }
 
+  console.log('validation checks finished');
   return {
     success: isFormValid,
     message,
@@ -142,7 +143,9 @@ router.post('/login', (req, res, next) => {
       });
     }
 
-    console.log('logging in user::', userData);
+    console.log('logging in user & setting cookie::', userData);
+    res.cookie('voting-username', userData.name, {
+      expire: new Date() + 9999});
     return res.json({
       success: true,
       message: 'You have successfully logged in!',

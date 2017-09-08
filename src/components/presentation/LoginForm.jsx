@@ -23,7 +23,6 @@ const LoginForm = ({
         <input
           placeholder="E-mail"
           name="email"
-          errorText={errors.email}
           onChange={onChange}
           value={user.email}
         />
@@ -35,13 +34,12 @@ const LoginForm = ({
           type="password"
           name="password"
           onChange={onChange}
-          errorText={errors.password}
           value={user.password}
         />
       </div>
 
       <div className="button-line">
-        <button type="submit" label="Log in" primary>Log in</button>
+        <button type="submit" label="Log in">Log in</button>
       </div>
 
       <div>Don't have an account? <a href='/user/register'>Create one</a>.</div>

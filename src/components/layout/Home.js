@@ -25,56 +25,36 @@ class Home extends Component {
     render() {
         var currentUserNameMsg = '';
         console.log('Home user is auth...', Auth.isUserAuthenticated());
-        
-        //const homeStyle = styles.frontpage; // needs to be inside the render func!
-        if (this.storageAvailable('localStorage')) {
-          if(!window.localStorage.getItem(locStoreKeyName)) {  
-            // cehck
-            //this._saveToLocalStorage(locStoreKeyName, JSON.stringify(recipeData));                  
-          } else {
-            currentUserNameMsg = 'Welcome ' + window.localStorage.getItem(locStoreKeyName)  
-          }
-        } else {
-          console.log('Local storage not available - not all functions will work on this browser');
-        }
+        var usrIsLoggedIn = Auth.isUserAuthenticated();
+
+        currentUserNameMsg = 'Welcome ' + Auth.getCookie('voting-username');
         return (
             <div className="container">
-            <h1>The Polling Station</h1>
-            <nav role="navigation">
-             <div className="container-fluid">
-                 {Auth.isUserAuthenticated() ?
-                <div className="navbar-header">
-                    <ul className="nav navbar-nav navbar-right">
-                        <li><Link to="logout">Log out</Link></li>
-                        <li><Link to="createPoll">Create Poll</Link></li>
-                    </ul>
+                <h1>The Polling Station</h1>
+                <nav role="navigation">
+                 <div className="container-fluid">
+                    {usrIsLoggedIn ?
+                        <div className="navbar-header">
+                            <ul className="nav navbar-nav navbar-right">
+                                <li><Link to="logout">Log out</Link></li>
+                                <li><Link to="createPoll">Create Poll</Link></li>
+                            </ul>
+                        </div>
+                        : 
+                        <div className="navbar-header">
+                            <ul className="nav navbar-nav navbar-right">
+                              <li><a href="/login" title="signin">Sign in</a></li>
+                              <li><a href="/user/register" title="register">Register</a></li>
+                            </ul>
+                        </div>
+                    }
+                 </div>
+                </nav>
+                <p>{usrIsLoggedIn ? currentUserNameMsg : ''}</p>
+                <div>
+                    <Polls />
                 </div>
-                : 
-                <div className="navbar-header">
-                    <ul className="nav navbar-nav navbar-right">
-                      <li><a href="/login" title="signin">Sign in</a></li>
-                      <li><a href="/user/register" title="register">Register</a></li>
-                    </ul>
-                </div>
-                 }
-             </div>
-            </nav>
-            <p>{currentUserNameMsg}</p>
-            <div>
-                <Polls />
-            </div>
-                <div className="row">
-                    <div className="col-md-6 col-sm-6">
-                        
-                        
-                    </div>
-                    <div className="col-md-6 col-sm-6">
-                       
-                    </div>
-                    
-                </div>
-                <Link to="test">test route here</Link>
-                
+
             </div>
         )
     }
