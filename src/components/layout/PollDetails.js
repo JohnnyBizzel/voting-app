@@ -7,58 +7,7 @@ import {Link} from 'react-router';
 import EditPoll from '../presentation/EditPoll';
 
 var pollidagain;
-// class RadioRows extends Component {
 
-//     constructor(props) {
-         
-//         super(props);
-//         this.state = {
-//             currentVoteResponse: '',
-//             currentPollId: this.props.pollId
-//         }
-//     }   
-   
-
-//     render(){
-//             return (
-//                 <div>
-//                 <tr>
-//                     <td>
-//                     <input  name="radiobtns" 
-//                         type="radio" 
-//                         value={this.props.resp}
-//                         />&emsp;{this.props.resp}
-//                     </td>
-//                     <td>
-//                     {this.props.votes}
-//                     </td>
-//                 </tr>
-//                 </div>
-//             );
-
-//     }
-   
-// }
-
-/*
-            <div key={this.props.index} className="responseBox">
-                <span className="float-right">
-                    current score: {this.props.votes}
-                </span>
-                <label><input  name="radiobtns" 
-                        type="radio" 
-                        value={this.props.resp}
-                        />&emsp;{this.props.resp}
-                </label>
-            </div>
-
-*/
-
-
-// RadioRows.propTypes = {
-//   resp: PropTypes.string.isRequired,
-//   votes: PropTypes.number.isRequired
-// };
 
 class PollDetails extends Component {
 
@@ -96,8 +45,9 @@ class PollDetails extends Component {
 
         this.submit = this.submit.bind(this);
     }
+    
     componentDidMount(){
-        //console.log('componentDidMount (Polldetail): ' + this.props.location.pathname);
+ 
         var urlWithId =this.props.location.pathname;
         
         var pollID = urlWithId.split('/').pop();
@@ -108,15 +58,12 @@ class PollDetails extends Component {
                 return;
             }
         
-            //console.log('This particular polldetail RESULTS: ' + JSON.stringify(response.message));
-        
+
             this.setState({
                     list: response.message
                 });
-        
-            
-            //console.log("responses are ",this.state.list.responses)
-            
+
+
             // update chart
             var myData = this.state.data.datasets;
             var votesSoFar = this.state.list.responses.map(function(rv) { return rv.votes; });
@@ -234,10 +181,6 @@ class PollDetails extends Component {
         
     }
    
-   /*
-        <RadioRows  key={index} 
-            pollId={this.state.list._id} resp={item.response} votes={item.votes} />
-   */
     render() {
         let responseList = this.state.list.responses.map(function(item, index){
             return (
@@ -296,19 +239,3 @@ class PollDetails extends Component {
 }
 
 export default PollDetails;
-
-// Removed buttons from lines 234, 235:
-
-//  <button onClick={() => this.deletefunc()} type="button">Delete</button>
-// <button className="btn btn-primary"><Link to={`/editdamnpoll/${pollidagain}`}>Edit the damn  Poll </Link> </button>
-
-/*
-                    <form onSubmit={this.submit}>
-                            {responseList}
-                        <div className="col-xs-12 text-center">
-                           <input type="submit" 
-                            className="btn-sm"
-                            value="Vote"/>
-                        </div>
-                    </form>
-*/                    

@@ -26,8 +26,14 @@ class Home extends Component {
         var currentUserNameMsg = '';
         console.log('Home user is auth...', Auth.isUserAuthenticated());
         var usrIsLoggedIn = Auth.isUserAuthenticated();
-
-        currentUserNameMsg = 'Welcome ' + Auth.getCookie('voting-username');
+        var currentUser = Auth.getCookie('voting-username');
+        if (currentUser) { 
+            currentUserNameMsg = 'Welcome ' + currentUser;
+        }
+        else {
+            currentUserNameMsg = '';
+            currentUser = '';
+        }
         return (
             <div className="container">
                 <h1>The Polling Station</h1>
@@ -52,7 +58,7 @@ class Home extends Component {
                 </nav>
                 <p>{usrIsLoggedIn ? currentUserNameMsg : ''}</p>
                 <div>
-                    <Polls />
+                    <Polls curUsr={currentUser} />
                 </div>
 
             </div>

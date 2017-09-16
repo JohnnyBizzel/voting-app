@@ -2,18 +2,18 @@
 import React, { Component } from 'react';
 import styles from '../layout/styles';
 import { Router, Route, IndexRoute, Link, IndexLink, browserHistory } from 'react-router';
-
+import Auth from '../../utils/Auth';
 
 //<Link to="/Polldetail">Some question</Link>
 //<Link to={`/user/${_id}`}>
 //<Link to={{ pathname: 'Polldetailfull/', query: { id: this.props.currentPoll._id } }}>{this.props.currentPoll.pollquestion}</Link>
 
 class Poll extends Component {
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = {
             linkStyle: 'normal',
-            currentUser: 'tester'
+            currentUser: ''
         }
         this.onHover = this.onHover.bind(this)
         this.offHover = this.offHover.bind(this)
@@ -21,7 +21,8 @@ class Poll extends Component {
     
     componentDidMount(){
         //console.log("here's the id",this.props.currentPoll._id)
-        
+        var curUsr = this.props.currentUser;
+        this.setState({ currentUser : curUsr });
     }
     
     onHover(e) {
@@ -48,7 +49,7 @@ class Poll extends Component {
 				    </h2>
 				        <br/>
 				        <span>by {this.props.currentPoll.author}</span>
-				        { this.state.currentUser == 'tester' ?
+				        { this.state.currentUser == this.props.currentPoll.author ?
 				        <Link className="btn" style={this.state.linkStyle == 'normal' ?
 				                    zoneStyle.link :
 				                    zoneStyle.linkHover}

@@ -143,9 +143,10 @@ router.post('/login', (req, res, next) => {
       });
     }
 
-    console.log('logging in user & setting cookie::', userData);
+    /* logging in user & setting cookie */
     res.cookie('voting-username', userData.name, {
       expire: new Date() + 9999});
+      
     return res.json({
       success: true,
       message: 'You have successfully logged in!',

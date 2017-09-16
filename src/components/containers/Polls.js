@@ -7,8 +7,8 @@ import styles from '../layout/styles';
 
 
 class Polls extends Component {
-	constructor() {
-		super()
+	constructor(props) {
+		super(props)
 		this.state = {
 			selected: 0,
 			list: []
@@ -76,7 +76,7 @@ class Polls extends Component {
 		const listItems = this.state.list.map((poll, i) =>  {
 			return (
 				<div key={i} style={stylePoll.pollwd}>
-					<Poll currentPoll={poll} /> 
+					<Poll currentPoll={poll} currentUser={this.props.curUsr} /> 
 				</div>
 			)
 		});

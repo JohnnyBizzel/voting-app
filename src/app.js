@@ -1,22 +1,15 @@
 import React from 'react'; // needed
 import ReactDOM from 'react-dom';
 import Home from './components/layout/Home.js';
-
 import Login from './Login/Login';
 import PollDetails from './components/layout/PollDetails.js';
 import EditPoll from './components/presentation/EditPoll.js';
 import CreatePoll from './components/presentation/CreatePoll';
-
 import Container from './components/containers/Container.js';
-
-
 import {Route,Router,browserHistory,IndexRoute} from 'react-router';
-
-//import makeMainRoutes from './components/routes'
 import Auth from './utils/Auth';
 
 const mountNode = document.getElementById('root');
-
 
 ReactDOM.render( 
   <Router history={browserHistory}>
@@ -25,6 +18,9 @@ ReactDOM.render(
       <Route path="login" component={Login} />
       <Route path="logout" onEnter={(nextState, replace) => {
         Auth.deauthenticateUser();
+        
+        console.log('Logging out src/app.js');
+        Auth.clearCookie();
         // change the current URL to /
         replace('/');}} />
       <Route path="Polldetailfull/:id" component={PollDetails}  />

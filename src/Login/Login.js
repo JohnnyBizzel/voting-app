@@ -100,6 +100,7 @@ class LoginPage extends React.Component {
    * Render the component.
    */
   render() {
+    console.log('render Login.js');
     return (
       <LoginForm
         onSubmit={this.processForm}

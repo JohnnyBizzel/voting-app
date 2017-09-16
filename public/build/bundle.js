@@ -86,10 +86,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var mountNode = document.getElementById('root');
-	
-	//import makeMainRoutes from './components/routes'
-	// needed
+	var mountNode = document.getElementById('root'); // needed
 	
 	
 	_reactDom2.default.render(_react2.default.createElement(
@@ -102,6 +99,9 @@
 	    _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _Login2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'logout', onEnter: function onEnter(nextState, replace) {
 	        _Auth2.default.deauthenticateUser();
+	
+	        console.log('Logging out src/app.js');
+	        _Auth2.default.clearCookie();
 	        // change the current URL to /
 	        replace('/');
 	      } }),
@@ -21894,8 +21894,13 @@
 	            var currentUserNameMsg = '';
 	            console.log('Home user is auth...', _Auth2.default.isUserAuthenticated());
 	            var usrIsLoggedIn = _Auth2.default.isUserAuthenticated();
-	
-	            currentUserNameMsg = 'Welcome ' + _Auth2.default.getCookie('voting-username');
+	            var currentUser = _Auth2.default.getCookie('voting-username');
+	            if (currentUser) {
+	                currentUserNameMsg = 'Welcome ' + currentUser;
+	            } else {
+	                currentUserNameMsg = '';
+	                currentUser = '';
+	            }
 	            return _react2.default.createElement(
 	                'div',
 	                { className: 'container' },
@@ -21971,7 +21976,7 @@
 	                _react2.default.createElement(
 	                    'div',
 	                    null,
-	                    _react2.default.createElement(_Polls2.default, null)
+	                    _react2.default.createElement(_Polls2.default, { curUsr: currentUser })
 	                )
 	            );
 	        }
@@ -29737,10 +29742,10 @@
 	var Polls = function (_Component) {
 		_inherits(Polls, _Component);
 	
-		function Polls() {
+		function Polls(props) {
 			_classCallCheck(this, Polls);
 	
-			var _this = _possibleConstructorReturn(this, (Polls.__proto__ || Object.getPrototypeOf(Polls)).call(this));
+			var _this = _possibleConstructorReturn(this, (Polls.__proto__ || Object.getPrototypeOf(Polls)).call(this, props));
 	
 			_this.state = {
 				selected: 0,
@@ -29811,12 +29816,14 @@
 		}, {
 			key: 'render',
 			value: function render() {
+				var _this4 = this;
+	
 				var stylePoll = _styles2.default.polls;
 				var listItems = this.state.list.map(function (poll, i) {
 					return _react2.default.createElement(
 						'div',
 						{ key: i, style: stylePoll.pollwd },
-						_react2.default.createElement(_Poll2.default, { currentPoll: poll })
+						_react2.default.createElement(_Poll2.default, { currentPoll: poll, currentUser: _this4.props.curUsr })
 					);
 				});
 				return _react2.default.createElement(
@@ -29854,6 +29861,10 @@
 	
 	var _reactRouter = __webpack_require__(194);
 	
+	var _Auth = __webpack_require__(252);
+	
+	var _Auth2 = _interopRequireDefault(_Auth);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -29870,14 +29881,14 @@
 	var Poll = function (_Component) {
 	    _inherits(Poll, _Component);
 	
-	    function Poll() {
+	    function Poll(props) {
 	        _classCallCheck(this, Poll);
 	
-	        var _this = _possibleConstructorReturn(this, (Poll.__proto__ || Object.getPrototypeOf(Poll)).call(this));
+	        var _this = _possibleConstructorReturn(this, (Poll.__proto__ || Object.getPrototypeOf(Poll)).call(this, props));
 	
 	        _this.state = {
 	            linkStyle: 'normal',
-	            currentUser: 'tester'
+	            currentUser: ''
 	        };
 	        _this.onHover = _this.onHover.bind(_this);
 	        _this.offHover = _this.offHover.bind(_this);
@@ -29888,7 +29899,8 @@
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
 	            //console.log("here's the id",this.props.currentPoll._id)
-	
+	            var curUsr = this.props.currentUser;
+	            this.setState({ currentUser: curUsr });
 	        }
 	    }, {
 	        key: 'onHover',
@@ -29925,7 +29937,7 @@
 	                    'by ',
 	                    this.props.currentPoll.author
 	                ),
-	                this.state.currentUser == 'tester' ? _react2.default.createElement(
+	                this.state.currentUser == this.props.currentPoll.author ? _react2.default.createElement(
 	                    _reactRouter.Link,
 	                    { className: 'btn', style: this.state.linkStyle == 'normal' ? zoneStyle.link : zoneStyle.linkHover,
 	                        onMouseOver: this.onHover,
@@ -30005,6 +30017,7 @@
 	    value: function deauthenticateUser() {
 	      localStorage.removeItem('token');
 	      localStorage.removeItem('PollingStation_usr');
+	      // Remove cookie also
 	    }
 	
 	    /**
@@ -30038,6 +30051,22 @@
 	        }
 	      }
 	      return "";
+	    }
+	
+	    // clear cookie for the user name
+	    //
+	
+	  }, {
+	    key: 'clearCookie',
+	    value: function clearCookie() {
+	      var cookies = document.cookie.split(";");
+	
+	      for (var i = 0; i < cookies.length; i++) {
+	        var cookie = cookies[i];
+	        var eqPos = cookie.indexOf("=");
+	        var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+	        if (name.trim().toLowerCase() == 'voting-username') document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+	      }
 	    }
 	  }]);
 	
@@ -30191,6 +30220,7 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      console.log('render Login.js');
 	      return _react2.default.createElement(_LoginForm2.default, {
 	        onSubmit: this.processForm,
 	        onChange: this.changeUser,
@@ -30360,57 +30390,6 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var pollidagain;
-	// class RadioRows extends Component {
-	
-	//     constructor(props) {
-	
-	//         super(props);
-	//         this.state = {
-	//             currentVoteResponse: '',
-	//             currentPollId: this.props.pollId
-	//         }
-	//     }   
-	
-	
-	//     render(){
-	//             return (
-	//                 <div>
-	//                 <tr>
-	//                     <td>
-	//                     <input  name="radiobtns" 
-	//                         type="radio" 
-	//                         value={this.props.resp}
-	//                         />&emsp;{this.props.resp}
-	//                     </td>
-	//                     <td>
-	//                     {this.props.votes}
-	//                     </td>
-	//                 </tr>
-	//                 </div>
-	//             );
-	
-	//     }
-	
-	// }
-	
-	/*
-	            <div key={this.props.index} className="responseBox">
-	                <span className="float-right">
-	                    current score: {this.props.votes}
-	                </span>
-	                <label><input  name="radiobtns" 
-	                        type="radio" 
-	                        value={this.props.resp}
-	                        />&emsp;{this.props.resp}
-	                </label>
-	            </div>
-	
-	*/
-	
-	// RadioRows.propTypes = {
-	//   resp: PropTypes.string.isRequired,
-	//   votes: PropTypes.number.isRequired
-	// };
 	
 	var PollDetails = function (_Component) {
 	    _inherits(PollDetails, _Component);
@@ -30445,7 +30424,6 @@
 	        value: function componentDidMount() {
 	            var _this2 = this;
 	
-	            //console.log('componentDidMount (Polldetail): ' + this.props.location.pathname);
 	            var urlWithId = this.props.location.pathname;
 	
 	            var pollID = urlWithId.split('/').pop();
@@ -30456,13 +30434,9 @@
 	                    return;
 	                }
 	
-	                //console.log('This particular polldetail RESULTS: ' + JSON.stringify(response.message));
-	
 	                _this2.setState({
 	                    list: response.message
 	                });
-	
-	                //console.log("responses are ",this.state.list.responses)
 	
 	                // update chart
 	                var myData = _this2.state.data.datasets;
@@ -30577,12 +30551,6 @@
 	                });
 	            });
 	        }
-	
-	        /*
-	             <RadioRows  key={index} 
-	                 pollId={this.state.list._id} resp={item.response} votes={item.votes} />
-	        */
-	
 	    }, {
 	        key: 'render',
 	        value: function render() {
@@ -30675,22 +30643,6 @@
 	}(_react.Component);
 	
 	exports.default = PollDetails;
-	
-	// Removed buttons from lines 234, 235:
-	
-	//  <button onClick={() => this.deletefunc()} type="button">Delete</button>
-	// <button className="btn btn-primary"><Link to={`/editdamnpoll/${pollidagain}`}>Edit the damn  Poll </Link> </button>
-	
-	/*
-	                    <form onSubmit={this.submit}>
-	                            {responseList}
-	                        <div className="col-xs-12 text-center">
-	                           <input type="submit" 
-	                            className="btn-sm"
-	                            value="Vote"/>
-	                        </div>
-	                    </form>
-	*/
 
 /***/ },
 /* 256 */

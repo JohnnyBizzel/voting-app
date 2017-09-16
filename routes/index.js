@@ -21,7 +21,12 @@ router.get('/user/register', function(req, res, next) {
 
 // Perform session logout and redirect to homepage
 router.get('/logout', function(req, res){
+  
+  console.log('>>>>>router log out<<<<<<');
+    
   req.logout();
+  // res.cookie("voting-username", ''); // rename a cookie
+  res.clearCookie("voting-username"); // delete cookie
   res.redirect('/');
 });
 
@@ -68,6 +73,8 @@ router.post('/register', function(req, res){
 });
 
 
+// AUTH0 versons...???
+
 // router.post('/user/login',
 //   passport.authenticate('local', {successRedirect:'/', failureRedirect:'/user/login',failureFlash: true}),
 //   function(req, res) {
@@ -75,12 +82,13 @@ router.post('/register', function(req, res){
 //     res.redirect('/');
 //   });
 
-router.get('/logout', function(req, res){
-	req.logout();
+// router.get('/logout', function(req, res){
 
-	req.flash('success_msg', 'You are logged out');
+// 	req.logout();
 
-	res.redirect('/user/login');
-});
+// 	req.flash('success_msg', 'You are logged out');
+
+// 	res.redirect('/user/login');
+// });
 
 module.exports = router;
