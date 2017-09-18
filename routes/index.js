@@ -20,15 +20,15 @@ router.get('/user/register', function(req, res, next) {
 //   });
 
 // Perform session logout and redirect to homepage
-router.get('/logout', function(req, res){
+// router.get('/logout', function(req, res){
   
-  console.log('>>>>>router log out<<<<<<');
+//   console.log('>>>>>router log out<<<<<<');
     
-  req.logout();
-  // res.cookie("voting-username", ''); // rename a cookie
-  res.clearCookie("voting-username"); // delete cookie
-  res.redirect('/');
-});
+//   req.logout();
+//   // res.cookie("voting-username", ''); // rename a cookie
+//   res.clearCookie("voting-username"); // delete cookie
+//   res.redirect('/');
+// });
 
 
   /* GET home page. */

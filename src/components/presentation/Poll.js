@@ -2,11 +2,6 @@
 import React, { Component } from 'react';
 import styles from '../layout/styles';
 import { Router, Route, IndexRoute, Link, IndexLink, browserHistory } from 'react-router';
-import Auth from '../../utils/Auth';
-
-//<Link to="/Polldetail">Some question</Link>
-//<Link to={`/user/${_id}`}>
-//<Link to={{ pathname: 'Polldetailfull/', query: { id: this.props.currentPoll._id } }}>{this.props.currentPoll.pollquestion}</Link>
 
 class Poll extends Component {
     constructor(props) {
@@ -20,7 +15,6 @@ class Poll extends Component {
     }
     
     componentDidMount(){
-        //console.log("here's the id",this.props.currentPoll._id)
         var curUsr = this.props.currentUser;
         this.setState({ currentUser : curUsr });
     }
@@ -63,8 +57,3 @@ class Poll extends Component {
 }
 
 export default Poll;
-
-/* 
-REMOVED Login link here:
-				        <Link style={zoneStyle.link} to="login">Log in</Link>
-*/

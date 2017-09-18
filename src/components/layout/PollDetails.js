@@ -104,8 +104,6 @@ class PollDetails extends Component {
     
     deletefunc(){
 
-        console.log("pollidagain value",pollidagain)
-        
         Api.del('/api/polls/' + pollidagain, null, (err, response) => {
             if (err) { 
                 alert("Error: " + err); 
@@ -113,6 +111,7 @@ class PollDetails extends Component {
             }
             else
             {
+                // TODO DELETE Poll
                 console.log("DELETE: No errors.")
             }
         
@@ -121,7 +120,7 @@ class PollDetails extends Component {
     }
    
     submit(e) { 
-        console.log('Time to handleNewVote')
+        // Time to handleNewVote
         e.preventDefault();
         
         // TODO : set something in storage to check on what polls user already voted.
@@ -134,18 +133,22 @@ class PollDetails extends Component {
     //   }
         
   
-        var form = e.target
-        const selectedRadio = form.elements.radiobtns.value
-        const pollId = this.state.list._id
+        var form = e.target;
+        const selectedRadio = form.elements.radiobtns.value;
+        const pollId = this.state.list._id;
 
         let updatedList = Object.assign([], this.state.list);
         let chartValues = Object.assign({}, this.state.data);
         console.log(this.state.list.responses);
         const idx = this.state.list.responses.findIndex(function(elem) { 
                                     return elem.response == selectedRadio;});
-                                    console.log(idx);
+        console.log(idx);
+        if (idx < 0) {
+            // No option selected
+            return;
+        }
         const totalVotes = this.state.list.responses[idx].votes + 1;
-        const rId = this.state.list.responses[idx].respID
+        const rId = this.state.list.responses[idx].respID;
         let newVotesObj = { respID: rId, response: selectedRadio, 
                             votes: totalVotes,
                             operation: '[UPDATE]'
@@ -169,7 +172,8 @@ class PollDetails extends Component {
             
             // Get doughnut to re-draw chart. (using a data store?)
             var votesSoFar = updatedList.responses.map(function(rv) { return rv.votes; });
-            chartValues.datasets[0].data = votesSoFar
+            chartValues.datasets[0].data = votesSoFar;
+            
             this.setState({ 
               data: chartValues,
               list: updatedList
@@ -202,23 +206,20 @@ class PollDetails extends Component {
                     </tr>
                     </table>
                 </div>
-            )
+            );
         }.bind(this)); 
   
         return(
         <div className="container">
             <div className="row">
                 <div className="col-md-6">
-                    
                     <h2>{this.state.list.pollquestion}</h2>
-                    
                     <form onSubmit={this.submit}>
                         <div className="gridWrapper">
                             <div className="responseHeaderRow">
                              <span className="float-right">Score</span>
                                 Option 
                             </div>
-                            
                             {responseList}
                         </div>
                         <div className="col-xs-12 text-center">
@@ -227,8 +228,6 @@ class PollDetails extends Component {
                             value="Vote"/>
                         </div>
                     </form>
-                    
-                    
                 </div>
                 <div className="col-md-6">
                     <Doughnut data={this.state.data} />

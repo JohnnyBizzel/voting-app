@@ -103,10 +103,16 @@
 	        console.log('Logging out src/app.js');
 	        _Auth2.default.clearCookie();
 	        // change the current URL to /
+	
 	        replace('/');
-	      } }),
+	        /* global location */
+	        location.reload();
+	      }
+	    }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'Polldetailfull/:id', component: _PollDetails2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'Editthepoll/:id', component: _EditPoll2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'Editthepoll/:id', getComponent: function getComponent(location, callback) {
+	        _Auth2.default.isUserAuthenticated() ? callback(null, _EditPoll2.default) : callback(null, _Home2.default);
+	      } }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'createPoll', getComponent: function getComponent(location, callback) {
 	        if (_Auth2.default.isUserAuthenticated()) {
 	          callback(null, _CreatePoll2.default);
@@ -116,6 +122,19 @@
 	      } })
 	  )
 	), mountNode);
+	
+	/*
+	      <Route path="logout" onEnter={(nextState, replace) => {
+	      Auth.deauthenticateUser();
+	      
+	      console.log('Logging out src/app.js');
+	      Auth.clearCookie();
+	      // change the current URL to /
+	      
+	      replace('/');
+	        location.reload();
+	      }} />
+	*/
 
 /***/ },
 /* 1 */
@@ -29751,9 +29770,6 @@
 				selected: 0,
 				list: []
 			};
-	
-			//	this.editPollOption= this.editPollOption.bind(this)
-	
 			return _this;
 		}
 	
@@ -29807,12 +29823,6 @@
 					});
 				});
 			}
-	
-			// editPollOption() {
-			// 	console.log('edit poll option - needed?')
-			// 	
-			// }
-	
 		}, {
 			key: 'render',
 			value: function render() {
@@ -29861,10 +29871,6 @@
 	
 	var _reactRouter = __webpack_require__(194);
 	
-	var _Auth = __webpack_require__(252);
-	
-	var _Auth2 = _interopRequireDefault(_Auth);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -29873,10 +29879,6 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // presentational componet
 	
-	
-	//<Link to="/Polldetail">Some question</Link>
-	//<Link to={`/user/${_id}`}>
-	//<Link to={{ pathname: 'Polldetailfull/', query: { id: this.props.currentPoll._id } }}>{this.props.currentPoll.pollquestion}</Link>
 	
 	var Poll = function (_Component) {
 	    _inherits(Poll, _Component);
@@ -29898,7 +29900,6 @@
 	    _createClass(Poll, [{
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
-	            //console.log("here's the id",this.props.currentPoll._id)
 	            var curUsr = this.props.currentUser;
 	            this.setState({ currentUser: curUsr });
 	        }
@@ -29956,11 +29957,6 @@
 	}(_react.Component);
 	
 	exports.default = Poll;
-	
-	/* 
-	REMOVED Login link here:
-					        <Link style={zoneStyle.link} to="login">Log in</Link>
-	*/
 
 /***/ },
 /* 252 */
@@ -30479,13 +30475,12 @@
 	        key: 'deletefunc',
 	        value: function deletefunc() {
 	
-	            console.log("pollidagain value", pollidagain);
-	
 	            _ApiManager2.default.del('/api/polls/' + pollidagain, null, function (err, response) {
 	                if (err) {
 	                    alert("Error: " + err);
 	                    return;
 	                } else {
+	                    // TODO DELETE Poll
 	                    console.log("DELETE: No errors.");
 	                }
 	            });
@@ -30495,7 +30490,7 @@
 	        value: function submit(e) {
 	            var _this3 = this;
 	
-	            console.log('Time to handleNewVote');
+	            // Time to handleNewVote
 	            e.preventDefault();
 	
 	            // TODO : set something in storage to check on what polls user already voted.
@@ -30519,6 +30514,10 @@
 	                return elem.response == selectedRadio;
 	            });
 	            console.log(idx);
+	            if (idx < 0) {
+	                // No option selected
+	                return;
+	            }
 	            var totalVotes = this.state.list.responses[idx].votes + 1;
 	            var rId = this.state.list.responses[idx].respID;
 	            var newVotesObj = { respID: rId, response: selectedRadio,
@@ -30545,6 +30544,7 @@
 	                    return rv.votes;
 	                });
 	                chartValues.datasets[0].data = votesSoFar;
+	
 	                _this3.setState({
 	                    data: chartValues,
 	                    list: updatedList

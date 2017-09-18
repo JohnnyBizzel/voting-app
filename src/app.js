@@ -22,9 +22,17 @@ ReactDOM.render(
         console.log('Logging out src/app.js');
         Auth.clearCookie();
         // change the current URL to /
-        replace('/');}} />
+        
+        replace('/');
+        /* global location */
+        location.reload();
+        }} 
+      />
       <Route path="Polldetailfull/:id" component={PollDetails}  />
-      <Route path="Editthepoll/:id" component={EditPoll}  />
+      <Route path="Editthepoll/:id" getComponent={(location, callback) => {
+        Auth.isUserAuthenticated() ? callback(null, EditPoll) :
+            callback(null, Home);
+      }} />
       <Route path="createPoll" getComponent={(location, callback) => {
         if (Auth.isUserAuthenticated()) {
           callback(null, CreatePoll);
@@ -34,3 +42,16 @@ ReactDOM.render(
       }} />
     </Route>
   </Router>,mountNode);
+  
+  /*
+        <Route path="logout" onEnter={(nextState, replace) => {
+        Auth.deauthenticateUser();
+        
+        console.log('Logging out src/app.js');
+        Auth.clearCookie();
+        // change the current URL to /
+        
+        replace('/');
+          location.reload();
+        }} />
+  */

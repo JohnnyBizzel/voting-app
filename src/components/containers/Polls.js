@@ -13,9 +13,6 @@ class Polls extends Component {
 			selected: 0,
 			list: []
 		}
-	
-	//	this.editPollOption= this.editPollOption.bind(this)
-		
 	}
 	
 
@@ -61,16 +58,9 @@ class Polls extends Component {
                 list: updatedList
             })
 		})
-		
-
 
 	}
-	
-	// editPollOption() {
-	// 	console.log('edit poll option - needed?')
-	// 	
-	// }
-	
+
 	render() {
 		const stylePoll = styles.polls;
 		const listItems = this.state.list.map((poll, i) =>  {
@@ -86,7 +76,6 @@ class Polls extends Component {
 			</div>
 	)}
 	
- 
 }
 
 export default Polls;
