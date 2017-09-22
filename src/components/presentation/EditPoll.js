@@ -252,7 +252,7 @@ class PollResponse extends Component {
 
     render() {
     	const sty = styles.editPoll;
-        return (<div>
+        return (<div key={this.props.thePollId}>
         			<div style={sty.responses}>
                     	{this.props.poll.responses.map(this.eachPollResponse)}
                 	</div>
@@ -291,8 +291,8 @@ PollResponse.propTypes = {
 /////////////////////////////////////////
 
 class EditPoll extends Component {
-    constructor() {
-    	super()
+    constructor(props) {
+    	super(props)
     	this.state = {
             poll:{
                 pollquestion: '',
@@ -300,12 +300,15 @@ class EditPoll extends Component {
                 responses: [1]
             },
             newresponses:[2],
-            valid: true   
+            valid: true,
+            deleteMode: false
         };
     	
     	this.save = this.save.bind(this);
     	this.update = this.update.bind(this);
     	this.deleteOption = this.deleteOption.bind(this);
+    	this.deleting = this.deleting.bind(this);
+    	this.deletePoll = this.deletePoll.bind(this);
     }
     
     componentDidMount(){
@@ -471,18 +474,43 @@ class EditPoll extends Component {
 			});
         }
         else{
+        	// TODO- convert to on screen error
             alert("You must have at least 2 options for a poll.")
         }
 	}
 	
+	deleting(event) {
+		event.preventDefault();
+		this.setState({ deleteMode: true });
 
+		
+		//this.props.history.push('/');
+	}
+	
+	deletePoll(event) {
+		event.preventDefault();
+		console.log('delete this poll: ', this.props.params.id);
+		Api.del('/api/polls/' + this.props.params.id, (err, response) => {
+			if (err) { 
+			     console.log("Error: " + JSON.stringify(err)); 
+			     return;
+			}
+			else{
+			    console.log("Delete option succesfully executed" + JSON.stringify(response))
+			}
+		
+		});
+		
+		this.setState({ deleteMode: false });
+		location.replace('/');
+	}
     
     render() {
     	let pollID = 'none';
+    	let deleteMode = this.state.deleteMode;
 		if (this.props.params != undefined)
 			pollID = this.props.params.id;
-    	//pollID = urlWithId.split('/').pop();
-    	//someResponses={this.state.poll.responses}
+
         const zoneStyle = styles.zone; // needs to be inside the render func!
         
         return (<div style={zoneStyle.container}>
@@ -497,6 +525,10 @@ class EditPoll extends Component {
 				        	deleteOpt={this.deleteOption} />
 				        <br/>
 				        <span>created by {this.state.poll.author}</span>
+				        <br/>
+				     <button className="btn-sm" onClick={this.deleting}>Delete this poll</button>
+				    	
+				    {deleteMode ? <button className="btn-sm btn-danger" onClick={this.deletePoll}>Sure?</button> : ''}
 				</div>
                 );
     }

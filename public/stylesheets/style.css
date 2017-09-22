@@ -120,3 +120,7 @@ ul { list-style: square }
 .error-text {
 	color: red;
 }
+
+.marginBottom { 
+	margin-bottom: 50px;
+}

@@ -21994,7 +21994,7 @@
 	                ),
 	                _react2.default.createElement(
 	                    'div',
-	                    null,
+	                    { className: 'marginBottom' },
 	                    _react2.default.createElement(_Polls2.default, { curUsr: currentUser })
 	                )
 	            );
@@ -22403,7 +22403,7 @@
 				var sty = _styles2.default.editPoll;
 				return _react2.default.createElement(
 					'div',
-					null,
+					{ key: this.props.thePollId },
 					_react2.default.createElement(
 						'div',
 						{ style: sty.responses },
@@ -22449,10 +22449,10 @@
 	var EditPoll = function (_Component3) {
 		_inherits(EditPoll, _Component3);
 	
-		function EditPoll() {
+		function EditPoll(props) {
 			_classCallCheck(this, EditPoll);
 	
-			var _this5 = _possibleConstructorReturn(this, (EditPoll.__proto__ || Object.getPrototypeOf(EditPoll)).call(this));
+			var _this5 = _possibleConstructorReturn(this, (EditPoll.__proto__ || Object.getPrototypeOf(EditPoll)).call(this, props));
 	
 			_this5.update = function (changedText, id) {
 				if (!changedText.trim()) {
@@ -22575,6 +22575,7 @@
 						}
 					});
 				} else {
+					// TODO- convert to on screen error
 					alert("You must have at least 2 options for a poll.");
 				}
 			};
@@ -22586,12 +22587,15 @@
 					responses: [1]
 				},
 				newresponses: [2],
-				valid: true
+				valid: true,
+				deleteMode: false
 			};
 	
 			_this5.save = _this5.save.bind(_this5);
 			_this5.update = _this5.update.bind(_this5);
 			_this5.deleteOption = _this5.deleteOption.bind(_this5);
+			_this5.deleting = _this5.deleting.bind(_this5);
+			_this5.deletePoll = _this5.deletePoll.bind(_this5);
 			return _this5;
 		}
 	
@@ -22632,12 +22636,37 @@
 			/* update text event (and update state) */
 	
 		}, {
+			key: 'deleting',
+			value: function deleting(event) {
+				event.preventDefault();
+				this.setState({ deleteMode: true });
+	
+				//this.props.history.push('/');
+			}
+		}, {
+			key: 'deletePoll',
+			value: function deletePoll(event) {
+				event.preventDefault();
+				console.log('delete this poll: ', this.props.params.id);
+				_ApiManager2.default.del('/api/polls/' + this.props.params.id, function (err, response) {
+					if (err) {
+						console.log("Error: " + JSON.stringify(err));
+						return;
+					} else {
+						console.log("Delete option succesfully executed" + JSON.stringify(response));
+					}
+				});
+	
+				this.setState({ deleteMode: false });
+				location.replace('/');
+			}
+		}, {
 			key: 'render',
 			value: function render() {
 				var pollID = 'none';
+				var deleteMode = this.state.deleteMode;
 				if (this.props.params != undefined) pollID = this.props.params.id;
-				//pollID = urlWithId.split('/').pop();
-				//someResponses={this.state.poll.responses}
+	
 				var zoneStyle = _styles2.default.zone; // needs to be inside the render func!
 	
 				return _react2.default.createElement(
@@ -22664,7 +22693,18 @@
 						null,
 						'created by ',
 						this.state.poll.author
-					)
+					),
+					_react2.default.createElement('br', null),
+					_react2.default.createElement(
+						'button',
+						{ className: 'btn-sm', onClick: this.deleting },
+						'Delete this poll'
+					),
+					deleteMode ? _react2.default.createElement(
+						'button',
+						{ className: 'btn-sm btn-danger', onClick: this.deletePoll },
+						'Sure?'
+					) : ''
 				);
 			}
 		}]);
@@ -30551,6 +30591,8 @@
 	                });
 	            });
 	        }
+	        // TODO improve vote button style
+	
 	    }, {
 	        key: 'render',
 	        value: function render() {
@@ -62282,7 +62324,10 @@
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
 	            var currentUser = _Auth2.default.getCookie('voting-username');
-	            this.setState({ author: currentUser });
+	            var initPoll = { pollquestion: '',
+	                author: currentUser,
+	                responses: [] };
+	            this.setState({ poll: initPoll });
 	        }
 	    }, {
 	        key: 'updatePoll',
@@ -62316,7 +62361,8 @@
 	
 	            _ApiManager2.default.post('/api/polls', pollObject, function (err, response) {
 	                if (err) {
-	                    alert("Error: " + JSON.stringify(err));
+	                    console.log("Error: " + JSON.stringify(err));
+	                    location.replace('/');
 	                    return;
 	                }
 	            });
@@ -62333,7 +62379,7 @@
 	                _react2.default.createElement('br', null),
 	                'Author:',
 	                _react2.default.createElement('br', null),
-	                _react2.default.createElement('input', { id: 'author', className: 'form-control', type: 'text', placeholder: 'Author', value: this.state.author }),
+	                _react2.default.createElement('input', { id: 'author', className: 'form-control', type: 'text', placeholder: 'Author', value: this.state.poll.author }),
 	                _react2.default.createElement('br', null),
 	                'Responses:',
 	                _react2.default.createElement('br', null),

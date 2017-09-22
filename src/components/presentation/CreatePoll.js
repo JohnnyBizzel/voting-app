@@ -18,7 +18,10 @@ class CreatePoll extends Component {
     
     componentDidMount() {
         const currentUser = Auth.getCookie('voting-username');
-        this.setState({ author: currentUser });
+        const initPoll = { pollquestion: '',
+                    author: currentUser,
+                    responses: [] }
+        this.setState({ poll: initPoll });
     }
     
     updatePoll(event){
@@ -56,14 +59,12 @@ class CreatePoll extends Component {
         
       
         	Api.post('/api/polls', pollObject, (err, response) => {
-			if (err) { 
-				alert("Error: " + JSON.stringify(err)); 
-				return;
-			}
-			
-			
-			
-		});
+    			if (err) { 
+    				console.log("Error: " + JSON.stringify(err)); 
+    				location.replace('/');
+    				return;
+    			}
+			});
     }
     
     render(){	
@@ -75,7 +76,7 @@ class CreatePoll extends Component {
                 <br/>
                 Author:
                 <br/>
-                <input id="author" className="form-control" type="text" placeholder="Author" value={this.state.author}/>
+                <input id="author" className="form-control" type="text" placeholder="Author" value={this.state.poll.author}/>
                 <br/>
                 Responses:
                 <br/>
@@ -87,7 +88,9 @@ class CreatePoll extends Component {
             </div>
 	    )
     }
+
     
 }
-      
+
+    
 export default CreatePoll

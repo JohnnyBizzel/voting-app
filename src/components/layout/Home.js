@@ -57,7 +57,7 @@ class Home extends Component {
                  </div>
                 </nav>
                 <p>{usrIsLoggedIn ? currentUserNameMsg : ''}</p>
-                <div>
+                <div className="marginBottom">
                     <Polls curUsr={currentUser} />
                 </div>
 

@@ -184,6 +184,7 @@ class PollDetails extends Component {
 
         
     }
+    // TODO improve vote button style
    
     render() {
         let responseList = this.state.list.responses.map(function(item, index){
