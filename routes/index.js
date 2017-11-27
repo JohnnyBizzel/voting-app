@@ -62,14 +62,14 @@ router.get("/editthepoll",function(req,res,next){
 
 
 // POST requests
-// Register User
-router.post('/register', function(req, res){
+// Register new User
+router.post('/user/register', function(req, res){
 	var name = req.body.name;
 	var email = req.body.email;
 	var username = req.body.username;
 	var password = req.body.password;
 	var password2 = req.body.password2;
-
+  console.log(res);
 });
 
 

@@ -30526,12 +30526,36 @@
 	            });
 	        }
 	    }, {
+	        key: '_storageAvailable',
+	        value: function _storageAvailable(type) {
+	            try {
+	                var storage = window[type],
+	                    x = '__storage_test__';
+	                storage.setItem(x, x);
+	                storage.removeItem(x);
+	                return true;
+	            } catch (e) {
+	                return false;
+	            }
+	        }
+	    }, {
 	        key: 'submit',
 	        value: function submit(e) {
 	            var _this3 = this;
 	
 	            // Time to handleNewVote
 	            e.preventDefault();
+	            console.log('hi');
+	
+	            if (localStorage.getItem(this.state.list._id)) {
+	                alert('You already voted!');
+	                return;
+	            } else {
+	                console.log('doesnt seem to be there');
+	                localStorage.setItem(this.state.list._id, true);
+	            }
+	
+	            // check if local storage works. credit:  https://codepen.io/Roky/pen/rrmppw
 	
 	            // TODO : set something in storage to check on what polls user already voted.
 	            //     //currentPollId
@@ -30543,8 +30567,8 @@
 	            //   }
 	
 	
-	            var form = e.target;
-	            var selectedRadio = form.elements.radiobtns.value;
+	            // var form = e.target;
+	            var selectedRadio = e.target.elements.radiobtns.value;
 	            var pollId = this.state.list._id;
 	
 	            var updatedList = Object.assign([], this.state.list);
@@ -30662,18 +30686,15 @@
 	                                ),
 	                                responseList
 	                            ),
-	                            _react2.default.createElement(
-	                                'div',
-	                                { className: 'col-xs-12 text-center' },
-	                                _react2.default.createElement('input', { type: 'submit',
-	                                    className: 'btn-sm',
-	                                    value: 'Vote' })
-	                            )
+	                            _react2.default.createElement('br', null),
+	                            _react2.default.createElement('input', { type: 'submit',
+	                                className: 'btn-sm',
+	                                value: 'Vote' })
 	                        )
 	                    ),
 	                    _react2.default.createElement(
 	                        'div',
-	                        { className: 'col-md-6' },
+	                        { className: 'col-md-6 col-xs-12' },
 	                        _react2.default.createElement(_reactChartjs.Doughnut, { data: this.state.data })
 	                    )
 	                )
@@ -62367,6 +62388,9 @@
 	                }
 	            });
 	        }
+	
+	        // TODO: "" i did this; and then this; " and got 3 options
+	
 	    }, {
 	        key: 'render',
 	        value: function render() {

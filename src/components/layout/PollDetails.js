@@ -47,7 +47,6 @@ class PollDetails extends Component {
     }
     
     componentDidMount(){
- 
         var urlWithId =this.props.location.pathname;
         
         var pollID = urlWithId.split('/').pop();
@@ -119,9 +118,34 @@ class PollDetails extends Component {
         
     }
    
+    _storageAvailable(type) {
+        try {
+          var storage = window[type],
+              x = '__storage_test__';
+          storage.setItem(x, x);
+          storage.removeItem(x);
+          return true;
+        }
+        catch(e) {
+          return false;
+        }
+    }
+      
+      
     submit(e) { 
         // Time to handleNewVote
         e.preventDefault();
+        console.log('hi');
+        
+        if(localStorage.getItem(this.state.list._id)){
+            alert('You already voted!');
+            return;
+        } else {
+            console.log('doesnt seem to be there');
+            localStorage.setItem(this.state.list._id, true);
+        }
+        
+          // check if local storage works. credit:  https://codepen.io/Roky/pen/rrmppw
         
         // TODO : set something in storage to check on what polls user already voted.
     //     //currentPollId
@@ -133,8 +157,8 @@ class PollDetails extends Component {
     //   }
         
   
-        var form = e.target;
-        const selectedRadio = form.elements.radiobtns.value;
+        // var form = e.target;
+        const selectedRadio = e.target.elements.radiobtns.value;
         const pollId = this.state.list._id;
 
         let updatedList = Object.assign([], this.state.list);
@@ -190,7 +214,6 @@ class PollDetails extends Component {
         let responseList = this.state.list.responses.map(function(item, index){
             return (
                 <div key={index} className="responseTableRow">
-
                     <table className="responseTable">
                     <tr>
                         <td>
@@ -219,18 +242,17 @@ class PollDetails extends Component {
                         <div className="gridWrapper">
                             <div className="responseHeaderRow">
                              <span className="float-right">Score</span>
-                                Option 
+                                Option
                             </div>
                             {responseList}
                         </div>
-                        <div className="col-xs-12 text-center">
-                           <input type="submit" 
+                        <br/>
+                           <input type="submit"
                             className="btn-sm"
                             value="Vote"/>
-                        </div>
                     </form>
                 </div>
-                <div className="col-md-6">
+                <div className="col-md-6 col-xs-12">
                     <Doughnut data={this.state.data} />
                 </div>
             </div>

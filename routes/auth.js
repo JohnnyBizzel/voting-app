@@ -71,33 +71,42 @@ function validateLoginForm(payload) {
   }
 
   console.log('validation checks finished');
-  return {
-    success: isFormValid,
-    message,
-    errors
+  return { 
+      success: isFormValid,
+      message,
+      errors
+    
   };
 }
 
-router.post('/signup', (req, res, next) => {
+router.post('/signup', (req, res) => {
     console.log('found signup route');
   const validationResult = validateSignupForm(req.body);
+  console.log('SIGNUP RES:', validationResult);
   if (!validationResult.success) {
-    return res.status(400).json({
-      success: false,
-      message: validationResult.message,
+    console.log(validationResult);
+   
+    return res.render('register', {
       errors: validationResult.errors
     });
-  }
+  } 
+  
 
-
+// Success valid form
   return passport.authenticate('local-signup', (err) => {
     if (err) {
       if (err.name === 'MongoError' && err.code === 11000) {
         // the 11000 Mongo code is for a duplication email error
         // the 409 HTTP status code is for conflict error
-        return res.status(409).json({
-          success: false,
-          message: 'Check the form for errors.',
+        // return res.status(409).json({
+        //   success: false,
+        //   message: 'Check the form for errors.',
+        //   errors: {
+        //     email: 'This email is already taken.'
+        //   }
+        // });
+        
+        return res.render('register', {
           errors: {
             email: 'This email is already taken.'
           }
@@ -110,14 +119,12 @@ router.post('/signup', (req, res, next) => {
       });
     }
 
-    return res.status(200).json({
-      success: true,
-      message: 'You have successfully signed up! Now you should be able to log in.'
-    });
-  })(req, res, next);
+    return res.redirect('/login');
+    
+  })(req, res);
 });
 
-router.post('/login', (req, res, next) => {
+router.post('/login', (req, res) => {
   const validationResult = validateLoginForm(req.body);
   if (!validationResult.success) {
     return res.status(400).json({
@@ -153,7 +160,7 @@ router.post('/login', (req, res, next) => {
       token,
       user: userData
     });
-  })(req, res, next);
+  })(req, res);
 });
 
 module.exports = router;

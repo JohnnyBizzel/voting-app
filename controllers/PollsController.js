@@ -32,10 +32,13 @@ module.exports = {
         var responseAry = responses.split(';');
         var newAry = [];
         responseAry.forEach(function(resp, index){
-            var respObj = { "response": resp.trim(), 
+            if (resp.trim() != '') {
+                var respObj = { "response": resp.trim(), 
                             "votes" : 0,
-                            "respID": index+1}
-           newAry.push(respObj); 
+                            "respID": index+1};
+                newAry.push(respObj);     
+            }
+            
         });   
         params['responses'] = newAry;
         

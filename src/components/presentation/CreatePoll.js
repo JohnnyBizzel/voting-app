@@ -67,6 +67,8 @@ class CreatePoll extends Component {
 			});
     }
     
+    // TODO: "" i did this; and then this; " and got 3 options
+    
     render(){	
         return (
 			<div>
